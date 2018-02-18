@@ -3,6 +3,8 @@
 My project work for the [Mobile Web Specialist Nanodegree ](https://sites.google.com/knowlabs.com/gdnd2017/home) by Udacity.  
 Thank you Google and Udacity for granting me a full 6-month Google Developer Nanodegree Scholarship.
 
+## Study Notes
+* [Responsive Web Design Fundamentals](docs/study-notes/responsive-web-design-fundamentals.md)
 
 ## Projects
 
