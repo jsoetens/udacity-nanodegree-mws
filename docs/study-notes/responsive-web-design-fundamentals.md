@@ -4,11 +4,14 @@
 * [Links](#links)
 * [Why Responsive](#why-responsive?)
 * [Start Small](#start-small)
+* [Building Up](#building-up)
 
 ## Links
 * [Google Developers - Web Fundamentals](https://developers.google.com/web/fundamentals/)
 * [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/)
 * [MDN - meta viewport tag](https://developer.mozilla.org/en-US/docs/Mozilla/Mobile/Viewport_meta_tag)
+* [MDN - using media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries)
+* [MDN - basic concepts of grid layout](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Basic_Concepts_of_Grid_Layout)
 
 ## Why Responsive?
 RWD is an art, not a science!
@@ -47,3 +50,42 @@ button {
 ```
 
 Performance matters so start with prioritising content and move from the smallest form factor to the next.
+
+## Building Up
+Picking the right design pattern can be more of an art than a science. A responsive website changes based on the characteristics of a device. This means different styles can be applied, the easiest way to do this is with **media queries**. Don't use *@import* because performance matters!
+
+```HTML
+<link rel="stylesheet" href="styles.css"
+<link rel="stylesheet" media="screen and (min-width:500px)" href="over500.css">
+```
+
+In linked CSS there are many small http requests, with *@media* there are fewer but bigger http requests.
+
+```CSS
+.yes {
+    color: green;
+    opacity: 0;
+}
+.no {
+    color: red;
+}
+
+@media screen and (min-width: 500px) and (max-width: 600px) {
+    .yes {
+        opacity: 1;
+    }
+    .no {
+        opacity: 0;
+    }
+}
+```
+
+*min-width* and *max-width* are mostly used. Don't use the device versions, min-width for example is based on the browser window where min-device-width is based on the size of the screen (possible problems with resizing).
+
+The point at which the page changes layout is called a **breakpoint**, there can be one or several. Always look at the content to find the right breakpoints.
+
+The most simple and probably most important pattern is the **grid fluid system**. With this pattern, columns end up wrapping to the next line as the browser width starts getting smaller. There are lots of good examples like Bootstrap.
+
+**Flexbox** is one of the most powerful tools you can use for layout. Make sure that you're using the vendor prefixed versions. The reason Flexbox is so powerful is its ability to fill the space available. If an element has extra room around it, it will expand to fit. If it's getting crowded elements will shrink so they take up as little space as possible.
+In normal block layout, each div is positioned one underneath the other one. Adding *display: flex;* to the container div will show the divs in a row (the default flex direction), by default flex items fit on a single line.
+Another feature of flexbox is the ability to change the order of elements using the css order attribute.
