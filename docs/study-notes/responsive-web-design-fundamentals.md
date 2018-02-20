@@ -5,13 +5,18 @@
 * [Why Responsive](#why-responsive?)
 * [Start Small](#start-small)
 * [Building Up](#building-up)
+* [Common Responsive Patterns](#common-responsive-patterns)
 
 ## Links
-* [Google Developers - Web Fundamentals](https://developers.google.com/web/fundamentals/)
+* [Udacity Course - Responsive Web Design Fundamentals](https://www.udacity.com/course/responsive-web-design-fundamentals--ud893)
+* [Web Fundamentals - What Makes a Good Mobile Site?](https://developers.google.com/web/fundamentals/design-and-ux/principles/)
+* [Web Fundamentals - Responsive Web Design Basics](https://developers.google.com/web/fundamentals/design-and-ux/responsive/)
+* [Web Fundamentals - Responsive Web Design Patterns](https://developers.google.com/web/fundamentals/design-and-ux/responsive/patterns)
 * [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/)
 * [MDN - meta viewport tag](https://developer.mozilla.org/en-US/docs/Mozilla/Mobile/Viewport_meta_tag)
 * [MDN - using media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries)
 * [MDN - basic concepts of grid layout](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Basic_Concepts_of_Grid_Layout)
+* [MDN - event propagation](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Examples#Example_5:_Event_Propagation)
 
 ## Why Responsive?
 RWD is an art, not a science!
@@ -55,7 +60,7 @@ Performance matters so start with prioritising content and move from the smalles
 Picking the right design pattern can be more of an art than a science. A responsive website changes based on the characteristics of a device. This means different styles can be applied, the easiest way to do this is with **media queries**. Don't use *@import* because performance matters!
 
 ```HTML
-<link rel="stylesheet" href="styles.css"
+<link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" media="screen and (min-width:500px)" href="over500.css">
 ```
 
@@ -89,3 +94,16 @@ The most simple and probably most important pattern is the **grid fluid system**
 **Flexbox** is one of the most powerful tools you can use for layout. Make sure that you're using the vendor prefixed versions. The reason Flexbox is so powerful is its ability to fill the space available. If an element has extra room around it, it will expand to fit. If it's getting crowded elements will shrink so they take up as little space as possible.
 In normal block layout, each div is positioned one underneath the other one. Adding *display: flex;* to the container div will show the divs in a row (the default flex direction), by default flex items fit on a single line.
 Another feature of flexbox is the ability to change the order of elements using the css order attribute.
+
+
+## Common Responsive Patterns
+There are 4 established **responsive patterns** that work on most devices, sometimes a combination of them.
+
+In pattern **Column Drop** each element will stack vertically at its narrowest viewport.
+As things get wider, the elements expand until the first break point is hit. As the viewport gets wider, the elements keep expanding until the next breakpoint is hit. Generally, once the viewport hits a maximum width, the columns hit a maximum size, and instead of getting wider, margins are added.
+
+The **Mostly Fluid** pattern is very similar to column drop but it tends to be more grid like with more columns and columns fitting in different ways depending on the viewport width. When the layout hits its widest viewport, margins are added on the left and right instead of expanding things out.
+
+The **Layout Shifter** pattern is probably the most responsive pattern with multiple breakpoints across several different screen widths. Instead of reflowing and dropping below other columns, we can use the css order attribute. It does require more planning to maintain.
+
+Instead of stacking vertically, the **Off Canvas** pattern places less frequently used content (navigation, app menus) off screen, only showing them if the screen is large enough. On smaller screens the off canvas content is typically shown when the user taps on the hamburger icon. In other cases the off screen content may actually come in from off the screen (left or right).
