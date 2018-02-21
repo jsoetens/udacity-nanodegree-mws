@@ -6,6 +6,7 @@
 * [Start Small](#start-small)
 * [Building Up](#building-up)
 * [Common Responsive Patterns](#common-responsive-patterns)
+* [Optimizations](#optimizations)
 
 ## Links
 * [Udacity Course - Responsive Web Design Fundamentals](https://www.udacity.com/course/responsive-web-design-fundamentals--ud893)
@@ -17,6 +18,8 @@
 * [MDN - using media queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries)
 * [MDN - basic concepts of grid layout](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Basic_Concepts_of_Grid_Layout)
 * [MDN - event propagation](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Examples#Example_5:_Event_Propagation)
+* [Article - difference between display: none and visibility: hidden in CSS](https://www.thoughtco.com/display-none-vs-visibility-hidden-3466884)
+* [Article - Responsive Data Table Roundup](https://css-tricks.com/responsive-data-table-roundup/)
 
 ## Why Responsive?
 RWD is an art, not a science!
@@ -95,7 +98,6 @@ The most simple and probably most important pattern is the **grid fluid system**
 In normal block layout, each div is positioned one underneath the other one. Adding *display: flex;* to the container div will show the divs in a row (the default flex direction), by default flex items fit on a single line.
 Another feature of flexbox is the ability to change the order of elements using the css order attribute.
 
-
 ## Common Responsive Patterns
 There are 4 established **responsive patterns** that work on most devices, sometimes a combination of them.
 
@@ -107,3 +109,17 @@ The **Mostly Fluid** pattern is very similar to column drop but it tends to be m
 The **Layout Shifter** pattern is probably the most responsive pattern with multiple breakpoints across several different screen widths. Instead of reflowing and dropping below other columns, we can use the css order attribute. It does require more planning to maintain.
 
 Instead of stacking vertically, the **Off Canvas** pattern places less frequently used content (navigation, app menus) off screen, only showing them if the screen is large enough. On smaller screens the off canvas content is typically shown when the user taps on the hamburger icon. In other cases the off screen content may actually come in from off the screen (left or right).
+
+## Optimizations
+**Images, tables and typography** are important aspects to responsive web design. Art direction, srcset and the picture element are all important and they're discussed in great detail in the [Responsive Images](https://www.udacity.com/course/responsive-images--ud882) course.
+Tables can be tricky, when there are many columns this often leads to overflowing the viewport and horizontal scrolling. There are a few options to fix this but might require some experimenting.
+
+**Hidden Columns** essentially hides table columns based on their importance as the viewport size gets smaller. The biggest problem with this approach is that we're hiding content from the user so consider abbreviating content.
+
+With the **No More Tables** technique, below a certain viewport width, the table is collapsed and resembles a long list as opposed to table data. The nice thing is that all of the data is visible, no matter what the size of the viewport is.
+
+**Contained Tables** keep the table in the viewport by wrapping it in a div, set width to 100% and overflow-x to auto. Instead of breaking out of the viewport, the table will instead take up the same width but scroll in the viewport.
+
+If a line of text is too long, readers will read parts again or skim through the text. A good **line length** is around 45 to 90 cpl, with an ideal of 65 cpl. Use measures as an important factor for picking breakpoints. Make sure **fonts** are big enough to read across any device. A recommendation is to set the base font to at least 16px, 1.2 em line height, text heavy sites can have it increased to 18px, 1.25em.
+
+Besides **major breakpoints** where layout changes significantly, **minor breakpoints** can also be interesting for small changes as margin, padding and font size.
