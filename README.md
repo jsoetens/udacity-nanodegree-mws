@@ -6,6 +6,7 @@ Thank you Google and Udacity for granting me a full 6-month Google Developer Nan
 ## Study Notes
 * [Responsive Web Design Fundamentals](docs/study-notes/responsive-web-design-fundamentals.md)
 * [Responsive Images](docs/study-notes/responsive-images.md)
+* [Web Accessibility](docs/study-notes/web-accessibility.md)
 
 ## Projects
 
