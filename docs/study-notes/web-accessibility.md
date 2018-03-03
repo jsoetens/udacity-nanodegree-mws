@@ -4,6 +4,7 @@
 * [Links](#links)
 * [Accessibility Overview](#accessibility-overview)
 * [Focus](#focus)
+* [Semantics Basics](#semantics-basics)
 
 ## Links
 * [Udacity Course - Web Accessibility](https://www.udacity.com/course/web-accessibility--ud891)
@@ -16,14 +17,21 @@
 * [WebAIMs Checklist 2.1.1 - Keyboard](https://webaim.org/standards/wcag/checklist#sc2.1.1)
 * [WebAIMs Checklist 1.3.2 - Meaningful Sequence](https://webaim.org/standards/wcag/checklist#sc1.3.2)
 * [WebAIMs Checklist 2.1.2 - No Keyboard Trap](https://webaim.org/standards/wcag/checklist#sc2.1.2)
+* [WebAIMs Checklist 1.3.1 - Info and Relationships](https://webaim.org/standards/wcag/checklist#sc1.3.1)
+* [WebAIMs Checklist 2.4.1 - Bypass Blocks](https://webaim.org/standards/wcag/checklist#sc2.4.1)
+* [WebAIMs Checklist 2.4.6 - Headings and Labels](https://webaim.org/standards/wcag/checklist#sc2.4.6)
+* [WebAIMs Checklist 2.4.10 - Section Headings](https://webaim.org/standards/wcag/checklist#sc2.4.10)
+* [WebAIM's WCAG 2.0 Guideline 1.1 - Text Alternatives](https://webaim.org/standards/wcag/checklist#g1.1)
 * [WebAIM - "Skip Navigiation" Links](https://webaim.org/techniques/skipnav/)
+* [WebAIM - Alternative Text](https://webaim.org/techniques/alttext/)
 * [W3C Recommendation - User interaction](https://www.w3.org/TR/html5/editing.html#focus-management)
 * [WAI-ARIA Authoring Practices 1.1](https://www.w3.org/TR/wai-aria-practices/)
 * [WAI-ARIA Authoring Best Practices 1.1 - Radio Group](https://www.w3.org/TR/wai-aria-practices-1.1/#radiobutton)
 * [WAI-ARIA Authoring Best Practices 1.1 - Design Patterns and Widges](https://www.w3.org/TR/wai-aria-practices/#aria_ex)
 * [MDN - DocumentOrShadowRoot.activeElement](https://developer.mozilla.org/en-US/docs/Web/API/DocumentOrShadowRoot/activeElement)
 * [MDN - tabindex](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex)
-* [MDN - The HTML <dialog> element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog)
+* [MDN - The HTML dialog element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog)
+* [MDN - The HTML label element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/label)
 * [Article -
 Removing Headaches from Focus Management](https://developers.google.com/web/updates/2016/03/focus-start-point?hl=en)
 
@@ -128,3 +136,63 @@ Oftentimes developers will add an overlay to cover the page, but that doesn't st
 In such instances we want to use a **temporary keyboard trap** to ensure that we track focus within the modal wall it's displaying.
 And then that we can restore it to the previously focused item once the model is closed.
 The **accessible model window** can be tricky element to implement.
+
+## Semantics Basics
+How do we build our websites to support users who can't see the screen at all?
+**Assistive technology** are tools that are designed to help users whose impairments can prevent them from accessing information technology at all.
+Assistive technology is an umbrella term for a broad range of devices, software and tools that help any person with a disability complete a task.
+And assistive technology in particular is pretty blurry.
+After all, all technologies are being built to assist people with some task or another, and things often move in and out of the assistive technology category.
+On the other hand, technology which is general purpose often finds an assistive use.
+In the context of web development we're still talking about a diverse range of technologies that we want to support.
+People may interact with your website using a screen reader or braille display with a screen magnifier, via voice control, using a switch device, or some other form of assistive technology which adapts the page to create a more specific interface that they can use.
+For all of these technologies, ensuring that our website support assistive technology uses is going to come down to **programmatically expressed semantics**.
+
+When we use any manmade tool or device, we typically look to its form and design to give us an idea of what it does and how it works.
+The fact that we've seen many similar things before gives us a visual clue.
+When it comes to graphical user interfaces, **affordances** still represent the actions we can take.
+But now they're more metaphorical since there's no physical object to interact with.
+Some classic examples of technology affordances are buttons, you will be hard pressed to find any software UI without at least one button on it.
+Think about how real world objects get translated into purely visual metaphors to create those affordance cues for graphical user interfaces.
+For example, you can clearly see a button on a keyboard reflected in a button element and a checkbox on a ballot paper in a checkbox element.
+While some graphical UI influences may not be immediately obvious to new users, people generally learn the visual cues quickly with little or no training.
+Well designed affordances enable people to do something with as little training as possible.
+
+Information needs to be expressed in a way which is flexible enough to be accessed programmatically by assistive technology. Which can then create an alternative user interface to suit its users needs.
+We refer to this as expressing the **semantics of an element**.
+The Web AIM WCAG 2.0 checklist explicitly calls this out in guideline 4.1.2, saying name, role, value, markup is used in a way that facilitates accessibility.
+The Web Content Accessibility Guidelines go into a bit more detail. For all user interface components, the name and role can be programmatically determined; states, properties, and values that can be set by the user can be programmatically set.
+A lot of the work we do to support screen readers also benefits users who use other assistive technologies.
+Things like voice control and switch control use the same programmatically expressed semantics.
+
+A screen reader actually largely creates the user interface for the user, based on the programatically expressed semantics.
+Instead of a visual UI, a screen reader provides an auditory interface.
+Roughly speaking, we can expect some subset of the following information to be expressed. What type of element it is? We call this an **elements role**.
+Sometimes a screen reader might simply state the element's role. Other times it might play an easily recognizable sound to avoid constant repetition. Sometimes it might do both. The screen reader will announce an elements name, if it has one. It will announce what its value is, if it has one. And it will also announce any information it has about an element's state.
+If we've done things right, we can expect to hear information about **an element's role, name, state, and value**.
+
+If you're building a user interface for screen reading users only, you don't need to create
+any visual UI at all. Just provide enough information for the screen reader to use.
+For a screen reader user, the screen reader provides the affordances based on the role alone without caring about the visual style. This is more or less what the browser actually presents to the screen reader. The browser takes the DOM tree and modifies it to turn it into a form which is useful to assistive technology.
+We refer to this modified tree as the **accessibility tree**. It conceptually looks a bit like an HTML page from the 90s.
+
+The browser can transform the DOM tree into the a11y tree because much of the DOM has **implicit semantic meaning**. The DOM is using standard native HTML elements that are automatically recognized by browsers and work predictably on a variety of platforms.
+A11y for native HTML elements such as the standard link or button, is handled automatically as well.
+We can take advantage of that built in a11y by writing HTML which expresses the semantics of our page directly.
+
+Screen readers will announce an element's role, name, state and value but not necessarily in that order. By using the right semantic element, we've got role, state and value covered, but we also need to make sure that we're making the elements name discoverable.
+This is actually the very first item on WebAIMSs checklist, provide **text alternatives** for any non-text content.
+There are two types of labels. **Visible labels**, which are used by all users to associate meaning with an element, and **text alternatives** which are only used when there's no need for visual labels. By its very nature a text alternative is usually not visible on the page.
+The checklist provides a list of recommendations for how to create visible and non-visible labels.
+The easiest is that form buttons have a descriptive value. A button typically has some text content and that acts as the button's text alternative.
+Next is that form inputs have associated text labels. When we create a form input like a check box and just put some text next to it, we get a visual label, but we don't actually create a programmatically accessible label for the element we're trying to label. Also, we don't get the nice behavior where we can click on the label to total the check box.
+We can fix this by using a **label element**. We can either wrap the input element or we can use the for attribute on the label. If we do that we need to make sure to give the input element an id and use the same id as the value of the for attribute. That creates an association between the label element and the input element.
+Whichever of these two methods we use, we will get an accessible label for the check box, and we'll be able to total the check box by clicking the label.
+
+We can use the alt attribute to provide a **text alternative for images**. However, we need to think about what role an image plays in the page to work out what type of text alternative it should have.
+The **alt attribute** allows you to specify a simple string to be used whenever an image is not available, whether the image fails to load or you're a web crawling bot or a screen reader user. alt differs from any other type of caption, including a title, in that it will only be used if the image isn’t available. Caption or title typically provides extra contexts for the image, rather than an alternative to the image.
+Writing useful alt text is a bit of an art. In order for a string to be a usable text alternative it needs to convey the same thing as the image in the given context.
+An easy way to check whether your alt text is sensible is to imagine all your
+images are broken. Can you still understand the page content?
+Empty alt text actually removes images from the accessibility tree so they'll be skipped by the screen reader.
+All images should have an alt attribute. Important images should have descriptive alt text that just describes what the image is. Decorative images should have blank alt text. The screen reader will skip that element completely. You want to include blank text because if you don't the screen reader may try to read the filename.
