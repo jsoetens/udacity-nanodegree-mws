@@ -5,6 +5,7 @@
 * [Accessibility Overview](#accessibility-overview)
 * [Focus](#focus)
 * [Semantics Basics](#semantics-basics)
+* [Navigating Content](#navigating-content)
 
 ## Links
 * [Udacity Course - Web Accessibility](https://www.udacity.com/course/web-accessibility--ud891)
@@ -14,16 +15,22 @@
 * [Chrome Extension - Accessibility Developer Tools](https://chrome.google.com/webstore/detail/accessibility-developer-t/fpkknkljclfencbdbgkenhalefipecmb?hl=en)
 * [Web Content Accessibility Guidelines 2.0 (WCAG)](https://www.w3.org/TR/WCAG20/)
 * [WebAIM's WCAG 2.0 Checklist](https://webaim.org/standards/wcag/checklist)
-* [WebAIMs Checklist 2.1.1 - Keyboard](https://webaim.org/standards/wcag/checklist#sc2.1.1)
-* [WebAIMs Checklist 1.3.2 - Meaningful Sequence](https://webaim.org/standards/wcag/checklist#sc1.3.2)
-* [WebAIMs Checklist 2.1.2 - No Keyboard Trap](https://webaim.org/standards/wcag/checklist#sc2.1.2)
 * [WebAIMs Checklist 1.3.1 - Info and Relationships](https://webaim.org/standards/wcag/checklist#sc1.3.1)
+* [WebAIMs Checklist 1.3.2 - Meaningful Sequence](https://webaim.org/standards/wcag/checklist#sc1.3.2)
+* [WebAIMs Checklist 2.1.1 - Keyboard](https://webaim.org/standards/wcag/checklist#sc2.1.1)
+* [WebAIMs Checklist 2.1.2 - No Keyboard Trap](https://webaim.org/standards/wcag/checklist#sc2.1.2)
 * [WebAIMs Checklist 2.4.1 - Bypass Blocks](https://webaim.org/standards/wcag/checklist#sc2.4.1)
 * [WebAIMs Checklist 2.4.6 - Headings and Labels](https://webaim.org/standards/wcag/checklist#sc2.4.6)
+* [WebAIMs Checklist 2.4.9 - Link Purpose](https://webaim.org/standards/wcag/checklist#sc2.4.9)
 * [WebAIMs Checklist 2.4.10 - Section Headings](https://webaim.org/standards/wcag/checklist#sc2.4.10)
 * [WebAIM's WCAG 2.0 Guideline 1.1 - Text Alternatives](https://webaim.org/standards/wcag/checklist#g1.1)
 * [WebAIM - "Skip Navigiation" Links](https://webaim.org/techniques/skipnav/)
 * [WebAIM - Alternative Text](https://webaim.org/techniques/alttext/)
+* [WebAIM - Keyboard Accessibility](https://webaim.org/techniques/keyboard/accesskey)
+* [WebAIM - Using VoiceOver to Evaluate Web Accessibility](https://webaim.org/articles/voiceover/)
+* [WebAIM - Using NVDA to Evaluate Web Accessibility](https://webaim.org/articles/nvda/)
+* [NVDA - NonVisual Desktop Access](https://www.nvaccess.org/)
+* [Orca Screen Reader](https://help.gnome.org/users/orca/stable/)
 * [W3C Recommendation - User interaction](https://www.w3.org/TR/html5/editing.html#focus-management)
 * [WAI-ARIA Authoring Practices 1.1](https://www.w3.org/TR/wai-aria-practices/)
 * [WAI-ARIA Authoring Best Practices 1.1 - Radio Group](https://www.w3.org/TR/wai-aria-practices-1.1/#radiobutton)
@@ -196,3 +203,61 @@ An easy way to check whether your alt text is sensible is to imagine all your
 images are broken. Can you still understand the page content?
 Empty alt text actually removes images from the accessibility tree so they'll be skipped by the screen reader.
 All images should have an alt attribute. Important images should have descriptive alt text that just describes what the image is. Decorative images should have blank alt text. The screen reader will skip that element completely. You want to include blank text because if you don't the screen reader may try to read the filename.
+
+## Navigating Content
+Writing semantic HTML already gives a lot of a11y out of the box.
+Many people, when they start learning about screen readers, assume that it's so difficult and tedious to use. To compensate for their assumption, they tend to do things like making every element on the web page focusable so that a screen reader user has an easier time getting to them.
+**VoiceOver** is a speech software that allows people who are blind or vision impaired to read information on the screen. It is built into Apple's macOS.
+Screen readers provide a lot of shortcut keys, and one of those shortcut keys is a way to spell a specific word or even a sentence, letter by letter.
+
+It's important to remember, that once you made the functionality of your web page accessible and usable for users of assistive technology, headings are probably one of the most important features you can build into your web pages, to make them more usable for screen reader users.
+
+DOM order matters, which is also item 1.3.2 on the WebAIMs checklist. **Meaningful Sequence** states that the reading and navigation order (determined by code order) is logical and intuitive.
+It matters for focus order, but it also matters for the order read by the screen reader.
+Since the screen reader, like any assistive technology, is interacting with the accessibility tree, which is based directly on the DOM tree, the order a screen reader is going to perceive will be directly based on the DOM order.
+Think of the page as perceived by desktop screen reader users at almost losing its second dimension. It's all serialized into a single stream of content. You can use a JavaScript snippet to list out the headings in the console.
+
+Using headings to lay out page structures is mentioned in several WebAIMs checklist items.
+**Section Headings** states that beyond providing an overall document structure, individual sections of content are designated using headings, where appropriate.
+**Info and Relationships** states that semantic markup is used to designate headings, lists, emphasized or special text, etc.
+**Bypass Blocks** states that if a page has a proper heading structure, this may be considered a sufficient technique instead of a "Skip to main content" link.
+
+You can use techniques where some headings are placed off screen to make them visible only to screen reader users and other assistive technology.
+For complex applications, this can be a good way to accommodate headings when the visual design doesn't require or even have room for a visible heading.
+However, it's important not to go overboard with this technique.
+Remember that assistive technology users may well be able to see the screen.
+So going too far down the path of creating screen reader only content can actually create a worse user experience for some users.
+It can also create a maintenance headache when it comes to things like internationalization.
+
+It's also important that you don't fall into the trap of using heading tags just to achieve a particular look on the page.
+Headings are used to improve the experience for screen reader users but there are other things you can use to navigate web pages.
+VoiceOver and other screen readers, for example, allow to navigate by links, by form controls and landmarks.
+
+VoiceOver can get you a list of links on a page, and even search through them.
+This feature is obviously most useful if, firstly, the screen reader can find the links. Secondly, if the actual text of the links is meaningful.
+There are three common link anti-patterns which can cause the screen reader to miss links in the page.
+One is using a span with some link styling or an anchor tag without an href attribute.
+For anything which behaves like a link, including within a single page application, you should absolutely use an anchor tag with an href attribute, no exceptions.
+Not only will this make the link show up in the links list, but it will mean it automatically works with the keyboard and that you can do things like copy or bookmark the link location.
+The second pattern is the opposite problem,
+something which is implemented using a link but is really more like a button.
+You can often recognize this by the href attribute being something nonsensical.
+The third example is where we have an image used as link content. We can fix that by using our usual alt text technique to make sure the link is experienced directly to the assistive technology layout.
+We also need to make sure that once the link makes it into the links list, that it's also useful. We do that by making sure its text is descriptive.
+The checklist has a stronger and weaker version of this point. The stronger one, item 2.4.9 states that the purpose of each link should be determined from the link text alone.
+In general, link text should give any user enough information to decide whether they want to click it. One common example of uninformative link text we see a lot these days is "learn more".
+We can make it more useful by rewriting the text to say it something like "learn more about responsive layouts" or even making the paragraph heading as the link.
+
+HTML5 introduced some new **semantic elements** which helps assistive technology understand how elements relate to one another.  
+* *main* represents the main content of a page, typically there should only be one main element.
+* *header* is either a page banner or else a grouping element for any introductory content at the start of any type of section. Using semantic elements allows us to express the same information while also potentially providing more information for screening ready users.
+* *footer* may be either a page footer and contain information about the page or site. Or maybe a footer to a particular section of a page with extra information about that section.
+* *nav* represents a section of a page that links to other pages like the top nav bar or to parts within the page like a table of contents.
+* *article* is for self-contained sections of content like a blog entry, news article or forum post. A handy test for an article is whether its content would make sense in another context such as cross-posting a blog post to several different blogs.
+* *section* is a completely generic section of a document or application. Since it doesn't really give much of a clue as to what its content might be, we typically include a heading inside as well.
+* *aside* can be used for groups of nav elements and for other content that is considered separate from the main content of the page. It will often be rendered as a sidebar.
+
+Make sure to use meaningful headings and link text as well as good page structure.
+Secondly, as a general rule, you shouldn't try to control the experience a screen reader user will have.
+They will use the information available to them plus the tool they're using to find that information on the web page.
+Things such as trying to control or fine-tune exactly what a screen reader says, or make an element focusable which shouldn't be, generally lead to more confusion and worse experience for users.
