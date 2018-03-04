@@ -6,6 +6,7 @@
 * [Focus](#focus)
 * [Semantics Basics](#semantics-basics)
 * [Navigating Content](#navigating-content)
+* [ARIA](#aria)
 
 ## Links
 * [Udacity Course - Web Accessibility](https://www.udacity.com/course/web-accessibility--ud891)
@@ -29,18 +30,26 @@
 * [WebAIM - Keyboard Accessibility](https://webaim.org/techniques/keyboard/accesskey)
 * [WebAIM - Using VoiceOver to Evaluate Web Accessibility](https://webaim.org/articles/voiceover/)
 * [WebAIM - Using NVDA to Evaluate Web Accessibility](https://webaim.org/articles/nvda/)
+* [WebAIM - Invisible Content Just for Screen Reader Users](https://webaim.org/techniques/css/invisiblecontent/)
 * [NVDA - NonVisual Desktop Access](https://www.nvaccess.org/)
 * [Orca Screen Reader](https://help.gnome.org/users/orca/stable/)
 * [W3C Recommendation - User interaction](https://www.w3.org/TR/html5/editing.html#focus-management)
-* [WAI-ARIA Authoring Practices 1.1](https://www.w3.org/TR/wai-aria-practices/)
-* [WAI-ARIA Authoring Best Practices 1.1 - Radio Group](https://www.w3.org/TR/wai-aria-practices-1.1/#radiobutton)
-* [WAI-ARIA Authoring Best Practices 1.1 - Design Patterns and Widges](https://www.w3.org/TR/wai-aria-practices/#aria_ex)
+* [W3C - ARIA in HTML](https://www.w3.org/TR/html-aria/)
+* [ARIA 1.1](https://www.w3.org/TR/wai-aria-1.1/)
+* [ARIA Authoring Practices 1.1](https://www.w3.org/TR/wai-aria-practices/)
+* [ARIA Authoring Best Practices 1.1 - Radio Group](https://www.w3.org/TR/wai-aria-practices-1.1/#radiobutton)
+* [ARIA Authoring Best Practices 1.1 - Design Patterns and Widgets](https://www.w3.org/TR/wai-aria-practices/#aria_ex)
+* [ARIA 1.1 - Roles](https://www.w3.org/TR/wai-aria-1.1/#roles)
+* [ARIA 1.1 - Radio Group](https://www.w3.org/TR/wai-aria-practices-1.1/#radiobutton)
+* [ARIA 1.1 - Relationship Attributes](https://www.w3.org/TR/wai-aria-1.1/#attrs_relationships)
+* [ARIA 1.1 - Combo Box](https://www.w3.org/TR/wai-aria-practices-1.1/#combobox)
 * [MDN - DocumentOrShadowRoot.activeElement](https://developer.mozilla.org/en-US/docs/Web/API/DocumentOrShadowRoot/activeElement)
 * [MDN - tabindex](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex)
 * [MDN - The HTML dialog element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog)
 * [MDN - The HTML label element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/label)
 * [Article -
 Removing Headaches from Focus Management](https://developers.google.com/web/updates/2016/03/focus-start-point?hl=en)
+* [Article - hidden and aria-hidden](https://developer.paciellogroup.com/blog/2012/05/html5-accessibility-chops-hidden-and-aria-hidden/)
 
 ## Accessibility Overview
 Good accessibility or "a11y" is crucial to making sure all users can access the content in your sites and applications. We often shorten the word "**accessibility**" to "**a11y**" because there's 11 letters between the "A" and "Y" in the word "Accessibility". Making sure you consider accessibility at the start of your process will ensure that your final product is more polished and works for more people.
@@ -261,3 +270,118 @@ Make sure to use meaningful headings and link text as well as good page structur
 Secondly, as a general rule, you shouldn't try to control the experience a screen reader user will have.
 They will use the information available to them plus the tool they're using to find that information on the web page.
 Things such as trying to control or fine-tune exactly what a screen reader says, or make an element focusable which shouldn't be, generally lead to more confusion and worse experience for users.
+
+## ARIA
+Accessibility of web content requires semantic information about user input widgets, structures, and behavior, to allow assistive technologies to convey appropriate information to people with disabilities.
+
+So far we've looked at how to make a web app accessible using a sensible **DOM order**, which helps you create a logical **focus** strategy, which lays the groundwork for a rich **keyboard** experience.
+Both through the use of built-in keyboard interactions and sophisticated custom keyboard event handling. Using native elements for optimal keyboard usability also gives us the built-in **semantics** used by assistive technology to present a customized interface.
+But we also need to think about **labeling** controls and images and being sure to add page structure using **headings** and other semantic HTML elements to provide **landmark** information for assistive technology.
+And finally the importance of **links** in creating a rich interactive experience in a complex site.
+HTML comes with support for all of those things built in but sometimes it just doesn't quite go far enough.
+
+The **Web Accessibility Initiatives Accessible Rich Internet Applications (WAI-ARIA or just ARIA) spec** is good for bridging areas where there are a11y issues that can't be managed with native HTML.
+ARIA works by allowing you to specify attributes on elements which modify the way that element is translated into the a11y tree.
+**ARIA attributes** always need to have explicit values.
+Adding a role attribute and an aria-checked attribute causes the node in the a11y tree to have the desired role and state, without changing anything else about that node's appearance or behavior.
+In terms of the a11y tree, what ARIA does is allow you to essentially do some tree surgery.
+We take the a11y tree as generated from the plain HTML tree, add ARIA and get a different a11y tree.
+It may be subtly different or radically different depending on what attributes we use and where. Keep in mind that this is the only thing ARIA changes. It doesn't change anything about the behavior of the element it's added to.
+
+ARIA attributes can be used in a number of ways to augment the existing ways we can express semantics in HTML.
+ARIA can add semantics to an element where no native semantics exist. Such as a div element which explicitly and deliberately has no native semantics.
+ARIA can also modify existing elements semantics within certain bounds.
+ARIA can express the semantic UI patterns which don't exist in HTML.
+In many cases, ARIA allows us to create accessible widgets which would not be possible using plain HTML. Please note that it's probably more work to create a fully accessible custom checkbox then to add custom styling to a native checkbox.
+ARIA can add extra label and description text, which is only exposed to assisted technology APIs.
+ARIA can also express semantic relationships between elements which go beyond standard DOM parent, child, and sibling relationships.
+One example of a more complex relationship is something like "this controls that". It can be a button which controls whether a particular part of the page is visible or hidden in the form of the disclosure widget.
+ARIA can make parts of the page live, that is inform assistive technology right away when they change.
+
+One of the core aspects of the ARIA system is its collection of roles. A **role**, in accessibility terms, amounts to a shorthand for a particular UI pattern.
+ARIA provides a vocabulary of patterns we can use via the role attribute on any HTML element.
+Applying role=checkbox tells assistive technology that the element should follow a specific pattern plus we promise it will have certain states.
+Since the keyboard interactions feature so prominently, it's very important to make sure that when creating a custom widget, to have the **role and tabindex on same element** so that keyboard events will go to the right place and so that when page focus lands on an element, its role is conveyed accurately.
+The ARIA spec describes a taxonomy of possible values for the role attribute and associated ARIA attributes which may legally be used in conjunction with those roles.
+This is the best source of truth when it comes to understanding how the ARIA roles and attributes all work together and may be used in a way that is supported by browsers and assistive technologies.
+It's well worth browsing through the list of roles, since there's a finite vocabulary of roles which can be used and each one has specific semantic implications.
+Certain roles are designated as abstract. These capture certain properties which may be common to several roles, but may not be used as values for the role attribute.
+The ARIA spec also has a section on each role, explaining its semantic meaning as well as any associated attributes that may or may not be used with it.
+The role's model includes a taxonomy of roles, including some abstract roles, which capture groups of roles with common properties but can't be used on their own.
+It's definitely worth learning to navigate the ARIA spec to find out about the specifics of ARIA roles, states, and properties. But if you can find a specific pattern you want in the ARIA practices guide, then that gives you all the information you need to implement the widget in one place.
+
+ARIA provides several mechanisms for adding **labels and descriptions** to elements. In fact, ARIA is the only way to add accessible help or description text.
+To enable us to create accessible labels, ARIA provides us with properties aria-label, aria-labelledby and aria-describedby.
+
+**aria-label** allows us to specify a string directly to be used as the accessible label. An example is where you have some kind of visual indication as to the purpose of an element but still need to clarify that for anyone who might not be able to access that visual indication, such as a button which uses a graphic to indicate its purpose. This overrides any other native labelling mechanism such as a label element.
+
+**aria-labelledby** allows us to specify an element id to refer to another element in the DOM as this element's label. It may be used on any element and is much like using a label element with some key differences.
+While a label element refers to the thing it labels, the relationship is reversed in the case of aria-labelledby. Since ARIA only affects the a11y tree, aria-labelledby by does not give you the nice label clicking behavior you get from the label element.
+aria-labelledby can take a list of id refs to compose a label out of multiple elements.
+aria-labelledby can refer to elements which are otherwise hidden from assistive technology.
+aria-labelledby overrides all other name sources for an element.
+
+ARIA allows us to add extra semantics into our HTML via attributes. Essentially, it allows us to modify the a11y tree without changing anything else about the page presentation or behavior.
+By default, it won't affect styling nor will it affect interactive behavior. The only thing it changes is how the page appears to assistive technology users.
+
+Always remember that native HTML elements have implicit semantics.
+This means that there's usually no need to redefine default semantics and some HTML elements have restrictions on what ARIA role and attribute values may be used effectively on them.
+The **ARIA in HTML spec** has a table explaining what ARIA may and may not be used with each type of HTML element.
+ARIA also offers a set of landmark and document structure roles. Many of these are redundant with HTML5 semantic elements but depending on what browser versions you need to support, it may be necessary in some cases to use both an HTML5 semantic element and a redundant ARIA role.
+
+aria-labelledby is an example of what we refer to as a **relationship attribute**.
+A relationship attribute creates some kind of **semantic relationship** between elements on the page.
+The ARIA 1.1 spec lists several relationship attributes. Most ARIA relationship attributes take a reference to one or more elements to create a new link between elements on the page.
+What differs in each case is what that link means and how it is presented to users.
+One of the most widely used Aria relationships is **aria-owns**.
+This allows us to tell assistive technology that an element, which is separate in the DOM, should be treated as a child of the current element, or to rearrange existing child elements into a different order.
+aria-owns can take a list of id references, so it can also be used to explicitly specify the order of children. By default, aria-owned children will come after natively-owned children.
+
+**aria-activedescendant** plays a related role. Just as the active element of a page is the one which has focus, setting the active descendant of an element allows us to tell assistive technology that when its parent has page focus, it should be presented to the user as the actual focused element.
+
+**aria-describedby** allows you to provide an accessible description, in the exact same way that aria-labelledby allows you to provide a label. This is a useful technique whenever
+there is some extra explanatory text that a user might need, whether that applies to only users of assistive technology or all users.
+One common example is a password input field, which is accompanied by some descriptive text explaining the password requirements.
+Unlike a label, the description may or may not be presented to the user.
+So description is a great way to communicate information, which is supplementary but not essential.
+
+The remaining two relationship attributes are a little different and work together.
+**aria-posinset** which is short for position inset, and **aria-setsize** are about
+defining a relationship between sibling elements in a set, such as a list.
+In the case where the size of the full set cannot be determined by the elements present in the DOM, such as when lazy rendering is used to avoid having all of our large lists in the DOM at any given time, aria-setsize can be used to specify the actual size of the set. aria-posinset can then be used to specify the position of the element in the set.
+
+Another important technique is ensuring that only the relevant parts of the page are exposed to assistive technology. There are several ways to ensure that a section of the DOM does not get exposed to a11y APIs or is exposed only to a11y APIs.
+Anything which is explicitly hidden will also not be included in the a11y tree. An element which is not visually rendered, but not explicitly hidden, is still included in the a11y tree.
+One common technique is to include screen reader only text in an element which is absolutely positioned far off screen.
+It's also possible to provide screen reader only text via an aria-label attribute or an aria-labelledby or aria-describedby attribute referencing element which is otherwise hidden.
+ARIA provides a mechanism for excluding content from assistive technology which is not visually hidden in the form of an **aria-hidden** attribute.
+Applying this attribute to an element effectively removes it and all of its descendants from
+the accessibility tree with the exception of any element which is referred to via an aria-labelledby or aria-describedby attribute.
+
+**aria-live** allows developers to mock a part of the page as live, in the sense that updates should be communicated to users in a timely manner rather than if and when they happen to explore that part of the page. An example is a status message which appears as a result of either a user action or an external event.
+If this message is important enough, we can direct an assistive technology user's attention to it by setting an aria-live attribute on it. When an element has an aria-live attribute we refer to the part of the page containing it and its descendants, as a **live region**.
+aria-live has three allowable values, off, polite, and assertive.
+
+* *off* is the default value.
+* *polite* tells assistive technology to alert the user to changes when you finished whatever you were doing. It's great to use if something is important but not urgent.
+* *assertive* tells assistive technology to interrupt and alert the user to this change immediately. This is only for important and urgent updates.
+
+When you're working with aria-live, verify if your aria-live region is in the initial page load. Please note that different screen readers and assistive technologies react differently to different types of changes.
+
+There are three attributes which work with aria-live to fine-tune what is communicated to the user when the live region changes.
+
+* **aria-atomic** indicates whether the entire region should be considered as a whole when communicating updates. Value false is the default.
+
+* **aria-relevant** indicates what types of changes should be presented to the user.
+There are three distinct options which may be used separately or as a token list.
+Additions, removals, and text are three distinct op
+An aria-relevant value of additions means that any element being added to the live region is significant. Value of text implies that text content being added to any descendant node is relevant regardless of whether a new element is actually added.
+Value of removals implies that removing any text or any descendant element should trigger an announcement.
+The default value for aria-relevant is additions text, meaning that adding either a descendant element, or adding text content through some other mechanism is significant.
+It's rarely necessary to specify aria-relevant explicitly.
+
+* **aria-busy** lets us notify assistive technology that it should temporarily ignore changes to this element.
+
+Aria allows us to express an extremely broad range of semantic concepts via the use of HTML attributes. If you don't need to use Aria, you can just not. Implicit HTML semantics can
+get you a very long way and will save you a lot of effort in re-implementing the semantics and
+behaviors of many standard user experience patterns.
