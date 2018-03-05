@@ -14,16 +14,23 @@
 * [ChromeVox](http://www.chromevox.com/)
 * [Chrome Extension - Web Server for Chrome](https://chrome.google.com/webstore/detail/web-server-for-chrome/ofhbbkphhbklhfoeikjpcbhemlocgigb?hl=en)
 * [Chrome Extension - Accessibility Developer Tools](https://chrome.google.com/webstore/detail/accessibility-developer-t/fpkknkljclfencbdbgkenhalefipecmb?hl=en)
+* [Chrome Extension - NoCoffee](https://chrome.google.com/webstore/detail/nocoffee/jjeeggmbnhckmgdhmgdckeigabjfbddl?hl=en-US)
+* [Chrome Extension - High Contrast](https://chrome.google.com/webstore/detail/high-contrast/djcfdncoelnlbldjfhinnjlhdjlikmph?hl=en)
 * [Web Content Accessibility Guidelines 2.0 (WCAG)](https://www.w3.org/TR/WCAG20/)
 * [WebAIM's WCAG 2.0 Checklist](https://webaim.org/standards/wcag/checklist)
 * [WebAIMs Checklist 1.3.1 - Info and Relationships](https://webaim.org/standards/wcag/checklist#sc1.3.1)
 * [WebAIMs Checklist 1.3.2 - Meaningful Sequence](https://webaim.org/standards/wcag/checklist#sc1.3.2)
+* [WebAIMs Checklist 1.4.1 - Use of Color](https://webaim.org/standards/wcag/checklist#sc1.4.1)
+* [WebAIMs Checklist 1.4.3 - Contrast (Minimum)](https://webaim.org/standards/wcag/checklist#sc1.4.3)
+* [WebAIMs Checklist 1.4.4 - Resize text](https://webaim.org/standards/wcag/checklist#sc1.4.4)
+* [WebAIMs Checklist 1.4.6 - Contrast (Enhanced)](https://webaim.org/standards/wcag/checklist#sc1.4.6)
 * [WebAIMs Checklist 2.1.1 - Keyboard](https://webaim.org/standards/wcag/checklist#sc2.1.1)
 * [WebAIMs Checklist 2.1.2 - No Keyboard Trap](https://webaim.org/standards/wcag/checklist#sc2.1.2)
 * [WebAIMs Checklist 2.4.1 - Bypass Blocks](https://webaim.org/standards/wcag/checklist#sc2.4.1)
 * [WebAIMs Checklist 2.4.6 - Headings and Labels](https://webaim.org/standards/wcag/checklist#sc2.4.6)
 * [WebAIMs Checklist 2.4.9 - Link Purpose](https://webaim.org/standards/wcag/checklist#sc2.4.9)
 * [WebAIMs Checklist 2.4.10 - Section Headings](https://webaim.org/standards/wcag/checklist#sc2.4.10)
+* [WebAIMs Checklist 2.4.7 - Focus Visible](https://webaim.org/standards/wcag/checklist#sc2.4.7)
 * [WebAIM's WCAG 2.0 Guideline 1.1 - Text Alternatives](https://webaim.org/standards/wcag/checklist#g1.1)
 * [WebAIM - "Skip Navigiation" Links](https://webaim.org/techniques/skipnav/)
 * [WebAIM - Alternative Text](https://webaim.org/techniques/alttext/)
@@ -47,9 +54,20 @@
 * [MDN - tabindex](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex)
 * [MDN - The HTML dialog element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog)
 * [MDN - The HTML label element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/label)
+* [MDN - The :focus CSS pseudo-class](https://developer.mozilla.org/en-US/docs/Web/CSS/:focus)
+* [MDN - The outline CSS property](https://developer.mozilla.org/en-US/docs/Web/CSS/outline)
+* [MDN - The :hover CSS pseudo-class](https://developer.mozilla.org/en-US/docs/Web/CSS/:hover)
+* [MDN - CSS ::before](https://developer.mozilla.org/en-US/docs/Web/CSS/::before)
+* [MDN - The :-moz-focusring CSS pseudo-class](https://developer.mozilla.org/en-US/docs/Web/CSS/:-moz-focusring)
+* [MDN - Attribute selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors)
+* [Input Modality - JavaScript Shim](https://github.com/alice/modality)
+* [Material Design - Accessibility](https://material.io/guidelines/usability/accessibility.html#)
+* [Colour Blind Awareness](http://www.colourblindawareness.org/colour-blindness/)
 * [Article -
 Removing Headaches from Focus Management](https://developers.google.com/web/updates/2016/03/focus-start-point?hl=en)
 * [Article - hidden and aria-hidden](https://developer.paciellogroup.com/blog/2012/05/html5-accessibility-chops-hidden-and-aria-hidden/)
+* [Article - Proposing CSS input modality](https://www.oreilly.com/ideas/proposing-css-input-modality)
+
 
 ## Accessibility Overview
 Good accessibility or "a11y" is crucial to making sure all users can access the content in your sites and applications. We often shorten the word "**accessibility**" to "**a11y**" because there's 11 letters between the "A" and "Y" in the word "Accessibility". Making sure you consider accessibility at the start of your process will ensure that your final product is more polished and works for more people.
@@ -385,3 +403,76 @@ It's rarely necessary to specify aria-relevant explicitly.
 Aria allows us to express an extremely broad range of semantic concepts via the use of HTML attributes. If you don't need to use Aria, you can just not. Implicit HTML semantics can
 get you a very long way and will save you a lot of effort in re-implementing the semantics and
 behaviors of many standard user experience patterns.
+
+## Style
+Without the built-in browser focus ring, it's impossible for a keyboard user to tell which element is currently focused.
+The WebAIM checklist specifically states in section 2.4.7 **Focus Visible** that it should be visually apparent which page element has the current keyboard focus, as you tab through the page, you can see where you are.
+Sometimes the default focus ring may not fit in well with your design.
+To change the appearance of the element and only when it's focused, we can use the **:focus pseudo-class**. The :focus pseudo-class only matches when an element has focus.
+To change the appearance, we can then use the **outline property**.
+Removing the style altogether is a major anti-pattern, without a focus inindicator, how is a keyboard user supposed to tell which item they're interacting with?
+You then need to replace it with another consistent focus indicator so a keyboard or switch device user can navigate your page. A simple solution is using the same hover and focus styles.
+Browsers style the outline properties slightly differently. Use a box shadow instead of just changing the color and you'll get a consistent focus indicator across the different browsers.
+If possible, leave the default browser focus ring in place, as it's what many users have come to expect.
+If, however, the ring is clashing with your page styles or it's just awkwardly wrapping around your elements, then you can use the focus pseudo class to provide your own custom focus indicator
+Be careful about just conveying information with color because some users may have a color vision impairment.
+
+For native elements like button, browsers implement special behaviors to let them differentiate between mouse and keyboard focus and they only display the focus ring for keyboard focus. Unfortunately, this is not the case for custom controls you create yourself.
+This behavior is also inconsistent in different browsers. Unfortunately, there isn't
+currently any single cross-browser solution that will let us differentiate between mouse and keyboard focus.
+In Firefox, the **:-moz-focusring CSS pseudo-class** does allow you to write a focus style that will only be applied if the element is focused via the keyboard.
+There's a JavaScript shim for differentiating between mouse and keyboard input which can be used in your applications.
+
+When you're building components, it's a very common practice to reflect the state of the component using CSS classes.
+You can use CSS attribute selectors to target the element (for example when **aria-pressed** is true). This would create a nice relationship between the actual state of the component and our visual representation.
+One huge benefit to styling with ARIA is that it provides visual feedback that you've applied the state correctly, which can also act as a safeguard when you're testing and debugging your code.
+
+**Responsive design** is also a huge win for a11y.
+When a page is designed responsibly, the UI will rearrange itself for smaller viewports when zooming in. This is great for desktop users who require screen magnification and it's great for mobile screen reader users since there are fewer elements to touch and explore.
+Just by designing responsively we're meeting rule 1.4.4 of the WebAIMs checklist which states that a page should be readable and functional when text size is doubled.
+Make sure that you're always using a meta viewport tag and that you're setting its
+width equal to device-width and its initial-scale to 1.
+The meta viewport tag gives the browser instructions on how to control the page's dimensions and its scaling. By setting width equal to device-width we're telling the viewport to match
+the screen's width in device independent pixels.
+By setting initial-scale equal to 1 we're establishing a one-to-one relationship between CSS pixels and device independent pixels. This will instruct the browser to fit our content to the screen.
+When using the viewport tag, make sure you don't force max-scale to 1 or set user-scalable to no. This is an anti-pattern because it prevents users from easily pinching to zoom.
+Another technique is to make sure that you're designing with a responsive grid. This will allow your content to reflow when pages change its size.
+A major advantage of using relative units is that text and content can enlarge and force other items down the page.
+When your design is displaying on a mobile device, ensure that your interactive elements like buttons or links have touch targets that are large enough and also have enough space around
+them to make them easy to press without accidentally overlapping onto other elements.
+This is especially helpful for anyone with a motor impairment.
+A minimum recommended touch target size is around 48 device independent pixels, this corresponds to about 9 millimetres.
+Touch targets should also be spaced about 32 pixels apart, both horizontally and vertically.
+
+**Contrast ratio** is the relationship between the foreground color and the background color in terms of luminance.
+When the colors are very similar, we have a low contrast ratio.
+When the colors are very different we get a high contrast ratio.
+In section 1.4.3 the WebAIMs checklist recommends a minimum contrast ratio of 4.5 to 1 for all body text and images, with an exception for larger text.
+This contrast ratio was chosen as a minimum because it compensates for the loss in contrast sensitivity, usually experienced by users with 20/40 vision. This vision is commonly
+reported as the typical visual acuity for someone of around 80 years of age.
+For users with low vision impairments or color vision deficiencies we can increase the contrast up to a ratio of 7 to 1 for body copy and 4.5 to 1 for larger text.
+Using the Chrome Accessibility Developer Tools extension, you can do a page audit to verify that you're meeting contrast requirements.
+
+There are roughly 320 million people with some form of **color vision deficiency**. This means about 1 in 12 men and 1 in 200 women suffer from some form of **color blindness** so it affects men much more substantially than women.
+This also means that around 1 out of 20 users of your site will likely have some form of color vision deficiency.
+Some information might not be conveyed to color blind or screen reader users. We should always try to provide multiple avenues for the user of your site to access critical information.
+The WebAIMs checklist states in section 1.4.1 that color alone should not be used as the sole method of conveying content or distinguishing visual elements.
+Color should also not be used to distinguish links from surrounding text unless they meet certain contrast requirements.
+Instead, the checklist recommends adding an additional indicator like an underline to indicate
+when a link is active.
+You can use the **NoCoffee** Chrome extension to simulate various forms of visual impairment including different types of color blindness.
+For someone with a little vision impairment **High Contrast Mode** can make it much easier to navigate the content of the page. Another good Chrome extension is **High Contrast**. It allows the user to invert foreground and background colors which may help text stand out a lot better.
+
+There are a lot of interesting facets to accessibility worth considering when you're building your app.
+A well laid out focus strategy is extremely important but without focus styling, that effort goes completely to waste.
+Semantic markup is critical to assistive technology users.
+With styling keyed off of semantic properties, we can ensure a consistent experience for all of our users.
+Ensuring all text meets a minimum color contrast ratio is an easy way to improve readability for everyone, particularly those users with any kind of vision impairment.
+Responsive design benefits all mobile device users as well as users who employ browsers' zoom.
+It's important to remember that no matter what your product is, there's a whole range of users out there. Building only for a subset of users is excluding not only anyone with a permanent disability or impairment, but also means our product may fail any user when they're in a context which impacts the way that they use technology. Having empathy is a huge part of creating an accessible product. Another really important aspect is to make it part of the process from the beginning and make it part of everyone's job. Trying to make things better, remediating accessibility is best looked at through the lens of impact.
+
+* How *frequently* is this piece of UI used?
+* How badly does this accessibility issue *affect* your users?
+* How *expensive* is it going to be to fix?
+
+Good a11y = good UX!
