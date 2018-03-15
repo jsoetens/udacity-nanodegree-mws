@@ -15,3 +15,4 @@
 * [Progressive Web App Dev Summit Videos](https://www.youtube.com/playlist?list=PLNYkxOF6rcIAWWNR_Q6eLPhsyx6VvYjVb)
 * [Google Developers - Codelab Your First Progressive Web App](https://codelabs.developers.google.com/codelabs/your-first-pwapp/#0)
 * [Google Developers - The App Shell Model](https://developers.google.com/web/fundamentals/architecture/app-shell)
+* [Article - The next billion users](https://developers.google.com/web/billions/)
