@@ -103,21 +103,16 @@ if (workbox) {
   );
 
   // Restaurants
-  // https://developers.google.com/web/tools/workbox/modules/workbox-cacheable-response
+  // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#network_first_network_falling_back_to_cache
   // http://localhost:8887/restaurant.html?id=1
   workbox.routing.registerRoute(
-    new RegExp('.*restaurant\.html\?'),
-    workbox.strategies.cacheFirst({
+    new RegExp('restaurant.html(.*)'),
+    workbox.strategies.networkFirst({
       cacheName: 'pwa-cache-restaurants',
-      // The workbox-cacheable-response module provides a standard way of
-      // determining whether a response should be cached based on its numeric
-      // status code, the presence of a header with a specific value,
-      // or a combination of the two.
-      plugins: [
-        new workbox.cacheableResponse.Plugin({
-          statuses: [0, 200]
-        })
-      ]
+      // Status 0 is the response you would get if you request a cross-origin
+      // resource and the server that you're requesting it from is not
+      // configured to serve cross-origin resources.
+      cacheableResponse: {statuses: [0, 200]}
     })
   );
 
