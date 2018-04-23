@@ -17,7 +17,9 @@
     </nav>
   </header>
   <!-- main -->
-  <main id="maincontent">
+  <!-- IE11 and below: add an aria role of “main” to ensure it is accessible -->
+  <!-- https://developer.mozilla.org/en/docs/Web/HTML/Element/main#Browser_compatibility -->
+  <main id="maincontent" role="main">
     <!-- map -->
     <section id="map-container">
       <!-- The application role will tell assistive technology to disable -->
