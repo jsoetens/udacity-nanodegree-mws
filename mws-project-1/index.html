@@ -20,16 +20,18 @@
   <main id="maincontent">
     <!-- map -->
     <section id="map-container">
-      <div id="map"></div>
+      <!-- The application role will tell assistive technology to disable -->
+      <!-- its shortcuts and pass through all key presses to the page. -->
+      <div id="map" role="application" aria-label="Google Maps overview of restaurants" aria-hidden="true"></div>
     </section>
     <!-- restaurants -->
     <section>
       <div class="filter-options">
         <h2>Filter Results</h2>
-        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Select Neighborhood">
           <option value="all">All Neighborhoods</option>
         </select>
-        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="Select Quisine">
           <option value="all">All Cuisines</option>
         </select>
       </div>

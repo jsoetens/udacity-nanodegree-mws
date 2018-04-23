@@ -16,6 +16,16 @@ window.initMap = () => {
       });
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+
+      // a11y - Frames must have non-empty title attribute
+      // https://dequeuniversity.com/rules/axe/2.2/frame-title
+      // https://developers.google.com/maps/documentation/javascript/events
+      let setTitle = () => {
+        const iFrameGoogleMaps = document.querySelector('#map iframe');
+        iFrameGoogleMaps.setAttribute('title', 'Google Maps overview of restaurants');
+      }
+      self.map.addListener('tilesloaded', setTitle);
+
     }
   });
 }
@@ -58,6 +68,8 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img'
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  // Add alternative text
+  image.alt = restaurant.alternative_text;
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -95,7 +107,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h2');
+  const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
 
@@ -143,6 +155,9 @@ fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
   li.innerHTML = restaurant.name;
+  // a11y - indicate current page
+  // https://www.w3.org/TR/wai-aria-practices/examples/breadcrumb/index.html -->
+  li.setAttribute('aria-current', 'page');
   breadcrumb.appendChild(li);
 }
 

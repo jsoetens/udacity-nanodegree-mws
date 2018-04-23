@@ -37,7 +37,8 @@
         "rating": 3,
         "comments": "I was VERY excited to come here after seeing and hearing so many good things about this place. Having read much, I knew going into it that it was not going to be authentic Chinese. The place was edgy, had a punk rock throwback attitude, and generally delivered the desired atmosphere. Things went downhill from there though. The food was okay at best and the best qualities were easily overshadowed by what I believe to be poor decisions by the kitchen staff."
       }
-    ]
+    ],
+    "alternative_text": "Interior of Mission Chinese Food"
   }, {
     "id": 2,
     "name": "Emily",
@@ -76,7 +77,8 @@
         "rating": 5,
         "comments": "5 star atmosphere as it is very cozy with great staff. 5 star food as their Emmy burger is outrageously good. and its on a pretzel bun.. Too juicy for its own good and downright addicting. Also try the Colony pizza. Many others looked like worth competitors, but the Colony really found its way to my heart. when you start with a great crust, top it with top notch cheese and sauce, you've got a winner. But, if you go a step further and add the salty from the pepperoni, the sweet from the honey, and the spicy from the chili oil.... your mouth is confused and happy at the same time."
       }
-    ]
+    ],
+    "alternative_text": "Pizza Quattro Formaggi"
   }, {
     "id": 3,
     "name": "Kang Ho Dong Baekjeong",
@@ -115,7 +117,8 @@
         "rating": 2,
         "comments": "MEH. I've tried their Jersey location as well but Kang Ho Dong meat quality is severely decreasing. A Korean bbq place with whatever meat? I think NOT!"
       }
-    ]
+    ],
+    "alternative_text": "Interior of Kang Ho Dong Baekjeong"
   }, {
     "id": 4,
     "name": "Katz's Delicatessen",
@@ -154,7 +157,8 @@
         "rating": 2,
         "comments": "Ok so four of us came. One more later who didn't order becauase it's so expensive and simple. Seriously, a bunch of meat albeit you can sample beforehand on rye/white/wheat bread. Cheese extra. Pickles free, you can just ask them at the pickup counter. But seriously 20 bucks gone for an non-flavored half sandwich. And a line that is long, especially if you want seating. I'm down to just take a quick look where Sally and Harry sat and leave to the other delis all around NYC. Oh and they accept Samsung pay."
       }
-    ]
+    ],
+    "alternative_text": "Outside view of Katz's Delicatessen at night"
   }, {
     "id": 5,
     "name": "Roberta's Pizza",
@@ -193,7 +197,8 @@
         "rating": 4,
         "comments": "The pizza is fantastic, not THE best I've ever had, but would definitely go back since it has great food and great ambiance. Definitely worth going to. It has A LOT of hype in the New York food scene, and I question if it deserves all of it, but it's still a totally great spot to hit up when in the area!!"
       }
-    ]
+    ],
+    "alternative_text": "Open kitchen of Roberta's Pizza"
   }, {
     "id": 6,
     "name": "Hometown BBQ",
@@ -232,7 +237,8 @@
         "rating": 4,
         "comments": "mmmmmm, what a gem this is in bklyn! I loveeee how soft their brisket is here. Their pork tacos are to die for, their different variety of ribs and lastly, their lamb is not gamey at all. Super wallet friendly for the amount they give you. I highly recommend this spot- after eating here, you can definitely walk over for Steve's key lime pies."
       }
-    ]
+    ],
+    "alternative_text": "People queueing at Hometown BBQ"
   }, {
     "id": 7,
     "name": "Superiority Burger",
@@ -271,7 +277,8 @@
         "rating": 4,
         "comments": "Great flavors and very satisfying. Craving a sandwich, I stopped by on a Friday night with a vegetarian friend. Super small location with just a few seats inside. Ambiance is a bit industrial, good is definitely much more sophisticated than the look of the place! Ordered the superiority burger anda side of potato salad. The potato salad was very light and tasted clean ( less mayo, lots of dill and some cucumber) -- refreshing for a humid summer night! Sandwich was surprisingly delicious - it is very small ( funny allusion to a White Castle burger) but it packs a punch! Not only are there layers of flavors ( amazing sauces) but the party itself had a great texture Ahmed flavor-- well done and so wonderful! Will definitely stop by again for an overall amazing burger/sandwich. Staff was super nice and accommodating but not out of the way friendly."
       }
-    ]
+    ],
+    "alternative_text": "Outside view of Superiority Burger"
   }, {
     "id": 8,
     "name": "The Dutch",
@@ -310,7 +317,8 @@
         "rating": 4,
         "comments": "Aside from the slightly claustrophobic dining area and the fact that you may have difficulty hearing your dining companion, I'd return to The Dutch without hesitation. The food is surprisingly well-executed and conceived, and our dinner service flowed smoothly without a hitch. Just make sure to get a reservation in advance, as I'm sure more than just a few other people will have the same idea."
       }
-    ]
+    ],
+    "alternative_text": "Outside view of The Dutch"
   }, {
     "id": 9,
     "name": "Mu Ramen",
@@ -349,7 +357,8 @@
         "rating": 4,
         "comments": "One of the tastiest and most unique ramen places I've been to in NYC, but also the priciest. I think overall its worth the try. Not an everyday casual ramen shop though."
       }
-    ]
+    ],
+    "alternative_text": "People eating at Mu Ramen"
   }, {
     "id": 10,
     "name": "Casa Enrique",
@@ -388,6 +397,7 @@
         "rating": 4,
         "comments": "For a Michelin star restaurant, it's fairly priced and the food is fairly good. Started with a strawberry margarita which was good in flavor but not much alcohol. Had the chicken enchiladas with salsa verde and it was really good. Great balance in flavor and a good portion. Extra tasty with their hot sauces. My wife had the lamb but it was a bit too salty for our taste. Although, it was cooked very well and fell off the bone. The highlight of the night was the tres leches cake. Probably the best I've ever had to be honest. Not too sweet and very milky. Overall, one of my top 3 favorite Mexican in NY."
       }
-    ]
+    ],
+    "alternative_text": "Interior of Casa Enrique"
   }]
 }

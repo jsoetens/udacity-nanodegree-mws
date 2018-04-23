@@ -19,19 +19,25 @@
       </h1>
     </nav>
     <!-- breadcrumbs -->
-    <ul id="breadcrumb" >
-      <li><a href="/">Home</a></li>
-    </ul>
+    <!-- https://www.w3.org/TR/wai-aria-practices/examples/breadcrumb/index.html -->
+    <!-- TODO: make ul ol -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <ul id="breadcrumb">
+        <li><a href="/">Home</a></li>
+      </ul>
+    </nav>
   </header>
   <!-- main -->
   <main id="maincontent">
     <!-- map -->
     <section id="map-container">
-      <div id="map"></div>
+      <!-- The application role will tell assistive technology to disable -->
+      <!-- its shortcuts and pass through all key presses to the page. -->
+      <div id="map" role="application" aria-label="Google Maps overview of restaurants" aria-hidden="true"></div>
     </section>
     <!-- restaurants -->
     <section id="restaurant-container">
-      <h1 id="restaurant-name"></h1>
+      <h2 id="restaurant-name"></h2>
       <img id="restaurant-img">
       <p id="restaurant-cuisine"></p>
       <p id="restaurant-address"></p>

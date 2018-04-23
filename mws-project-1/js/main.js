@@ -1,8 +1,8 @@
 let restaurants,
   neighborhoods,
-  cuisines
-var map
-var markers = []
+  cuisines;
+var map;
+var markers = [];
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -69,6 +69,7 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
 
 /**
  * Initialize Google map, called from HTML.
+ *
  */
 window.initMap = () => {
   let loc = {
@@ -81,6 +82,16 @@ window.initMap = () => {
     scrollwheel: false
   });
   updateRestaurants();
+
+  // a11y - Frames must have non-empty title attribute
+  // https://dequeuniversity.com/rules/axe/2.2/frame-title
+  // https://developers.google.com/maps/documentation/javascript/events
+  let setTitle = () => {
+    const iFrameGoogleMaps = document.querySelector('#map iframe');
+    iFrameGoogleMaps.setAttribute('title', 'Google Maps overview of restaurants');
+  }
+  self.map.addListener('tilesloaded', setTitle);
+
 }
 
 /**
@@ -141,13 +152,17 @@ createRestaurantHTML = (restaurant) => {
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  // Add alternative text
+  image.setAttribute('alt', restaurant.alternative_text);
   li.append(image);
 
-  const name = document.createElement('h1');
+  const name = document.createElement('h2');
   name.innerHTML = restaurant.name;
   li.append(name);
 
-  const neighborhood = document.createElement('p');
+  // Use contact address element
+  // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/address
+  const neighborhood = document.createElement('address');
   neighborhood.innerHTML = restaurant.neighborhood;
   li.append(neighborhood);
 
@@ -158,8 +173,9 @@ createRestaurantHTML = (restaurant) => {
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
-  li.append(more)
+  li.append(more);
 
+  // Return has automatic semicolon insertion (ASI).
   return li
 }
 
