@@ -148,32 +148,48 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
+  li.className = 'restaurant-card';
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  // Add alternative text
+  // Add alternative text.
   image.setAttribute('alt', restaurant.alternative_text);
   li.append(image);
 
+  // Create a div with class card-primary that contains h2, h3.
+  const divCardPrimary = document.createElement('div');
+  divCardPrimary.className = 'card-primary';
   const name = document.createElement('h2');
+  name.className = 'card-title';
   name.innerHTML = restaurant.name;
-  li.append(name);
-
-  // Use contact address element
-  // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/address
-  const neighborhood = document.createElement('p');
+  divCardPrimary.append(name);
+  const neighborhood = document.createElement('h3');
+  neighborhood.className = 'card-subtitle';
   neighborhood.innerHTML = restaurant.neighborhood;
-  li.append(neighborhood);
+  divCardPrimary.append(neighborhood);
+  li.append(divCardPrimary);
 
+  // Create a div with class card-secondary that contains further content.
+  const divCardSecondary = document.createElement('div');
+  divCardSecondary.className = 'card-secondary';
+  // Use contact address element.
+  // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/address
   const address = document.createElement('address');
+  address.className = 'card-secondary-content';
   address.innerHTML = restaurant.address;
-  li.append(address);
+  divCardSecondary.append(address);
+  li.append(divCardSecondary);
 
+  // Create a div with class card-actions.
+  const divCardActions = document.createElement('div');
+  divCardActions.className = 'card-actions';
   const more = document.createElement('a');
+  more.className = 'card-actions-link';
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
-  li.append(more);
+  divCardActions.append(more);
+  li.append(divCardActions);
 
   // Return has automatic semicolon insertion (ASI).
   return li
