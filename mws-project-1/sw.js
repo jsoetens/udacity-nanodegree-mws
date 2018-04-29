@@ -1,5 +1,7 @@
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.1.0/workbox-sw.js');
+
 /**
- * Workbox
+ * Workbox 3.1.0
  * Workbox - https://developers.google.com/web/tools/workbox/
  * Codelab - https://codelabs.developers.google.com/codelabs/workbox-lab/
  *
@@ -9,16 +11,9 @@
  * and the file names for our source and production service workers (swSrc and
  * swDest, respectively). We can also modify this config file directly to change
  * what files are precached.
- */
-
-
-/**
- * Importing Workbox
- *
  * The importScripts call imports the workbox-sw.js library so the workbox
  * object gives our service worker access to all the Workbox modules.
  */
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js');
 
 if (workbox) {
   console.log(`[DEBUG] Workbox is loaded.`);
@@ -38,31 +33,31 @@ if (workbox) {
   workbox.precaching.precacheAndRoute([
     {
       "url": "css/styles.css",
-      "revision": "42545e85bb0a38228ef7f8e36e96bb59"
+      "revision": "0e7f7120891b6609730d747c2c78b306"
     },
     {
       "url": "data/restaurants.json",
-      "revision": "500a3defff288a163f63f80b48025716"
+      "revision": "a294ed676e9bb2d3d50019ecb4292eaf"
     },
     {
       "url": "index.html",
-      "revision": "cfaf9ff76e5561be7f41c638eac0bf7e"
+      "revision": "375469cbd761d5ad336110b9d73b5686"
     },
     {
       "url": "js/dbhelper.js",
-      "revision": "e68051d2f94543853f3641b63f9051fb"
+      "revision": "81e76e9572140f26622ea4fe428cc9eb"
     },
     {
       "url": "js/main.js",
-      "revision": "ff3fca18d778da7d033184c2d4e45f1e"
+      "revision": "957d7bbef08fe20de2e0a31131219be1"
     },
     {
       "url": "js/restaurant_info.js",
-      "revision": "8ad50d3d6e2488d447d49231ec3ff92b"
+      "revision": "a798d8a9e1f3e1ca8709f2fb8cc010ae"
     },
     {
       "url": "restaurant.html",
-      "revision": "935be362157523ba7662486040655e12"
+      "revision": "ef524a681d8e0c52cdd55e6c0bb53ec3"
     }
   ]);
 

@@ -1,5 +1,7 @@
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.1.0/workbox-sw.js');
+
 /**
- * Workbox
+ * Workbox 3.1.0
  * Workbox - https://developers.google.com/web/tools/workbox/
  * Codelab - https://codelabs.developers.google.com/codelabs/workbox-lab/
  *
@@ -9,16 +11,9 @@
  * and the file names for our source and production service workers (swSrc and
  * swDest, respectively). We can also modify this config file directly to change
  * what files are precached.
- */
-
-
-/**
- * Importing Workbox
- *
  * The importScripts call imports the workbox-sw.js library so the workbox
  * object gives our service worker access to all the Workbox modules.
  */
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js');
 
 if (workbox) {
   console.log(`[DEBUG] Workbox is loaded.`);
