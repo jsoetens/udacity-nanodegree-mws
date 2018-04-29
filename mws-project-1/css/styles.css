@@ -5,8 +5,8 @@
 
 /* Common Stuff */
 
-/* Color Scheme */
-/* https://material.io/color/#!/?view.left=0&view.right=0&primary.color=3F51B5&secondary.color=FF4081&primary.text.color=ffffff */
+/* Using a Material Design color palette - https://material.io */
+/* Primary color - Indigo, secondary Color - Pink */
 
 * {
   /* border-box - includes content, padding and border */
@@ -20,10 +20,7 @@ html {
 	line-height: 1.15;
 }
 
-body,
-td,
-th,
-p {
+body {
   font-family: Roboto, sans-serif;
 	/* Set to default browser size */
 	font-size: 16px;
@@ -35,10 +32,6 @@ body {
   color: #000000;
 }
 
-a img{
-	border: none 0px #fff;
-}
-
 /* Not setting block level elements */
 /* https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements */
 
@@ -46,51 +39,19 @@ a img{
 /* -------------------------------------------------------------------------- */
 
 /*
- * Responsive Web Design
+ * Responsive Web Design using Flexbox - Flexible Box Layout
  *
  * https://developers.google.com/web/fundamentals/design-and-ux/responsive/
  * https://www.w3.org/TR/css-flexbox-1/
- * https://developers.google.com/web/ilt/pwa/lab-responsive-design
- * https://material.io
- * https://material-components-web.appspot.com/
- * http://jeffbridgforth.com/aligning-last-child-in-flexbox-grid/
- */
-
-/* Prevent accidentally overflowing the viewport */
-img,
-embed,
-object,
-video {
-  max-width: 100%;
-}
-
-/* Flexbox Parent - Flex Container
- *
- * display: flex defines a flex container (inline or block depending on the
- * given value. It enables a flex context for all its direct children.
- * It enables a flex context for all its direct children.
- * flex-direction establishes the main-axis, thus defining the direction
- * flex items are placed in the flex container.
- * flex-flow applies to the parent flex container element and is a shorthand
- * for flex-direction and flex-wrap properties, which together define
- * the flex container's main and cross axes. Default is row nowrap
- * flex: no
- * Flexbox Child - Flex Items
- * Tip: a margin set to `auto` in a flex container absorbs extra space.
- * Setting a vertical margin of auto will make the item perfectly centered
- * in both axis.
- * no margin: auto or the magic stuff for flex items
- * Auto margins expand to absorb extra space in the corresponding dimension
- * Please remark that float, clear and vertical-align have no effect
- * on flex items.
  */
 
 /* Flexbox Wrapper */
+/* https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
 .wrapper {
   margin: 0;
   padding: 0;
-  display: flex; /* or inline-flex */
-  flex-flow: row wrap; /* flex items will all try to fit onto one line. */
+  display: flex;
+  flex-flow: row wrap;
 }
 
 /* We tell all items to be 100% width, via flex-basis */
@@ -99,6 +60,14 @@ video {
 	/* flew-grow: 1 */
 	/* flex-shrink: 1 */
   flex: 1 100%;
+}
+
+/* Prevent accidentally overflowing the viewport */
+img,
+embed,
+object,
+video {
+  max-width: 100%;
 }
 
 
@@ -115,7 +84,6 @@ video {
 	align-items: center;
   box-shadow: 0 0.125rem 0.3125rem rgba(0,0,0,.26);
   text-transform: uppercase;
-  /* Primary color - Indigo */
   background-color: #002984;
 }
 
@@ -182,31 +150,22 @@ video {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: center; /* space-evenly */
 }
 
-/* .restaurant-card */
 .restaurant-card {
-  min-width: 240px;
+  min-width: 15rem; /* 240px */
   width: 100%;
   margin: 0.75rem;
   display: flex;
   flex-direction: column; /* mobile first */
+  list-style-type: none;
   border-radius: 2px;
   box-shadow:
     0px 3px 1px -2px rgba(0, 0, 0, 0.2),
     0px 2px 2px 0px rgba(0, 0, 0, 0.14),
     0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 	background-color: rgb(255, 255, 255);
-}
-
-#restaurants-list .restaurant-img {
-  /* background-color: #ccc; */
-  /* display: block; */
-  /* margin: 0; */
-  /* max-width: 100%; */
-  /* min-height: 248px; */
-  /* min-width: 100%; */
 }
 
 .card-primary {
@@ -260,149 +219,171 @@ video {
 }
 
 .card-actions-link:hover, .card-actions-link:focus {
-  /* Secondary Color - Pink */
   color: #ff4081;
 }
 
 
 /* -------------------------------------------------------------------------- */
 
-/* breadcrumb */
-
-#breadcrumb {
-    padding: 10px 40px 16px;
-    list-style: none;
-    background-color: #eee;
-    font-size: 17px;
-    margin: 0;
-    width: calc(50% - 80px);
+.breadcrumbs {
+  width: 100%;
+  min-width: 48px;
+  min-height: 52px;
+  margin: 0;
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  /* background-color: #ffffff; */
+  background-color: #3f51b5;
 }
 
-/* Display list items side by side */
-#breadcrumb li {
-    display: inline;
+.breadcrumb {
+  list-style-type: none;
+  font-weight: 300;
+  color: #ffffff;
 }
 
-/* Add a slash symbol (/) before/behind each list item */
-#breadcrumb li+li:before {
-    padding: 8px;
-    color: black;
-    content: "/\00a0";
+.breadcrumb+.breadcrumb:before {
+  padding: 0.5rem;
+  content: ">";
 }
 
-/* Add a color to all links inside the list */
-#breadcrumb li a {
-    color: #0275d8;
-    text-decoration: none;
+.breadcrumb-link {
+  min-width: 3rem;
+  min-height: 3rem; /* nice tap targets */
+  font-weight: 300;
+  text-decoration: none;
+  /* color: #000000; */
+  color: #ffffff;
 }
 
-/* Add a color on mouse-over */
-#breadcrumb li a:hover {
-    color: #01447e;
-    text-decoration: underline;
+.breadcrumb-link:hover, .breadcrumb-link:focus {
+  color: #ff4081;
 }
 
 
 /* -------------------------------------------------------------------------- */
 
-/* ====================== Restaurant Details ====================== */
-.inside header {
-  /* position: fixed; */
-  /* top: 0; */
-  /* width: 100%; */
-  /* z-index: 1000; */
-}
-.inside #map-container {
-  /* background: blue none repeat scroll 0 0; */
-  /* height: 87%; */
-  /* position: fixed; */
-  /* right: 0; */
-  /* top: 80px; */
-  /* width: 50%; */
-}
-.inside #map {
-  /* background-color: #ccc; */
-  /* height: 100%; */
-  /* width: 100%; */
-}
-.inside #footer {
-  /* bottom: 0; */
-  /* position: absolute; */
-  /* width: 50%; */
-}
-#restaurant-name {
-  color: #f18200;
-  /* font-family: Arial,sans-serif; */
-  font-size: 20pt;
-  font-weight: 200;
-  letter-spacing: 0;
-  margin: 15px 0 30px;
-  text-transform: uppercase;
-  line-height: 1.1;
-}
-#restaurant-img {
-	width: 90%;
-}
-#restaurant-address {
-  font-size: 12pt;
-  margin: 10px 0px;
-}
-#restaurant-cuisine {
-  background-color: #333;
-  color: #ddd;
-  font-size: 12pt;
-  font-weight: 300;
-  letter-spacing: 10px;
-  margin: 0 0 20px;
-  padding: 2px 0;
-  text-align: center;
-  text-transform: uppercase;
-	width: 90%;
-}
-#restaurant-container, #reviews-container {
-  border-bottom: 1px solid #d9d9d9;
-  border-top: 1px solid #fff;
-  padding: 140px 40px 30px;
-  width: 50%;
-}
-#reviews-container {
-  padding: 30px 40px 80px;
-}
-#reviews-container h2 {
-  color: #f58500;
-  font-size: 24pt;
-  font-weight: 300;
-  letter-spacing: -1px;
-  padding-bottom: 1pt;
-}
-#reviews-list {
+.restaurant-details {
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #e0e0e0;
 }
-#reviews-list li {
-  background-color: #fff;
-  border: 2px solid #f3f3f3;
-  display: block;
+
+.restaurant-details-map {
+  width: 50%;
+  min-height: 25vh;
+  flex: 1;
+}
+
+.google-maps-stretch {
+  width: 100%;
+	height: 100%;
+}
+
+.restaurant-details-title {
+  width: 100%;
+  margin: 0.75rem;
+  padding-left: 0.25rem;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.restaurant-details-card {
+  width: 50%;
+  min-width: 15rem; /* 240px */
+  display: flex;
+  flex-direction: column;
   list-style-type: none;
-  margin: 0 0 30px;
-  overflow: hidden;
-  padding: 0 20px 20px;
-  position: relative;
-  width: 85%;
-}
-#reviews-list li p {
-  margin: 0 0 10px;
-}
-#restaurant-hours td {
-  color: #666;
+	background-color: rgb(255, 255, 255);
 }
 
+.restaurant-card-cuisine {
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #3f51b5;
+}
 
+.restaurant-card-cuisine-content {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.restaurant-card-opening-hours {
+  padding: 1rem;
+}
+
+.restaurant-card-table-content {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.01786em;
+  font-style: normal;
+  color: rgba(0, 0, 0, 0.54);
+}
 
 
 /* -------------------------------------------------------------------------- */
 
-/* footer */
+.reviews-title {
+  width: 100%;
+  margin: 0.75rem;
+  padding-left: 0.25rem;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.review-cards {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly; /* space-evenly */
+}
+
+.review-card {
+  min-width: 15rem; /* 240px */
+  width: 100%;
+  margin: 0.75rem;
+  display: flex;
+  flex-direction: column; /* mobile first */
+  list-style-type: none;
+  border-radius: 2px;
+  box-shadow:
+    0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+	background-color: rgb(255, 255, 255);
+}
+
+.review-card-rating {
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #ff79b0;
+}
+
+.review-card-rating-content {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+
+/* -------------------------------------------------------------------------- */
 
 .footer {
   width: 100%;
@@ -420,8 +401,6 @@ video {
 .footer-content {
   padding: 1rem;
   font-size: 0.75rem;
-  /* font-weight: 300; */
-  /* letter-spacing: 0.25em; */
   letter-spacing: 0.05em;
   color: #000000;
 }
@@ -466,6 +445,18 @@ video {
 		width: 90%; /* fallback if needed */
 		width: calc(100% - 1em);
 	}
+  .restaurant-details {
+    flex-direction: column;
+  }
+  .restaurant-details-card {
+    width: 100%;
+    order: 2;
+  }
+  .restaurant-details-map {
+    width: 100%;
+    height: 30vh;
+    order: 1;
+  }
   .footer-content {
     font-size: 0.55rem; /* from 0.75rem */
     font-weight: 300;
@@ -486,6 +477,18 @@ video {
   .restaurant-card {
     margin: 1rem;
   }
+  .restaurant-details {
+    flex-direction: column;
+  }
+  .restaurant-details-card {
+    width: 100%;
+    order: 2;
+  }
+  .restaurant-details-map {
+    width: 100%;
+    height: 35vh;
+    order: 1;
+  }
   .footer-content {
     font-size: 0.65rem; /* from 0.75rem */
     font-weight: 300;
@@ -503,10 +506,10 @@ video {
 	.restaurants-filter select {
 		width: calc(45% - 1em);
 	}
-  .restaurant-cards {
-    flex-direction: row;
-  }
   .restaurant-card {
+    width: 45%; /* 2 cards */
+  }
+  .review-card {
     width: 45%; /* 2 cards */
   }
 }
@@ -521,10 +524,10 @@ video {
 	.restaurants-filter select {
 		width: calc(40% - 1em);
 	}
-  .restaurant-cards {
-    flex-direction: row;
-  }
   .restaurant-card {
+    width: 45%; /* 2 cards */
+  }
+  .review-card {
     width: 45%; /* 2 cards */
   }
 }
@@ -539,10 +542,10 @@ video {
 	.restaurants-filter select {
 		width: calc(35% - 1em);
 	}
-  .restaurant-cards {
-    flex-direction: row;
-  }
   .restaurant-card {
+    width: 30%; /* 3 cards */
+  }
+  .review-card {
     width: 30%; /* 3 cards */
   }
 }
@@ -554,10 +557,13 @@ video {
 	.restaurants-filter select {
 		width: calc(30% - 1em);
 	}
-  .restaurant-cards {
-    flex-direction: row;
-  }
   .restaurant-card {
     width: 22.5%; /* 4 cards */
+  }
+  .restaurant-card-table-content {
+    font-size: 0.925rem;
+  }
+  .review-card {
+    width: 30%; /* 3 cards */
   }
 }
