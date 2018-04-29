@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <!-- meta viewport tag to control the width and scaling of the browser's viewport. -->
+  <!-- width=device-width to match the screen's width in device-independent pixels. -->
+  <!-- initial-scale=1 to establish a 1:1 relationship between CSS pixels and device-independent pixels. -->
+  <!-- Ensure page is accessible by not disabling user scaling. -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- CSS -->
   <!-- Normalize.css corrects bugs and common browser inconsistencies. -->
@@ -9,49 +13,62 @@
   <link rel="stylesheet" href="css/styles.css">
   <title>Restaurant Info</title>
 </head>
-<body class="inside">
-  <!-- header -->
-  <header>
-    <!-- nav -->
-    <nav>
-      <h1>
-        <a href="/">Restaurant Reviews</a>
-      </h1>
-    </nav>
-    <!-- breadcrumbs -->
-    <!-- https://www.w3.org/TR/wai-aria-practices/examples/breadcrumb/index.html -->
-    <!-- TODO: make ul ol -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <ul id="breadcrumb">
-        <li><a href="/">Home</a></li>
-      </ul>
-    </nav>
-  </header>
-  <!-- main -->
-  <main id="maincontent">
-    <!-- map -->
-    <section id="map-container">
-      <!-- The application role will tell assistive technology to disable -->
-      <!-- its shortcuts and pass through all key presses to the page. -->
-      <div id="map" role="application" aria-label="Google Maps overview of restaurants" aria-hidden="true"></div>
-    </section>
-    <!-- restaurants -->
-    <section id="restaurant-container">
-      <h2 id="restaurant-name"></h2>
-      <img id="restaurant-img">
-      <p id="restaurant-cuisine"></p>
-      <p id="restaurant-address"></p>
-      <table id="restaurant-hours"></table>
-    </section>
-    <!-- reviews -->
-    <section id="reviews-container">
-      <ul id="reviews-list"></ul>
-    </section>
-  </main>
-  <!-- footer -->
-  <footer id="footer">
-    Copyright (c) 2018 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
-  </footer>
+<body>
+  <div class="wrapper">
+    <!-- header -->
+    <header>
+      <nav class="nav">
+        <h1>
+          <a class="nav-title" href="/">Restaurant Reviews</a>
+        </h1>
+      </nav>
+      <!-- breadcrumbs -->
+      <!-- https://www.w3.org/TR/wai-aria-practices/examples/breadcrumb/index.html -->
+      <nav aria-label="Breadcrumb">
+        <ol id="breadcrumb" class="breadcrumbs">
+          <li class="breadcrumb">
+            <a class="breadcrumb-link" href="/">Home</a>
+          </li>
+        </ol>
+      </nav>
+    </header>
+    <!-- main -->
+    <!-- IE11 and below: add an aria role of “main” to ensure it is accessible -->
+    <!-- https://developer.mozilla.org/en/docs/Web/HTML/Element/main#Browser_compatibility -->
+    <main id="maincontent" class="main" role="main">
+      <!-- restaurant-details -->
+      <div class="restaurant-details">
+        <!-- restaurants -->
+        <section id="restaurant-container" class="restaurant-details-card">
+          <img id="restaurant-img">
+          <div class="card-primary">
+            <h2 id="restaurant-name" class="card-title" ></h2>
+            <address id="restaurant-address" class="card-secondary-content"></address>
+          </div>
+          <div class="restaurant-card-cuisine">
+            <p id="restaurant-cuisine" class="restaurant-card-cuisine-content"></p>
+          </div>
+          <div class="restaurant-card-opening-hours">
+            <table id="restaurant-hours" class="restaurant-card-table-content"></table>
+          </div>
+        </section>
+        <!-- map -->
+        <section id="map-container" class="restaurant-details-map">
+          <!-- The application role will tell assistive technology to disable -->
+          <!-- its shortcuts and pass through all key presses to the page. -->
+          <div id="map" class="google-maps-stretch" role="application" aria-label="Google Maps overview of restaurants" aria-hidden="true"></div>
+        </section>
+      </div>
+      <!-- reviews -->
+      <section id="reviews-container">
+        <ul id="reviews-list" class="review-cards"></ul>
+      </section>
+    </main>
+    <!-- footer -->
+    <footer id="footer" class="footer">
+      <p class="footer-content">Copyright © 2018 <a class="footer-link" href="/">Restaurant Reviews</a> All Rights Reserved.</p>
+    </footer>
+  </div>
   <!-- scripts -->
   <!-- scripts - App -->
   <script src="js/dbhelper.js"></script>
