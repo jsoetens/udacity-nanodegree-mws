@@ -7,6 +7,7 @@
 
 ## Links
 * [Udacity Course - Offline Web Applications](https://www.udacity.com/course/offline-web-applications--ud899)
+* [Udacity Course - Intro to Progressive Web Apps](https://www.udacity.com/course/intro-to-progressive-web-apps--ud811)
 * [wittr by Jake Archibald](https://github.com/jakearchibald/wittr)
 * [Google Developers - Progressive Web Apps](https://developers.google.com/web/progressive-web-apps/)
 * [Google Developers - Progressive Web App Checklist](https://developers.google.com/web/progressive-web-apps/checklist)

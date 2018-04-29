@@ -67,6 +67,7 @@
 Removing Headaches from Focus Management](https://developers.google.com/web/updates/2016/03/focus-start-point?hl=en)
 * [Article - hidden and aria-hidden](https://developer.paciellogroup.com/blog/2012/05/html5-accessibility-chops-hidden-and-aria-hidden/)
 * [Article - Proposing CSS input modality](https://www.oreilly.com/ideas/proposing-css-input-modality)
+* [Accessibility in Google Maps](https://support.google.com/maps/answer/6396990?co=GENIE.Platform%3DDesktop&hl=en&oco=1)
 
 
 ## Accessibility Overview
