@@ -56,7 +56,8 @@
   </div>
   <!-- scripts -->
   <!-- scripts - Service Worker -->
-  <script>
+  <!-- importScripts in sw.js can result in a SecurityError without setting MIME explicitly -->
+  <script type="application/javascript">
     if ('serviceWorker' in navigator) {
       console.log('[DEBUG] Service worker is supported.')
       // Use the window load event to keep the page load performant
