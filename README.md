@@ -12,7 +12,7 @@ Thank you Google and Udacity for granting me a full 6-month [Google Developer Na
 ## Projects
 
 * [Restaurant Reviews App: Stage 1](mws-project-1/README.md)
-* Restaurant Reviews App: Stage 2
+* [Restaurant Reviews App: Stage 2](mws-project-2/README.md)
 * Restaurant Reviews App: Stage 3
 
 ## Supporting Courses

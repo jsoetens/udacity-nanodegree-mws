@@ -20,7 +20,7 @@ pipenv --python 3.6
 pipenv run python -m http.server 8887
 ```
 
-Open url [localhost:8000](localhost:8000) in your favorite browser.
+Open url [localhost:8887](localhost:8887) in your favorite browser.
 
 ## Workbox
 The service worker is created by the [Workbox CLI](https://developers.google.com/web/tools/workbox/modules/workbox-cli) using a source service worker and configuration file.
