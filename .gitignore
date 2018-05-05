@@ -5,3 +5,6 @@
 
 # IDE
 .idea
+
+# Node.js
+node_modules/

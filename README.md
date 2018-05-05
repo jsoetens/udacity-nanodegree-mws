@@ -8,6 +8,7 @@ Thank you Google and Udacity for granting me a full 6-month [Google Developer Na
 * [Responsive Images](docs/study-notes/responsive-images.md)
 * [Web Accessibility](docs/study-notes/web-accessibility.md)
 * [Offline Web Applications](docs/study-notes/offline-web-applications.md)
+* [Web Tooling and Automation](docs/study-notes/web-tooling-and-automation.md)
 
 ## Projects
 
