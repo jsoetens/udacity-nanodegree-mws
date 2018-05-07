@@ -97,7 +97,7 @@ gulp.task('styles', function() {
 })
 ```
 
-# Expressive Line Editing
+## Expressive Line Editing
 **Live Editing** can be set up in a few different ways:
 * Live on every keystroke in the editor.
 * Every save via Gulp.
@@ -124,7 +124,7 @@ gulp.task('browser-sync', function() {
 });
 ```
 
-# How to Prevent Disasters
+## How to Prevent Disasters
 By utilizing your build and editor tools, you can quite heavily improve the quality output of your coding.
 
 **Linting** is a way to automatically check your Java script code for errors. It can be done at various stages during development via your editor, your build process or your pre-commit hook in version control.
@@ -152,7 +152,7 @@ Continuous Integration in the cloud is a great place for your time intensive tas
 **Continuous Integration** is the idea that you're always making sure your code can be integrated with the remote repository. Across a team, you'll always have a stable build.
 A cloud solution like Jenkins will watch the commits going into your repository and trigger any terminal commands you feed it. This means that the test suite can run after every commit but on a completely different computer.  If one of these tests now fails, you've got a notification and you  can fix it in your next commit.
 
-# Awesome Optimizations
+## Awesome Optimizations
 Most optimizations are only meant for production.
 It's recommended to split your tasks into development and production.
 Development tasks contain things you really need no matter what.
@@ -280,7 +280,7 @@ gulp.task('default', function() {
 
 Smaller images can tolerate more aggressive lossy compression. You might want to try other things like converting images to SVG where applicable.
 
-# Scaffolding
+## Scaffolding
 If you set up plenty of projects, you might want to automate the automation.
 **Scaffolding** is a way of creating a starting point structure for your project based on a couple of assumptions that you control.
 It's very likely that you've already done the most basic form of scaffolding plenty of times, copy and paste.

@@ -9,6 +9,7 @@ Thank you Google and Udacity for granting me a full 6-month [Google Developer Na
 * [Web Accessibility](docs/study-notes/web-accessibility.md)
 * [Offline Web Applications](docs/study-notes/offline-web-applications.md)
 * [Web Tooling and Automation](docs/study-notes/web-tooling-and-automation.md)
+* [Asynchronous JavaScript Requests](docs/study-notes/asynchronous-javascript-requests.md)
 
 ## Projects
 
