@@ -1,7 +1,7 @@
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.1.0/workbox-sw.js');
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.2.0/workbox-sw.js');
 
 /**
- * Workbox 3.1.0
+ * Workbox 3.2.0
  * Workbox - https://developers.google.com/web/tools/workbox/
  * Codelab - https://codelabs.developers.google.com/codelabs/workbox-lab/
  *
@@ -32,12 +32,27 @@ if (workbox) {
   // cache-first handler.
   workbox.precaching.precacheAndRoute([]);
 
-  // Google APIs
+  // Google Fonts
+  // https://developers.google.com/web/tools/workbox/guides/common-recipes#google_fonts
+  // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
+  workbox.routing.registerRoute(
+  new RegExp('https://fonts.(?:googleapis|gstatic).com/(.*)'),
+  workbox.strategies.cacheFirst({
+    cacheName: 'pwa-cache-google-fonts',
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxEntries: 30,
+      }),
+    ],
+  }),
+);
+
+  // Google Maps APIs
   // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#stale-while-revalidate
   workbox.routing.registerRoute(
-    new RegExp('(.*).(?:googleapis|gstatic).com/(.*)'),
+    new RegExp('https://maps.(?:googleapis|gstatic).com/(.*)'),
     workbox.strategies.staleWhileRevalidate({
-      cacheName: 'pwa-cache-googleapis',
+      cacheName: 'pwa-cache-maps',
       cacheExpiration: {
         maxEntries: 20
       },

@@ -1,7 +1,7 @@
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.1.0/workbox-sw.js');
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.2.0/workbox-sw.js');
 
 /**
- * Workbox 3.1.0
+ * Workbox 3.2.0
  * Workbox - https://developers.google.com/web/tools/workbox/
  * Codelab - https://codelabs.developers.google.com/codelabs/workbox-lab/
  *
@@ -33,40 +33,63 @@ if (workbox) {
   workbox.precaching.precacheAndRoute([
     {
       "url": "css/styles.css",
-      "revision": "0e7f7120891b6609730d747c2c78b306"
-    },
-    {
-      "url": "data/restaurants.json",
-      "revision": "a294ed676e9bb2d3d50019ecb4292eaf"
+      "revision": "68111505fd505c7dd49951a02accc8da"
     },
     {
       "url": "index.html",
-      "revision": "375469cbd761d5ad336110b9d73b5686"
+      "revision": "14efceef149627b1e23d353c7fd6ae78"
     },
     {
       "url": "js/dbhelper.js",
-      "revision": "81e76e9572140f26622ea4fe428cc9eb"
+      "revision": "35b47d9935fbf66642b22efa233754f2"
     },
     {
       "url": "js/main.js",
-      "revision": "957d7bbef08fe20de2e0a31131219be1"
+      "revision": "1d5bc459f39f2238de5592e70a0ffea1"
     },
     {
       "url": "js/restaurant_info.js",
-      "revision": "a798d8a9e1f3e1ca8709f2fb8cc010ae"
+      "revision": "ef66faf2d8362c48b2bbef21aa72af06"
     },
     {
       "url": "restaurant.html",
-      "revision": "ef524a681d8e0c52cdd55e6c0bb53ec3"
+      "revision": "aa78d33e5daf4830e7ff3cfccc04f2bd"
+    },
+    {
+      "url": "manifest.json",
+      "revision": "70734e689aa308ac55dbc2638265dd5e"
+    },
+    {
+      "url": "img/touch/homescreen-192.png",
+      "revision": "2299ca25b016e5bbb9b9baf05fee167e"
+    },
+    {
+      "url": "img/touch/homescreen-512.png",
+      "revision": "2aaa97e853c790310ab46898b2195d1a"
     }
   ]);
 
-  // Google APIs
+  // Google Fonts
+  // https://developers.google.com/web/tools/workbox/guides/common-recipes#google_fonts
+  // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
+  workbox.routing.registerRoute(
+  new RegExp('https://fonts.(?:googleapis|gstatic).com/(.*)'),
+  workbox.strategies.cacheFirst({
+    cacheName: 'pwa-cache-google-fonts',
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxEntries: 30,
+      }),
+    ],
+  }),
+);
+
+  // Google Maps APIs
   // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#stale-while-revalidate
   workbox.routing.registerRoute(
-    new RegExp('(.*).(?:googleapis|gstatic).com/(.*)'),
+    new RegExp('https://maps.(?:googleapis|gstatic).com/(.*)'),
     workbox.strategies.staleWhileRevalidate({
-      cacheName: 'pwa-cache-googleapis',
+      cacheName: 'pwa-cache-maps',
       cacheExpiration: {
         maxEntries: 20
       },
