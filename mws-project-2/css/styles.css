@@ -100,12 +100,6 @@ video {
   letter-spacing: 0.275em;
 }
 
-/* nice tap targets */
-.nav a, button {
-  min-width: 48px;
-  min-height: 48px;
-}
-
 
 /* -------------------------------------------------------------------------- */
 
