@@ -46,10 +46,10 @@
         <!-- <div class="filter-options flex-container"> -->
         <div class="restaurants-filter">
           <!-- <h2>Filter Results</h2> -->
-          <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Select Neighborhood">
+          <select id="neighborhoods-select" name="neighborhoods" onchange="refreshRestaurants()" aria-label="Select Neighborhood">
             <option value="all">All Neighborhoods</option>
           </select>
-          <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="Select Quisine">
+          <select id="cuisines-select" name="cuisines" onchange="refreshRestaurants()" aria-label="Select Quisine">
             <option value="all">All Cuisines</option>
           </select>
         </div>
@@ -84,7 +84,7 @@
   </script>
   <!-- scripts - App -->
   <script src="js/dbhelper.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/app.js"></script>
   <!-- scripts - Google Maps -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDm9CBeGB2XpSOVQXsuyo-kJtdHSNGiF4k&libraries=places&callback=initMap"></script>
 </body>
