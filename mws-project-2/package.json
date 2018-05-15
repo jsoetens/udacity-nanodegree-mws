@@ -16,7 +16,11 @@
   "author": "Johan Soetens",
   "license": "MIT",
   "devDependencies": {
+    "browser-sync": "^2.24.4",
+    "del": "^3.0.0",
     "gulp": "^3.9.1",
+    "gulp-clean-css": "^3.9.4",
+    "run-sequence": "^2.2.1",
     "workbox-build": "^3.2.0"
   }
 }
