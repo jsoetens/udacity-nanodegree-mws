@@ -1,69 +1,128 @@
 const gulp = require('gulp');
 const del = require('del');
 const runSequence = require('run-sequence');
-const browserSync = require('browser-sync').create();
-const workboxBuild = require('workbox-build');
+const imagemin = require('imagemin');
+const imageminWebp = require('imagemin-webp');
+const webp = require('gulp-webp');
+const responsive = require('gulp-responsive');
+const $ = require('gulp-load-plugins')();
 const cleanCSS = require('gulp-clean-css');
+const sourcemaps = require('gulp-sourcemaps');
+const babel = require('gulp-babel');
+const concat = require('gulp-concat');
+const uglify = require('gulp-uglify');
+const workboxBuild = require('workbox-build');
 
-// Task: clean-build
-// Removes all files in build.
+
+/**
+ * Cleanup
+ * - clean-build
+ * - clean-images
+ */
+
+// Remove all files in build.
 gulp.task('clean-build', () => {
   return del.sync('build');
-})
+});
 
-// Task: copy-app
-// Copies all app files from app to build.
-gulp.task('copy-app', () =>
+// Remove all images except src.
+gulp.task('clean-images', () => {
+  return del.sync([
+    'app/img',
+    'build/img'
+  ]);
+});
+
+
+/*
+ * Images
+ * - images-copy2app
+ * - images-webp
+ * - images-resize
+ * - images-copy2build
+ */
+
+// Copy images that need no manipulations to app.
+gulp.task('images-copy2app', () =>
   gulp.src([
-    'app/*.html',
-    'app/css/**/*.css',
-    'app/js/**/*.js',
-    'app/img/**',
-    'app/favicon.ico',
-    'app/manifest.json'
-  ], {base: 'app/.'})
-  .pipe(gulp.dest('build'))
+    'src/images/touch/**'
+  ])
+  .pipe(gulp.dest('app/img/touch'))
 );
 
-// Task: copy-html
-gulp.task('copy-html', () =>
+// Create WebP images.
+gulp.task('images-webp', () =>
+  gulp.src('src/images/*.jpg')
+  .pipe(webp())
+  .pipe(gulp.dest('src/images'))
+);
+
+// Create responsive images.
+// https://github.com/mahnunchik/gulp-responsive/blob/HEAD/examples/multiple-resolutions.md
+gulp.task('images-resize', function () {
+  return gulp.src('src/images/*.{jpg,webp}')
+    .pipe($.responsive({
+      // Resize all JPEG/WebP images to sizes: 300, 433, 552, 653, 752, 800.
+      '*.{jpg,webp}': [{
+        width: 300,
+        rename: { suffix: '_w_300' },
+      }, {
+        width: 433,
+        rename: { suffix: '_w_433' },
+      }, {
+        width: 552,
+        rename: { suffix: '_w_552' },
+      }, {
+        width: 653,
+        rename: { suffix: '_w_653' },
+      }, {
+        width: 752,
+        rename: { suffix: '_w_752' },
+      }, {
+        width: 800,
+        rename: { suffix: '_w_800' },
+      }],
+    }, {
+      // Global configuration for all images.
+      // The output quality for JPEG, WebP and TIFF output formats.
+      quality: 70,
+      // Use progressive (interlace) scan for JPEG and PNG output.
+      progressive: true,
+      // Zlib compression level of PNG output format
+      compressionLevel: 6,
+      // Strip all metadata.
+      withMetadata: false,
+    }))
+    .pipe(gulp.dest('app/img'));
+});
+
+// Copy the images from app to build.
+gulp.task('images-copy2build', () =>
+  gulp.src('app/img/**/*', {base: 'app/img/'})
+  .pipe(gulp.dest('build/img'))
+);
+
+
+/**
+ * HTML
+ * - html-copy2build
+ */
+
+// Copy HTML from app to build.
+gulp.task('html-copy2build', () =>
   gulp.src('app/*.html')
   .pipe(gulp.dest('build'))
 );
 
-// Task: copy-css
-gulp.task('copy-css', () =>
-  gulp.src('app/css/**/*.css')
-  .pipe(gulp.dest('build/css'))
-);
 
-// Task: copy-js
-gulp.task('copy-js', () =>
-  gulp.src('app/js/**/*.js')
-  .pipe(gulp.dest('build/js'))
-);
+/**
+ * CSS
+ * - css-minify
+ * - css-copy2build
+ */
 
-// Task: copy-images
-gulp.task('copy-images', () =>
-  gulp.src('app/img/**')
-  .pipe(gulp.dest('build/img'))
-);
-
-// Task: copy-favicon
-gulp.task('copy-favicon', () =>
-  gulp.src('app/favicon.ico')
-  .pipe(gulp.dest('build'))
-);
-
-// Task: copy-manifest
-gulp.task('copy-manifest', () =>
-  gulp.src('app/manifest.json')
-  .pipe(gulp.dest('build'))
-);
-
-// Task: minify-css
 // Minify CSS using clean-css.
-gulp.task('minify-css', () => {
+gulp.task('css-minify', () => {
   return gulp.src('app/css/**/*.css')
     .pipe(cleanCSS({debug: true}, (details) => {
       console.log(`${details.name}: ${details.stats.originalSize}`);
@@ -72,20 +131,87 @@ gulp.task('minify-css', () => {
   .pipe(gulp.dest('build/css'));
 });
 
-// Task: service-worker
-gulp.task('service-worker', () => {
+// Copy CSS from app to build.
+gulp.task('css-copy2build', () =>
+  gulp.src('app/css/**/*.css')
+  .pipe(gulp.dest('build/css'))
+);
+
+
+/**
+ * JavaScript
+ * - js-copy2build
+ * - js-babel
+ * - js-minify-main
+ * - js-minify-resto
+ */
+
+// Copy JavaScript from app to build.
+gulp.task('js-copy2build', () =>
+  gulp.src('app/js/**/*.js')
+  .pipe(gulp.dest('build/js'))
+);
+
+// http://babeljs.io/docs/setup/#installation
+// https://babeljs.io/docs/usage/babelrc/
+// https://github.com/babel/gulp-babel
+gulp.task('js-babel', () => {
+  // return gulp.src('app/js/**/*.js')
+  return gulp.src([
+    'app/js/dbhelper.js', 'app/js/app.js', 'app/js/restaurant_info.js'
+    ])
+    .pipe(sourcemaps.init())
+    .pipe(babel())
+    // .pipe(concat('app.min.js'))
+    // .pipe(uglify())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('build/js'));
+});
+
+gulp.task('js-minify-main', () => {
+  return gulp.src([
+    'app/js/dbhelper.js', 'app/js/app.js'
+    ])
+    .pipe(sourcemaps.init())
+    .pipe(babel())
+    .pipe(concat('main-bundle.min.js'))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('build/js'));
+});
+
+gulp.task('js-minify-resto', () => {
+  return gulp.src([
+    'app/js/dbhelper.js', 'app/js/restaurant_info.js'
+    ])
+    .pipe(sourcemaps.init())
+    .pipe(babel())
+    .pipe(concat('resto-bundle.min.js'))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('build/js'));
+});
+
+
+/*
+ * Progressive Web Apps
+ * - pwa-service-worker
+ * - pwa-manifest-copy2build
+ */
+
+// Create a service worker in build.
+gulp.task('pwa-service-worker', () => {
   return workboxBuild.injectManifest({
-    swSrc: "app/sw.js",
+    swSrc: "src/js/sw.js",
     swDest: "build/sw.js",
     globDirectory: 'build',
     globPatterns: [
       "**/*.{html,css,js}",
-      "favicon.ico",
-      "manifest.json",
-      "img/touch/*.png"
+      "img/touch/*.png",
+      // "favicon.ico",
+      "manifest.json"
     ],
     globIgnores: [
-      "sw.src.js",
       "workbox-config.js",
       "node_modules/**/*"
     ]
@@ -94,32 +220,43 @@ gulp.task('service-worker', () => {
   });
 });
 
-// Task: browser-sync
-// Browsersync static server.
-gulp.task('browser-sync', function() {
-  browserSync.init({
-    server: {
-      baseDir: "./app"
-    }
-  });
-});
+// Copy manifest.json to build.
+gulp.task('pwa-manifest-copy2build', () =>
+  gulp.src('app/manifest.json')
+  .pipe(gulp.dest('build'))
+);
 
-// Task: default
-gulp.task('default', cb => {
-  runSequence(
-    'clean-build',
-    'copy-app',
-    'service-worker', cb);
-});
 
-// Task: watch
+/**
+ * Default / Watch
+ */
+
+// Default Gulp task.
+gulp.task('default', ['build']);
+
 // This task watches our "app" files & rebuilds whenever they change.
 gulp.task('watch', () => {
-  gulp.watch('app/*.html', ['copy-html']);
-  gulp.watch('app/css/**/*.css', ['copy-css']);
-  gulp.watch('app/js/**/*.js', ['copy-js']);
-  gulp.watch('app/img/**', ['copy-images']);
-  gulp.watch('app/manifest.json', ['copy-manifest']);
+  gulp.watch('app/img/**', ['images-copy2build']);
+  gulp.watch('app/*.html', ['html-copy2build']);
+  gulp.watch('app/css/**/*.css', ['css-copy2build']);
+  gulp.watch('app/js/**/*.js', ['js-copy2build']);
+  gulp.watch('app/js/**/*.js', ['js-minify-main', 'js-minify-resto']);
+  // gulp.watch('app/js/**/*.js', ['babel']);
+  gulp.watch('app/manifest.json', ['pwa-manifest-copy2build']);
+});
+
+
+/**
+ * Build
+ * - build-images
+ */
+
+// Task: build-images
+gulp.task('build-images', cb => {
+  runSequence(
+    'clean-images', 'images-copy2app', 'images-webp', 'images-resize',
+    'images-copy2build',
+    cb);
 });
 
 // Task: build
@@ -127,7 +264,11 @@ gulp.task('watch', () => {
 gulp.task('build', cb => {
   runSequence(
     'clean-build',
-    ['copy-html', 'copy-js', 'copy-images', 'copy-favicon', 'copy-manifest'],
-    'minify-css', 'service-worker',
+    'build-images',
+    'html-copy2build',
+    'css-minify',
+    // 'js-babel',
+    ['js-minify-main', 'js-minify-resto'],
+    'pwa-manifest-copy2build', 'pwa-service-worker',
     cb);
 });
