@@ -1,94 +1,98 @@
+/**
+ * TODO: Add to Home Screen (aka Web App Install Banners)
+ * trigger the Add to Home Screen prompt by using the beforeinstallprompt event.
+ * https://developers.google.com/web/fundamentals/app-install-banners/
+ */
+
+// Declare global variables.
+let map;
 let restaurant;
-var map;
+
+// Declare the id elements.
+const elementBreadcrumb = document.getElementById('breadcrumb');
+const elementCardPrimary = document.getElementById('card-primary');
+const elementRestaurantName = document.getElementById('restaurant-name');
+const elementRestaurantAddress = document.getElementById('restaurant-address');
+const elementRestaurantCuisine = document.getElementById('restaurant-cuisine');
+const elementRestaurantHours = document.getElementById('restaurant-hours');
+const elementGoogleMap = document.getElementById('map');
+const elementReviewsContainer = document.getElementById('reviews-container');
+const elementReviewsList = document.getElementById('reviews-list');
+
 
 /**
  * Initialize Google map, called from HTML.
+ * https://developers.google.com/maps/documentation/javascript/tutorial
  */
 window.initMap = () => {
-  fetchRestaurantFromURL((error, restaurant) => {
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: restaurant.latlng,
-        scrollwheel: false
-      });
-      fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-
-      // a11y - Frames must have non-empty title attribute
-      // https://dequeuniversity.com/rules/axe/2.2/frame-title
-      // https://developers.google.com/maps/documentation/javascript/events
-      let setTitle = () => {
-        const iFrameGoogleMaps = document.querySelector('#map iframe');
-        iFrameGoogleMaps.setAttribute('title', 'Google Maps overview of restaurants');
-      }
-      self.map.addListener('tilesloaded', setTitle);
-
-    }
-  });
-}
-
-/**
- * Get current restaurant from page URL.
- */
-fetchRestaurantFromURL = (callback) => {
-  if (self.restaurant) { // restaurant already fetched!
-    callback(null, self.restaurant)
-    return;
-  }
+  // Fetch restaurant by using url parameter on current page.
   const id = getParameterByName('id');
-  if (!id) { // no id found in URL
-    error = 'No restaurant id in URL'
-    callback(error, null);
-  } else {
-    DBHelper.fetchRestaurantById(id, (error, restaurant) => {
-      self.restaurant = restaurant;
-      if (!restaurant) {
-        console.error(error);
-        return;
-      }
-      fillRestaurantHTML();
-      callback(null, restaurant)
-    });
-  }
+  DBHelper.fetchRestaurantById(id)
+  .then(restaurant => {
+    self.restaurant = restaurant;
+    updateRestaurantUI();
+    createBreadcrumb();
+    return restaurant;
+  })
+  .then(restaurant => {
+    createGoogleMaps();
+  })
+  .catch(DBHelper.logError);
 }
 
+const createGoogleMaps = () => {
+  let loc = {lat: 40.722216, lng: -73.987501};
+  // Not using scrollwheel: False anymore, using default gestureHandling: auto
+  // https://developers.google.com/maps/documentation/javascript/interaction
+  // self.map = new google.maps.Map(elementGoogleMap, {
+  map = new google.maps.Map(elementGoogleMap, {
+    // center: restaurant.latlng,
+    center: loc,
+    zoom: 12
+  });
+  DBHelper.addMarkerForRestaurant(self.restaurant, self.map);
+  // a11y - Frames must have non-empty title attribute
+  // https://dequeuniversity.com/rules/axe/2.2/frame-title
+  // https://developers.google.com/maps/documentation/javascript/events
+  let setTitle = () => {
+    const iFrameGoogleMaps = document.querySelector('#map iframe');
+    iFrameGoogleMaps.setAttribute('title', 'Google Maps overview of restaurants');
+  }
+  // self.map.addListener('tilesloaded', setTitle);
+  map.addListener('tilesloaded', setTitle);
+};
+
 /**
- * Create restaurant HTML and add it to the webpage
+ * Create restaurant details, update operating hours and the review cards.
  */
-fillRestaurantHTML = (restaurant = self.restaurant) => {
-  const name = document.getElementById('restaurant-name');
-  name.innerHTML = restaurant.name;
-  name.tabIndex = '0';
+const updateRestaurantUI = (restaurant = self.restaurant) => {
+  // There is no insertAfter method. It can be emulated by combining the
+  // insertBefore method with nextSibling.
+  const picture = createResponsivePicture(restaurant);
+  // A reference to card-primary is needed before we can insert the element.
+  // Get a reference to the parent element.
+  const parentElement = elementCardPrimary.parentNode;
+  // console.log(parentElement);
+  // Insert the new element into the DOM before elementCardPrimary.
+  parentElement.insertBefore(picture, elementCardPrimary);
 
-  const address = document.getElementById('restaurant-address');
-  address.innerHTML = restaurant.address;
+  elementRestaurantName.innerHTML = restaurant.name;
+  elementRestaurantName.tabIndex = '0';
 
-  const image = document.getElementById('restaurant-img');
-  image.className = 'restaurant-img'
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  // Add alternative text
-  image.alt = restaurant.alternative_text;
-  image.tabIndex = '0';
+  elementRestaurantAddress.innerHTML = restaurant.address;
 
-  const cuisine = document.getElementById('restaurant-cuisine');
-  cuisine.innerHTML = restaurant.cuisine_type;
+  elementRestaurantCuisine.innerHTML = restaurant.cuisine_type;
 
-  // fill operating hours
   if (restaurant.operating_hours) {
-    fillRestaurantHoursHTML();
+    updateRestaurantHoursUI();
   }
-  // fill reviews
-  fillReviewsHTML();
+  updateReviewsUI();
 }
 
 /**
- * Create restaurant operating hours HTML table and add it to the webpage.
+ * Create table data with restaurant operating hours.
  */
-fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
-  const hours = document.getElementById('restaurant-hours');
+const updateRestaurantHoursUI = (operatingHours = self.restaurant.operating_hours) => {
   for (let key in operatingHours) {
     const row = document.createElement('tr');
     row.className = 'restaurant-card-table-content';
@@ -102,42 +106,37 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
     time.innerHTML = operatingHours[key];
     row.appendChild(time);
 
-    hours.appendChild(row);
+    elementRestaurantHours.appendChild(row);
   }
 }
 
 /**
- * Create all reviews HTML and add them to the webpage.
+ * Create reviews cards.
  */
-fillReviewsHTML = (reviews = self.restaurant.reviews) => {
-  const container = document.getElementById('reviews-container');
+const updateReviewsUI = (reviews = self.restaurant.reviews) => {
   const title = document.createElement('h3');
   title.className = 'reviews-title';
   title.innerHTML = 'Reviews';
-  container.appendChild(title);
+  elementReviewsContainer.appendChild(title);
 
   // TODO: test with no reviews.
   if (!reviews) {
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';
-    container.appendChild(noReviews);
+    elementReviewsContainer.appendChild(noReviews);
     return;
   }
-  const ul = document.getElementById('reviews-list');
+
   reviews.forEach(review => {
-    ul.appendChild(createReviewHTML(review));
+    elementReviewsList.appendChild(createReviewHTML(review));
   });
-  container.appendChild(ul);
+  elementReviewsContainer.appendChild(elementReviewsList);
 }
 
 /**
- * Create review HTML and add it to the webpage.
- *
- * https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/append
- * https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild
+ * Create a review card.
  */
-
-createReviewHTML = (review) => {
+const createReviewHTML = (review) => {
   const li = document.createElement('li');
   li.className = 'review-card';
 
@@ -179,23 +178,22 @@ createReviewHTML = (review) => {
 }
 
 /**
- * Add restaurant name to the breadcrumb navigation menu
+ * Add restaurant name to the breadcrumb navigation menu.
  */
-fillBreadcrumb = (restaurant=self.restaurant) => {
-  const breadcrumb = document.getElementById('breadcrumb');
+const createBreadcrumb = (restaurant=self.restaurant) => {
   const li = document.createElement('li');
   li.className = 'breadcrumb';
   li.innerHTML = restaurant.name;
   // a11y - indicate current page
   // https://www.w3.org/TR/wai-aria-practices/examples/breadcrumb/index.html -->
   li.setAttribute('aria-current', 'page');
-  breadcrumb.appendChild(li);
+  elementBreadcrumb.appendChild(li);
 }
 
 /**
- * Get a parameter by name from page URL.
+ * Get an URL parameter by name from page URL.
  */
-getParameterByName = (name, url) => {
+const getParameterByName = (name, url) => {
   if (!url)
     url = window.location.href;
   name = name.replace(/[\[\]]/g, '\\$&');
@@ -206,4 +204,124 @@ getParameterByName = (name, url) => {
   if (!results[2])
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+/**
+ * Create a responsive image.
+ *
+ * Main page
+ * 0 to 479px: card has width 100%, so 1 img 100% (455 x 321).
+ * 480 to 599px: card has width 100%, so 1 img fullwidth (567 x 425).
+ * 600 to 839px: card has width 45%, so 2 img 45% (378 x 283).
+ * 840 to 959px: card has width 45%, so 2 img 45% (432 x 324).
+ * 960 to 1279px: card has width 30%, so 3 img 30% (384 x 289).
+ * 1280px to x: card has width 22.5%, so 4 img 22.5% (minimum 288 x 216).
+ *
+ * Restaurant Info
+ * 0 to 479px: card has width 100%, so 1 img 100% (479 x 359).
+ * 480 to 599px: card has width 100%, so 1 img fullwidth (599 x 449).
+ * 600 to 839px: card has width 50%, so 1 img 50% (419.5 x 315).
+ * 840 to 959px: card has width 50%, so 1 img 50% (479.5 x 360).
+ * 960 to 1279px: card has width 50%, so 1 img 50% (639.5 x 480).
+ * 1280px to x: card has width 50%, so 1 img 50% (minimum 640 x 480).
+ *
+ * Image breakpoints have been determined using the Cloudinary generator.
+ * http://www.responsivebreakpoints.com/
+ * Image widths are 300, 433, 552, 653, 752, 800
+ *
+ * The srcset attribute gives the browser the option to choose which file
+ * to use. However, the browser has no way of determining the file sizes before
+ * it loads them, so it always chooses the first image in the list.
+ *
+ * To load the correct image size based on the viewport width we need to tell
+ * the browser how big each file is before it fetches them.
+ * By adding a width descriptor to each file in the srcset, we are telling
+ * the browser the width of each image in pixels before it fetches the image.
+ * The browser can then use these widths to decide which image to fetch based
+ * on its window size. It fetches the image with the smallest width that is
+ * still larger than the viewport width.
+ *
+ * Because the CSS is parsed after the HTML at runtime, the browser has no way
+ * to know what the final display size of the image will be when it fetches it.
+ * Unless we tell it otherwise, the browser assumes the images will be displayed
+ * at 100% of the viewport width and fetches the images based on this.
+ *
+ * The sizes value matches the image's max-width value in the CSS. The browser
+ * now has everything it needs to choose the correct image version. The browser
+ * knows its own viewport width and the pixel density of the user's device,
+ * and we have given it the source files' dimensions (using width descriptor)
+ * and the image sizes relative to the viewport (the sizes attribute).
+ *
+ * The media query tests the viewport width of the screen, and applies the CSS.
+ * We can tell the browser about the media query in the sizes attribute so that
+ * it fetches the correct image when the image changes size.
+ *
+ * We can use the <picture> element and the <source> element, in combination
+ * with media queries, to change the image source as the window is resized.
+ *
+ * The <picture> element lets us define multiple source files using the
+ * <source> tag. This is different than simply using an <img> tag with the
+ * srcset attribute because the source tag lets us add things like media queries
+ * to each set of sources. Instead of giving the browser the image sizes and
+ * letting it decide which files to use, we can define the images to use at
+ * each window size.
+ *
+ * If the user's browser doesn't support the <picture> element, it fetches
+ * whatever is in the <img> element. The <picture> element is just used to
+ * specify multiple sources for the <img> element contained in it. The <img>
+ * element is what displays the image.
+ *
+ * Display density descriptors are great for fixed width images, but are
+ * insufficient for flexible images.
+ */
+const createResponsivePicture = (restaurant) => {
+  const picture = document.createElement('picture');
+
+  // sizes: the browser ignores everything after the first matching condition.
+  const sizes = '(max-width: 37.4375rem) 100vw, (min-width: 37.5rem) 50vw, 100vw';
+
+  // srcset
+  const srcsetWebP =
+    `${DBHelper.getImageUrlForRestaurant(restaurant, 'webp', 300)} 300w,
+    ${DBHelper.getImageUrlForRestaurant(restaurant, 'webp', 433)} 433w,
+    ${DBHelper.getImageUrlForRestaurant(restaurant, 'webp', 552)} 552w,
+    ${DBHelper.getImageUrlForRestaurant(restaurant, 'webp', 653)} 653w,
+    ${DBHelper.getImageUrlForRestaurant(restaurant, 'webp', 752)} 752w,
+    ${DBHelper.getImageUrlForRestaurant(restaurant, 'webp', 800)} 800w`;
+
+  const srcsetJPEG =
+    `${DBHelper.getImageUrlForRestaurant(restaurant, 'jpeg', 300)} 300w,
+    ${DBHelper.getImageUrlForRestaurant(restaurant, 'jpeg', 433)} 433w,
+    ${DBHelper.getImageUrlForRestaurant(restaurant, 'jpeg', 552)} 552w,
+    ${DBHelper.getImageUrlForRestaurant(restaurant, 'jpeg', 653)} 653w,
+    ${DBHelper.getImageUrlForRestaurant(restaurant, 'jpeg', 752)} 752w,
+    ${DBHelper.getImageUrlForRestaurant(restaurant, 'jpeg', 800)} 800w`;
+
+  const sourceWebP = document.createElement('source');
+  sourceWebP.srcset = srcsetWebP;
+  sourceWebP.sizes = sizes;
+  sourceWebP.type = 'image/webp';
+  picture.appendChild(sourceWebP);
+
+  const sourceDefault = document.createElement('source');
+  sourceDefault.srcset = srcsetJPEG;
+  sourceDefault.sizes = sizes;
+  sourceDefault.type = 'image/jpeg';
+  picture.appendChild(sourceDefault);
+
+  const defaultImg = document.createElement('img');
+  // Get default image which should be width 800.
+  const imageSrc = DBHelper.getImageUrlForRestaurant(restaurant, 'jpeg', 800);
+  defaultImg.src = imageSrc;
+
+  let altText = DBHelper.getAlternativeText(restaurant.id);
+  if (!altText) {
+    altText = `Restaurant ${restaurant.name}`;
+  }
+  defaultImg.alt = altText;
+  // defaultImg.setAttribute('tabindex', '0');
+  defaultImg.tabIndex = '0';
+  picture.appendChild(defaultImg);
+
+  return picture;
 }
