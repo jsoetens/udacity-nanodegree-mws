@@ -44,6 +44,12 @@
     <!-- IE11 and below: add an aria role of “main” to ensure it is accessible -->
     <!-- https://developer.mozilla.org/en/docs/Web/HTML/Element/main#Browser_compatibility -->
     <main id="maincontent" class="main" role="main">
+      <!-- These info and warnings are hidden and displayed dynamically -->
+      <!-- https://codelabs.developers.google.com/codelabs/workbox-indexeddb -->
+      <p id="offline" class="message warn">You're offline and viewing stored data.</p>
+      <p id="no-data" class="message error">You're offline and local data is unavailable.</p>
+      <p id="data-saved" class="message success">Server data was saved for offline mode.</p>
+      <p id="save-error" class="message error">Server data couldn't be saved offline.</p>
       <!-- restaurant-details -->
       <div class="restaurant-details">
         <!-- restaurants -->
@@ -81,6 +87,7 @@
   <!-- scripts - App -->
   <!-- <script src="js/dbhelper.js"></script> -->
   <!-- <script src="js/restaurant_info.js"></script> -->
+  <script src="js/idb-bundle.min.js"></script>
   <script src="js/resto-bundle.min.js"></script>
   <!-- scripts - Google Maps -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDm9CBeGB2XpSOVQXsuyo-kJtdHSNGiF4k&libraries=places&callback=initMap"></script>

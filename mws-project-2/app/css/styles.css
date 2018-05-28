@@ -561,3 +561,24 @@ video {
     width: 30%; /* 3 cards */
   }
 }
+
+
+/* -------------------------------------------------------------------------- */
+
+.message {
+  box-shadow: 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12), 0 3px 5px -1px rgba(0,0,0,.2);
+  display: none;
+  padding: 15px;
+}
+
+.warn {
+  background: #FF9800;
+}
+
+.error {
+  background: #F44336;
+}
+
+.success {
+  background: #4CAF50;
+}

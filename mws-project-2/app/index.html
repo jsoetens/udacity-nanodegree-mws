@@ -35,6 +35,12 @@
     <!-- IE11 and below: add an aria role of “main” to ensure it is accessible -->
     <!-- https://developer.mozilla.org/en/docs/Web/HTML/Element/main#Browser_compatibility -->
     <main id="maincontent" class="main" role="main">
+      <!-- These info and warnings are hidden and displayed dynamically -->
+      <!-- https://codelabs.developers.google.com/codelabs/workbox-indexeddb -->
+      <p id="offline" class="message warn">You're offline and viewing stored data.</p>
+      <p id="no-data" class="message error">You're offline and local data is unavailable.</p>
+      <p id="data-saved" class="message success">Server data was saved for offline mode.</p>
+      <p id="save-error" class="message error">Server data couldn't be saved offline.</p>
       <!-- map -->
       <section id="map-container">
         <!-- The application role will tell assistive technology to disable -->
@@ -46,10 +52,10 @@
         <!-- <div class="filter-options flex-container"> -->
         <div class="restaurants-filter">
           <!-- <h2>Filter Results</h2> -->
-          <select id="neighborhoods-select" name="neighborhoods" onchange="refreshRestaurants()" aria-label="Select Neighborhood">
+          <select id="neighborhoods-select" name="neighborhoods" onchange="refreshRestaurantsNetworkFirst()" aria-label="Select Neighborhood">
             <option value="all">All Neighborhoods</option>
           </select>
-          <select id="cuisines-select" name="cuisines" onchange="refreshRestaurants()" aria-label="Select Quisine">
+          <select id="cuisines-select" name="cuisines" onchange="refreshRestaurantsNetworkFirst()" aria-label="Select Quisine">
             <option value="all">All Cuisines</option>
           </select>
         </div>
@@ -63,8 +69,7 @@
   </div>
   <!-- scripts -->
   <!-- scripts - Service Worker -->
-  <!-- importScripts in sw.js can result in a SecurityError without setting MIME explicitly -->
-  <script type="application/javascript">
+  <script>
     if ('serviceWorker' in navigator) {
       console.log('[DEBUG] Service worker is supported.')
       // Use the window load event to keep the page load performant
@@ -85,6 +90,7 @@
   <!-- scripts - App -->
   <!-- <script src="js/dbhelper.js"></script> -->
   <!-- <script src="js/app.js"></script> -->
+  <script src="js/idb-bundle.min.js"></script>
   <script src="js/main-bundle.min.js"></script>
   <!-- scripts - Google Maps -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDm9CBeGB2XpSOVQXsuyo-kJtdHSNGiF4k&libraries=places&callback=initMap"></script>

@@ -27,17 +27,43 @@ const elementReviewsList = document.getElementById('reviews-list');
 window.initMap = () => {
   // Fetch restaurant by using url parameter on current page.
   const id = getParameterByName('id');
-  DBHelper.fetchRestaurantById(id)
-  .then(restaurant => {
-    self.restaurant = restaurant;
+  loadRestaurantNetworkFirst(id);
+}
+
+/**
+ * Fetch a restaurant by its ID from network and fallback to IndexedDB,
+ * update UI.
+ */
+const loadRestaurantNetworkFirst = (id) => {
+  const endpointRestaurantById = `http://localhost:1337/restaurants/${id}`;
+  DBHelper.getServerData(endpointRestaurantById)
+  .then(dataFromNetwork => {
+    self.restaurant = dataFromNetwork;
     updateRestaurantUI();
     createBreadcrumb();
-    return restaurant;
-  })
-  .then(restaurant => {
+    saveRestaurantsDataLocally(dataFromNetwork)
+    .then(() => {
+      DBHelper.setLastUpdated(new Date());
+      // DBHelper.messageDataSaved();
+    }).catch(err => {
+      // DBHelper.messageSaveError();
+      console.warn(err);
+    });
     createGoogleMaps();
-  })
-  .catch(DBHelper.logError);
+  }).catch(err => {
+    console.log('[DEBUG] Network requests have failed, this is expected if offline');
+    getLocalRestaurantByIdData(id)
+    .then(offlineData => {
+      // DBHelper.messageOffline();
+      self.restaurant = offlineData;
+      updateRestaurantUI();
+      createBreadcrumb();
+      createGoogleMaps();
+    }).catch(err => {
+      // DBHelper.messageNoData();
+      console.warn(err);
+    });
+  });
 }
 
 const createGoogleMaps = () => {
@@ -65,10 +91,10 @@ const createGoogleMaps = () => {
 /**
  * Create restaurant details, update operating hours and the review cards.
  */
-const updateRestaurantUI = (restaurant = self.restaurant) => {
+const updateRestaurantUI = () => {
   // There is no insertAfter method. It can be emulated by combining the
   // insertBefore method with nextSibling.
-  const picture = createResponsivePicture(restaurant);
+  const picture = createResponsivePicture(self.restaurant);
   // A reference to card-primary is needed before we can insert the element.
   // Get a reference to the parent element.
   const parentElement = elementCardPrimary.parentNode;
@@ -76,12 +102,12 @@ const updateRestaurantUI = (restaurant = self.restaurant) => {
   // Insert the new element into the DOM before elementCardPrimary.
   parentElement.insertBefore(picture, elementCardPrimary);
 
-  elementRestaurantName.innerHTML = restaurant.name;
+  elementRestaurantName.innerHTML = self.restaurant.name;
   elementRestaurantName.tabIndex = '0';
 
-  elementRestaurantAddress.innerHTML = restaurant.address;
+  elementRestaurantAddress.innerHTML = self.restaurant.address;
 
-  elementRestaurantCuisine.innerHTML = restaurant.cuisine_type;
+  elementRestaurantCuisine.innerHTML = self.restaurant.cuisine_type;
 
   if (restaurant.operating_hours) {
     updateRestaurantHoursUI();
@@ -92,7 +118,8 @@ const updateRestaurantUI = (restaurant = self.restaurant) => {
 /**
  * Create table data with restaurant operating hours.
  */
-const updateRestaurantHoursUI = (operatingHours = self.restaurant.operating_hours) => {
+const updateRestaurantHoursUI = () => {
+  let operatingHours = self.restaurant.operating_hours;
   for (let key in operatingHours) {
     const row = document.createElement('tr');
     row.className = 'restaurant-card-table-content';

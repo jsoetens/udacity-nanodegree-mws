@@ -1,3 +1,9 @@
+const offlineMessage = document.getElementById('offline');
+const noDataMessage = document.getElementById('no-data');
+const dataSavedMessage = document.getElementById('data-saved');
+const saveErrorMessage = document.getElementById('save-error');
+
+
 /**
  * DBHelper provides functions to interact with the local development API server
  * provided by Udacity for project 2.
@@ -27,13 +33,45 @@ class DBHelper {
     return altTexts[id];
   }
 
-  /**
-   * Get the database URL.
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get
-   */
-  static get DATABASE_URL() {
-    const port = 1337;
-    return `http://localhost:${port}`;
+  // Alert user that data may not be current
+  // "You're offline and viewing stored data."
+  static messageOffline() {
+    const lastUpdated = this.getLastUpdated();
+    if (lastUpdated) {
+     offlineMessage.textContent += ' Last fetched server data: ' + lastUpdated;
+    }
+    offlineMessage.style.display = 'block';
+  }
+
+  // Alert user that there is no data available.
+  // "You're offline and local data is unavailable."
+  static messageNoData() {
+    //
+    noDataMessage.style.display = 'block';
+  }
+
+  // Alert user that data has been saved for offline.
+  // "Server data was saved for offline mode.""
+  static messageDataSaved() {
+    const lastUpdated = this.getLastUpdated();
+    if (lastUpdated) {dataSavedMessage.textContent += ' on ' + lastUpdated;}
+    dataSavedMessage.style.display = 'block';
+  }
+
+  // Alert user that data couldn't be saved offline
+  // "Server data couldn't be saved offline.""
+  static messageSaveError() {
+    saveErrorMessage.style.display = 'block';
+  }
+
+  // Util network function.
+  static getLastUpdated() {
+    return localStorage.getItem('lastUpdated');
+  }
+
+  // Util network function.
+  static setLastUpdated(date) {
+    localStorage.setItem('lastUpdated', date);
   }
 
   /*
@@ -81,91 +119,27 @@ class DBHelper {
   }
 
   /**
-   * FetchJSON
+   * Get the database URL.
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get
    */
-  static fetchJSON(pathToResource) {
+  static get DATABASE_URL() {
+    const port = 1337;
+    return `http://localhost:${port}`;
+  }
+
+  /**
+   * getServerData
+   */
+  static getServerData(pathToResource) {
     // Fetch is called on a resource and Fetch returns a promise that will
     // resolve to a response object. When the promise resolves, the response
     // object is passed to validateResponse.
-    return fetch(pathToResource) // 1
-    .then(DBHelper.validateResponse) // 2
-    .then(DBHelper.readResponseAsJSON) // 3
-    // Once the promise resolves, the JSON data is passed to logResult.
-    // .then(DBHelper.logResult) // 4
-    .catch(DBHelper.logError);
-  }
-
-  /**
-   * Fetch all neighborhoods.
-   */
-  static fetchNeighborhoods() {
-    // return fetch(`${DBHelper.DATABASE_URL}/restaurants`)
-    // .then(DBHelper.validateResponse)
-    // .then(DBHelper.readResponseAsJSON)
-    return DBHelper.fetchJSON(`${DBHelper.DATABASE_URL}/restaurants`)
-    .then(result => {
-      // Get all neighborhoods from all restaurants.
-      const neighborhoods = result.map((v, i) => result[i].neighborhood);
-      // Remove duplicates from neighborhoods.
-      const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) == i);
-      return uniqueNeighborhoods;
-    })
-    .catch(DBHelper.logError);
-  }
-
-  /**
-   * Fetch all cuisines.
-   */
-  static fetchCuisines() {
-    // return fetch(`${DBHelper.DATABASE_URL}/restaurants`)
-    // .then(DBHelper.validateResponse)
-    // .then(DBHelper.readResponseAsJSON)
-    return DBHelper.fetchJSON(`${DBHelper.DATABASE_URL}/restaurants`)
-    .then(result => {
-      // Get all cuisines from all restaurants.
-      const cuisines = result.map((v, i) => result[i].cuisine_type);
-      // Remove duplicates from cuisines.
-      const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) == i);
-      return uniqueCuisines;
-    })
-    .catch(DBHelper.logError);
-  }
-
-  /**
-   * Fetch restaurants by cuisine and neighborhood.
-   */
-  static fetchRestaurantByNeighborhoodAndCuisine(neighborhood, cuisine) {
-    // return fetch(`${DBHelper.DATABASE_URL}/restaurants`)
-    // .then(DBHelper.validateResponse)
-    // .then(DBHelper.readResponseAsJSON)
-    return DBHelper.fetchJSON(`${DBHelper.DATABASE_URL}/restaurants`)
-    .then(result => {
-      let restaurants = result;
-      if (cuisine != 'all') {
-        restaurants = restaurants.filter(r => r.cuisine_type == cuisine);
-      }
-      if (neighborhood != 'all') {
-        restaurants = restaurants.filter(r => r.neighborhood == neighborhood);
-      }
-      return restaurants;
-    })
-    .catch(DBHelper.logError);
-  }
-
-  /**
-  * Fetch a restaurant by its ID.
-  * http://localhost:1337/restaurants/{3}
-  */
-  static fetchRestaurantById(id) {
-    // return fetch(`${DBHelper.DATABASE_URL}/restaurants/${id}`)
-    // .then(DBHelper.validateResponse)
-    // .then(DBHelper.readResponseAsJSON)
-    return DBHelper.fetchJSON(`${DBHelper.DATABASE_URL}/restaurants/${id}`)
-    .then(result => {
-      let restaurant = result;
-      return restaurant;
-    })
-    .catch(DBHelper.logError);
+    return fetch(pathToResource)
+      .then(this.validateResponse)
+      .then(this.readResponseAsJSON)
+      // Once the promise resolves, the JSON data is passed to logResult.
+      // .then(this.logResult)
+      // .catch(this.logError);
   }
 
   /**

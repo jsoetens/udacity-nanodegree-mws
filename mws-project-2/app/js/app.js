@@ -10,6 +10,7 @@ let neighborhoods;
 let cuisines;
 let restaurants;
 let markers = [];
+const endpointRestaurants = `http://localhost:1337/restaurants`;
 
 // Declare the id elements.
 const elementGoogleMap = document.getElementById('map');
@@ -26,27 +27,59 @@ const elementRestaurantsList = document.getElementById('restaurants-list');
  * https://developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded
  */
 document.addEventListener('DOMContentLoaded', (event) => {
-  fetchNeighborhoods();
-  fetchCuisines();
+  loadMainNetworkFirst();
 });
 
-
 /**
- * Fetch all neighborhoods and update UI.
+ * Fetch all neighborhoods and cuisines from network and fallback to IndexedDB,
+ * update UI.
+ * In loadMainNetworkFirst, once the server data is received, IndexedDB and
+ * the page are updated. Then, when the data is successfully saved, a timestamp
+ * is stored and the user is notified that the data is available for
+ * offline use. If there is no network availability when this function is
+ * called, then the getServerData function rejects and the catch method takes
+ * over. In the catch call, the getLocalRestaurantsData function retrieves
+ * local data from IndexedDB. If there isn't any local data saved, then
+ * the user is alerted by messageNoData. Otherwise the local data is displayed
+ * and a message informs the user that the data might be outdated.
  */
-const fetchNeighborhoods = () => {
-  DBHelper.fetchNeighborhoods()
-  .then(neighborhoods => {
-    self.neighborhoods = neighborhoods;
-    updateNeighborhoodsUI();
-  })
-  // Error handling is done in DBHelper.fetchNeighborhoods
+const loadMainNetworkFirst = () => {
+  DBHelper.getServerData(endpointRestaurants)
+  .then(dataFromNetwork => {
+    updateNeighborhoodsUI(dataFromNetwork);
+    updateCuisinesUI(dataFromNetwork);
+    saveRestaurantsDataLocally(dataFromNetwork)
+    .then(() => {
+      DBHelper.setLastUpdated(new Date());
+      // DBHelper.messageDataSaved();
+    }).catch(err => {
+      // DBHelper.messageSaveError();
+      console.warn(err);
+    });
+  }).catch(err => {
+    console.log('[DEBUG] Network requests have failed, this is expected if offline');
+    getLocalRestaurantsData()
+    .then(offlineData => {
+      if (!offlineData.length) {
+        // DBHelper.messageNoData();
+      } else {
+        // DBHelper.messageOffline();
+        updateNeighborhoodsUI(offlineData);
+        updateCuisinesUI(offlineData);
+      }
+    });
+  });
 }
 
 /**
- * Update the neighborhoods select.
+ * Update UI of Neighborhoods select element.
  */
-const updateNeighborhoodsUI = (neighborhoods = self.neighborhoods) => {
+const updateNeighborhoodsUI = (result) => {
+  // Get all neighborhoods from all restaurants.
+  let allNeighborhoods = result.map((v, i) => result[i].neighborhood);
+  // Remove duplicates from neighborhoods and assign to global variable.
+  self.neighborhoods = allNeighborhoods.filter((v, i) => allNeighborhoods.indexOf(v) == i);
+  // Update the neighborhoods select.
   neighborhoods.forEach(neighborhood => {
     const option = document.createElement('option');
     option.innerHTML = neighborhood;
@@ -56,21 +89,14 @@ const updateNeighborhoodsUI = (neighborhoods = self.neighborhoods) => {
 }
 
 /**
- * Fetch all cuisines and update UI.
+ * Update UI of Cuisines select element.
  */
-const fetchCuisines = () => {
-  DBHelper.fetchCuisines()
-  .then(cuisines => {
-    self.cuisines = cuisines;
-    updateCuisinesUI();
-  })
-  // Error handling is done in DBHelper.fetchNeighborhoods
-}
-
-/**
- * Update the cuisines select.
- */
-const updateCuisinesUI = (cuisines = self.cuisines) => {
+const updateCuisinesUI = (result) => {
+  // Get all cuisines from all restaurants.
+  let allCuisines = result.map((v, i) => result[i].cuisine_type);
+  // Remove duplicates from cuisines and assign to global variable.
+  self.cuisines = allCuisines.filter((v, i) => allCuisines.indexOf(v) == i);
+  // Update the cuisines select.
   cuisines.forEach(cuisine => {
     const option = document.createElement('option');
     option.innerHTML = cuisine;
@@ -80,36 +106,61 @@ const updateCuisinesUI = (cuisines = self.cuisines) => {
 }
 
 /**
- * Update ul restaurants-list and markers on map for current restaurants.
+ * Fetch all restaurants from network and fallback to IndexedDB, update UI.
  */
-const refreshRestaurants = () => {
-  const neighborhoodIndex = elementNeighborhoodsSelect.selectedIndex;
-  const cuisineIndex = elementCuisinesSelect.selectedIndex;
-  const neighborhood = elementNeighborhoodsSelect[neighborhoodIndex].value;
-  const cuisine = elementCuisinesSelect[cuisineIndex].value;
-  DBHelper.fetchRestaurantByNeighborhoodAndCuisine(neighborhood, cuisine)
-  .then(restaurants => {
-    resetRestaurantsUI(restaurants);
-    updateRestaurantsUI();
+const refreshRestaurantsNetworkFirst = () => {
+  DBHelper.getServerData(endpointRestaurants)
+  .then(dataFromNetwork => {
+    refreshRestaurantsUI(dataFromNetwork);
+    saveRestaurantsDataLocally(dataFromNetwork)
+    .then(() => {
+      DBHelper.setLastUpdated(new Date());
+      // DBHelper.messageDataSaved();
+    }).catch(err => {
+      // DBHelper.messageSaveError();
+      console.warn(err);
+    });
+  }).catch(err => {
+    console.log('[DEBUG] Network requests have failed, this is expected if offline');
+    getLocalRestaurantsData()
+    .then(offlineData => {
+      if (!offlineData.length) {
+        // DBHelper.messageNoData();
+      } else {
+        // DBHelper.messageOffline();
+        refreshRestaurantsUI(offlineData);
+      }
+    });
   });
 }
 
 /**
- * Clear ul restaurants-list and markers on map for current restaurants.
+ * Update ul restaurants-list and markers on map for current restaurants.
  */
-const resetRestaurantsUI = (restaurants) => {
+const refreshRestaurantsUI = (result) => {
+  // Retrieve the selected neighborhood and cuisine.
+  const neighborhoodIndex = elementNeighborhoodsSelect.selectedIndex;
+  const cuisineIndex = elementCuisinesSelect.selectedIndex;
+  const neighborhood = elementNeighborhoodsSelect[neighborhoodIndex].value;
+  const cuisine = elementCuisinesSelect[cuisineIndex].value;
+
+  // Clear ul restaurants-list and markers on map for current restaurants.
   self.restaurants = [];
   elementRestaurantsList.innerHTML = '';
   markers.forEach(m => m.setMap(null));
   markers = [];
-  self.restaurants = restaurants;
-}
 
-/**
- * Create ul restaurants-list and add markers on map for current restaurants.
- */
-const updateRestaurantsUI = (restaurants = self.restaurants) => {
-  restaurants.forEach(restaurant => {
+  // Filter the data by neighborhood and cuisine.
+  self.restaurants = result;
+  if (neighborhood != 'all') {
+    self.restaurants = self.restaurants.filter(r => r.neighborhood == neighborhood);
+  }
+  if (cuisine != 'all') {
+    self.restaurants = self.restaurants.filter(r => r.cuisine_type == cuisine);
+  }
+
+  // Create ul restaurants-list and add markers on map for current restaurants.
+  self.restaurants.forEach(restaurant => {
     elementRestaurantsList.appendChild(addRestaurantCardUI(restaurant));
   });
   addMarkersToMapUI();
@@ -303,7 +354,7 @@ window.initMap = () => {
   // self.map.addListener('tilesloaded', setTitle);
   map.addListener('tilesloaded', setTitle);
   // Refresh all restaurants.
-  refreshRestaurants();
+  refreshRestaurantsNetworkFirst();
 }
 
 /**
