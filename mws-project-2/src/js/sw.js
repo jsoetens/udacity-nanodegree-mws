@@ -24,6 +24,12 @@ if (workbox) {
   // Force production builds
   workbox.setConfig({ debug: false });
 
+  // Custom Cache Names
+  // https://developers.google.com/web/tools/workbox/guides/configure-workbox
+  workbox.core.setCacheNameDetails({
+    prefix: 'pwa',
+    suffix: 'v1'
+  });
   // The precacheAndRoute method of the precaching module takes a precache
   // "manifest" (a list of file URLs with "revision hashes") to cache on service
   // worker installation. It also sets up a cache-first strategy for the
@@ -36,42 +42,43 @@ if (workbox) {
   // https://developers.google.com/web/tools/workbox/guides/common-recipes#google_fonts
   // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
   workbox.routing.registerRoute(
-  new RegExp('https://fonts.(?:googleapis|gstatic).com/(.*)'),
-  workbox.strategies.cacheFirst({
-    cacheName: 'pwa-cache-google-fonts',
-    plugins: [
-      new workbox.expiration.Plugin({
-        maxEntries: 30,
-      }),
-    ],
-  }),
-);
+    new RegExp('https://fonts.(?:googleapis|gstatic).com/(.*)'),
+    workbox.strategies.cacheFirst({
+      cacheName: 'pwa-cache-google-fonts',
+      plugins: [
+        new workbox.expiration.Plugin({
+          maxEntries: 30,
+        }),
+      ],
+    }),
+  );
 
   // Google Maps APIs
   // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#stale-while-revalidate
-  workbox.routing.registerRoute(
-    new RegExp('https://maps.(?:googleapis|gstatic).com/(.*)'),
-    workbox.strategies.staleWhileRevalidate({
-      cacheName: 'pwa-cache-maps',
-      cacheExpiration: {
-        maxEntries: 20
-      },
-      // Status 0 is the response you would get if you request a cross-origin
-      // resource and the server that you're requesting it from is not
-      // configured to serve cross-origin resources.
-      cacheableResponse: {statuses: [0, 200]}
-    })
-  );
+  // Use cache but update in the background ASAP.
+  // workbox.routing.registerRoute(
+  //   new RegExp('https://maps.(?:googleapis|gstatic).com/(.*)'),
+  //   workbox.strategies.staleWhileRevalidate({
+  //     cacheName: 'pwa-maps-cache',
+  //     cacheExpiration: {
+  //       maxEntries: 20
+  //     },
+  //     // Status 0 is the response you would get if you request a cross-origin
+  //     // resource and the server that you're requesting it from is not
+  //     // configured to serve cross-origin resources.
+  //     cacheableResponse: {statuses: [0, 200]}
+  //   })
+  // );
 
   // Images
   // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
   // https://developers.google.com/web/tools/workbox/modules/workbox-cache-expiration
   workbox.routing.registerRoute(
-    /\.(?:png|gif|jpg|jpeg|svg)$/,
+    /\.(?:jpeg|webp|png|gif|jpg|svg)$/,
     // Whenever the app requests images, the service worker checks the
     // cache first for the resource before going to the network.
     workbox.strategies.cacheFirst({
-      cacheName: 'pwa-cache-images',
+      cacheName: 'pwa-images-cache',
       // A maximum of 60 entries will be kept (automatically removing older
       // images) and these files will expire in 30 days.
       plugins: [
@@ -89,7 +96,7 @@ if (workbox) {
   workbox.routing.registerRoute(
     new RegExp('restaurant.html(.*)'),
     workbox.strategies.networkFirst({
-      cacheName: 'pwa-cache-restaurants',
+      cacheName: 'pwa-restaurants-cache',
       // Status 0 is the response you would get if you request a cross-origin
       // resource and the server that you're requesting it from is not
       // configured to serve cross-origin resources.
