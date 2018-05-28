@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const del = require('del');
 const runSequence = require('run-sequence');
+// const browserify = require('browserify');
 const imagemin = require('imagemin');
 const imageminWebp = require('imagemin-webp');
 const webp = require('gulp-webp');
@@ -18,6 +19,7 @@ const workboxBuild = require('workbox-build');
  * Cleanup
  * - clean-build
  * - clean-images
+ * - clean-js
  */
 
 // Remove all files in build.
@@ -30,6 +32,13 @@ gulp.task('clean-images', () => {
   return del.sync([
     'app/img',
     'build/img'
+  ]);
+});
+
+// Remove all JS in build.
+gulp.task('clean-js', () => {
+  return del.sync([
+    'build/js'
   ]);
 });
 
@@ -168,6 +177,18 @@ gulp.task('js-babel', () => {
     .pipe(gulp.dest('build/js'));
 });
 
+gulp.task('js-minify-idb', () => {
+  return gulp.src([
+    'app/js/idb-promised.js', 'app/js/idb.js'
+    ])
+    .pipe(sourcemaps.init())
+    .pipe(babel())
+    .pipe(concat('idb-bundle.min.js'))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('build/js'));
+});
+
 gulp.task('js-minify-main', () => {
   return gulp.src([
     'app/js/dbhelper.js', 'app/js/app.js'
@@ -202,19 +223,24 @@ gulp.task('js-minify-resto', () => {
 // Create a service worker in build.
 gulp.task('pwa-service-worker', () => {
   return workboxBuild.injectManifest({
-    swSrc: "src/js/sw.js",
-    swDest: "build/sw.js",
+    swSrc: 'src/js/sw.js',
+    swDest: 'build/sw.js',
     globDirectory: 'build',
     globPatterns: [
-      "**/*.{html,css,js}",
-      "img/touch/*.png",
-      // "favicon.ico",
-      "manifest.json"
+      '**\/*.{html,css,js}',
+      'img/touch/*.png',
+      // 'favicon.ico',
+      'manifest.json'
     ],
     globIgnores: [
-      "workbox-config.js",
-      "node_modules/**/*"
+      'workbox-config.js',
+      'node_modules/**/*'
     ]
+  }).then(({count, size, warnings}) => {
+    // Optionally, log any warnings and details.
+    warnings.forEach(console.warn);
+    console.log(
+      `[INFO] ${count} files will be precached, totaling ${size} bytes.`);
   }).catch(err => {
     console.log('[ERROR] ' + err);
   });
@@ -239,19 +265,23 @@ gulp.task('watch', () => {
   gulp.watch('app/img/**', ['images-copy2build']);
   gulp.watch('app/*.html', ['html-copy2build']);
   gulp.watch('app/css/**/*.css', ['css-copy2build']);
-  gulp.watch('app/js/**/*.js', ['js-copy2build']);
-  gulp.watch('app/js/**/*.js', ['js-minify-main', 'js-minify-resto']);
+  // gulp.watch('app/js/**/*.js', ['js-copy2build']);
+  // gulp.watch('app/js/**/*.js', ['js-minify-idb']);
+  gulp.watch('app/js/**/*.js', ['build-js']);
   // gulp.watch('app/js/**/*.js', ['babel']);
   gulp.watch('app/manifest.json', ['pwa-manifest-copy2build']);
+  gulp.watch('src/js/sw.js', ['pwa-service-worker']);
 });
 
 
 /**
  * Build
  * - build-images
+ * - build-js
+ * - build
  */
 
-// Task: build-images
+// Clean up and build the images.
 gulp.task('build-images', cb => {
   runSequence(
     'clean-images', 'images-copy2app', 'images-webp', 'images-resize',
@@ -259,8 +289,17 @@ gulp.task('build-images', cb => {
     cb);
 });
 
-// Task: build
-// Build the production app.
+// Clean up and build the JavaScript.
+gulp.task('build-js', cb => {
+  runSequence(
+    'clean-js',
+    'js-minify-idb',
+    ['js-minify-main', 'js-minify-resto'],
+    'pwa-service-worker',
+    cb);
+});
+
+// Clean up and build the production app.
 gulp.task('build', cb => {
   runSequence(
     'clean-build',
@@ -268,7 +307,7 @@ gulp.task('build', cb => {
     'html-copy2build',
     'css-minify',
     // 'js-babel',
-    ['js-minify-main', 'js-minify-resto'],
+    ['js-minify-idb', 'js-minify-main', 'js-minify-resto'],
     'pwa-manifest-copy2build', 'pwa-service-worker',
     cb);
 });
