@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- https://developers.google.com/web/tools/lighthouse/audits/description -->
+  <!-- https://support.google.com/webmasters/answer/35624#1 -->
+  <meta name="Description" content="The best restaurant reviews of your area!">
+  <!-- https://developers.google.com/web/tools/lighthouse/audits/address-bar -->
+  <meta name="theme-color" content="#002984"/>
+  <!-- meta viewport tag to control the width and scaling of the browser's viewport. -->
+  <!-- width=device-width to match the screen's width in device-independent pixels. -->
+  <!-- initial-scale=1 to establish a 1:1 relationship between CSS pixels and device-independent pixels. -->
+  <!-- Ensure page is accessible by not disabling user scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- https://developers.google.com/web/fundamentals/web-app-manifest/ -->
+  <link rel="manifest" href="/manifest.json">
+  <!-- CSS -->
+  <!-- Normalize.css corrects bugs and common browser inconsistencies. -->
+  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+  <link rel="stylesheet" href="css/styles.css">
+  <title>Restaurant Info</title>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- header -->
+    <header>
+      <nav class="nav">
+        <h1>
+          <a class="nav-title" href="/">Restaurant Reviews</a>
+        </h1>
+      </nav>
+      <!-- breadcrumbs -->
+      <!-- https://www.w3.org/TR/wai-aria-practices/examples/breadcrumb/index.html -->
+      <nav aria-label="Breadcrumb">
+        <ol id="breadcrumb" class="breadcrumbs">
+          <li class="breadcrumb">
+            <a class="breadcrumb-link" href="/">Home</a>
+          </li>
+        </ol>
+      </nav>
+    </header>
+    <!-- main -->
+    <!-- IE11 and below: add an aria role of “main” to ensure it is accessible -->
+    <!-- https://developer.mozilla.org/en/docs/Web/HTML/Element/main#Browser_compatibility -->
+    <main id="maincontent" class="main" role="main">
+      <!-- These info and warnings are hidden and displayed dynamically -->
+      <!-- https://codelabs.developers.google.com/codelabs/workbox-indexeddb -->
+      <p id="offline" class="message warn">You're offline and viewing stored data.</p>
+      <p id="no-data" class="message error">You're offline and local data is unavailable.</p>
+      <p id="data-saved" class="message success">Server data was saved for offline mode.</p>
+      <p id="save-error" class="message error">Server data couldn't be saved offline.</p>
+      <!-- restaurant-details -->
+      <div class="restaurant-details">
+        <!-- restaurants -->
+        <section id="restaurant-container" class="restaurant-details-card">
+          <!-- <img id="restaurant-img"> -->
+          <div id="card-primary" class="card-primary">
+            <h2 id="restaurant-name" class="card-title" ></h2>
+            <address id="restaurant-address" class="card-secondary-content"></address>
+          </div>
+          <div class="restaurant-card-cuisine">
+            <p id="restaurant-cuisine" class="restaurant-card-cuisine-content"></p>
+          </div>
+          <div class="restaurant-card-opening-hours">
+            <table id="restaurant-hours" class="restaurant-card-table-content"></table>
+          </div>
+        </section>
+        <!-- map -->
+        <section id="map-container" class="restaurant-details-map">
+          <!-- The application role will tell assistive technology to disable -->
+          <!-- its shortcuts and pass through all key presses to the page. -->
+          <div id="map" class="google-maps-stretch" role="application" aria-label="Google Maps overview of restaurants" aria-hidden="true"></div>
+        </section>
+      </div>
+      <!-- reviews -->
+      <section id="reviews-container">
+        <ul id="reviews-list" class="review-cards"></ul>
+      </section>
+    </main>
+    <!-- footer -->
+    <footer id="footer" class="footer">
+      <p class="footer-content">Copyright © 2018 <a class="footer-link" href="/">Restaurant Reviews</a> All Rights Reserved.</p>
+    </footer>
+  </div>
+  <!-- scripts -->
+  <!-- scripts - App -->
+  <!-- <script src="js/dbhelper.js"></script> -->
+  <!-- <script src="js/restaurant_info.js"></script> -->
+  <script src="js/idb-bundle.min.js"></script>
+  <script src="js/resto-bundle.min.js"></script>
+  <!-- scripts - Google Maps -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDm9CBeGB2XpSOVQXsuyo-kJtdHSNGiF4k&libraries=places&callback=initMap"></script>
+</body>
+</html>

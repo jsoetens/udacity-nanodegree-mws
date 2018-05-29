@@ -1,0 +1,584 @@
+@charset "utf-8";
+
+
+/* -------------------------------------------------------------------------- */
+
+/* Common Stuff */
+
+/* Using a Material Design color palette - https://material.io */
+/* Primary color - Indigo, secondary Color - Pink */
+
+* {
+  /* border-box - includes content, padding and border */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+	line-height: 1.15;
+}
+
+body {
+  font-family: Roboto, sans-serif;
+	/* Set to default browser size */
+	font-size: 16px;
+}
+
+body {
+	margin: 0;
+  background-color: #fafafa;
+  color: #000000;
+}
+
+/* Not setting block level elements */
+/* https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements */
+
+
+/* -------------------------------------------------------------------------- */
+
+/*
+ * Responsive Web Design using Flexbox - Flexible Box Layout
+ *
+ * https://developers.google.com/web/fundamentals/design-and-ux/responsive/
+ * https://www.w3.org/TR/css-flexbox-1/
+ */
+
+/* Flexbox Wrapper */
+/* https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
+.wrapper {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+/* We tell all items to be 100% width, via flex-basis */
+.wrapper > * {
+	/* flex-basis: 100% */
+	/* flew-grow: 1 */
+	/* flex-shrink: 1 */
+  flex: 1 100%;
+}
+
+/* Prevent accidentally overflowing the viewport */
+img,
+embed,
+object,
+video {
+  max-width: 100%;
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+/* Material Design - App Bar */
+/* Mobile Portrait: 56dp, Tablet/Desktop: 64dp / pixels = 4rem */
+.nav {
+  width: 100%;
+  height: 4rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+  box-shadow: 0 0.125rem 0.3125rem rgba(0,0,0,.26);
+  text-transform: uppercase;
+  background-color: #002984;
+}
+
+.nav-title {
+  font-size: 1.25rem;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.nav-title:hover, .nav-title:focus {
+  font-weight: 400;
+  letter-spacing: 0.275em;
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+.google-maps {
+  width: 100%;
+	height: 40vh;
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+.restaurants-filter {
+	height: 3rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	align-items: center;
+  background-color: #3f51b5;
+}
+
+.restaurants-filter select {
+	width: calc(50% - 1em);
+	height: 1.75rem;
+	font-size: 1rem;
+	background-color: rgb(255, 255, 255);
+	border: none;
+	outline: none;
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+/* To get a really good layout we should combine it with CSS Grid */
+/* space-evenly doesn't look great when there are only a few restaurants */
+/* to be shown but a real app should have lots of restaurants ;-) */
+
+/* https://material.io/guidelines/components/cards.html */
+
+.restaurant-cards {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center; /* space-evenly */
+}
+
+.restaurant-card {
+  min-width: 15rem; /* 240px */
+  width: 100%;
+  margin: 0.75rem;
+  display: flex;
+  flex-direction: column; /* mobile first */
+  list-style-type: none;
+  border-radius: 2px;
+  box-shadow:
+    0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+	background-color: rgb(255, 255, 255);
+}
+
+.card-primary {
+  padding: 1rem;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 2rem;
+  font-weight: 500;
+  letter-spacing: 0.0125em;
+}
+
+.card-subtitle {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  font-weight: 500;
+  letter-spacing: 0.00714em;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.card-secondary {
+  padding: 0 1rem 8px 1rem;
+}
+
+.card-secondary-content {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.01786em;
+  font-style: normal;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.card-actions {
+  /* nice tap targets */
+  min-width: 48px;
+  min-height: 52px;
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.card-actions-link {
+  color: #000000;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.card-actions-link:hover, .card-actions-link:focus {
+  color: #ff4081;
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+.breadcrumbs {
+  width: 100%;
+  min-width: 48px;
+  min-height: 52px;
+  margin: 0;
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  /* background-color: #ffffff; */
+  background-color: #3f51b5;
+}
+
+.breadcrumb {
+  list-style-type: none;
+  font-weight: 300;
+  color: #ffffff;
+}
+
+.breadcrumb+.breadcrumb:before {
+  padding: 0.5rem;
+  content: ">";
+}
+
+.breadcrumb-link {
+  min-width: 3rem;
+  min-height: 3rem; /* nice tap targets */
+  font-weight: 300;
+  text-decoration: none;
+  /* color: #000000; */
+  color: #ffffff;
+}
+
+.breadcrumb-link:hover, .breadcrumb-link:focus {
+  color: #ff4081;
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+.restaurant-details {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.restaurant-details-map {
+  width: 50%;
+  min-height: 25vh;
+  flex: 1;
+}
+
+.google-maps-stretch {
+  width: 100%;
+	height: 100%;
+}
+
+.restaurant-details-title {
+  width: 100%;
+  margin: 0.75rem;
+  padding-left: 0.25rem;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.restaurant-details-card {
+  width: 50%;
+  min-width: 15rem; /* 240px */
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+	background-color: rgb(255, 255, 255);
+}
+
+.restaurant-card-cuisine {
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #3f51b5;
+}
+
+.restaurant-card-cuisine-content {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.restaurant-card-opening-hours {
+  padding: 1rem;
+}
+
+.restaurant-card-table-content {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.01786em;
+  font-style: normal;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+.reviews-title {
+  width: 100%;
+  margin: 0.75rem;
+  padding-left: 0.25rem;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.review-cards {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly; /* space-evenly */
+}
+
+.review-card {
+  min-width: 15rem; /* 240px */
+  width: 100%;
+  margin: 0.75rem;
+  display: flex;
+  flex-direction: column; /* mobile first */
+  list-style-type: none;
+  border-radius: 2px;
+  box-shadow:
+    0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+	background-color: rgb(255, 255, 255);
+}
+
+.review-card-rating {
+  padding-left: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #ff79b0;
+}
+
+.review-card-rating-content {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+.footer {
+  width: 100%;
+  height: 4rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+  text-transform: uppercase;
+  /* Secondary Color - Blue Grey */
+  background-color: #757de8;
+  box-shadow: 0 -0.1875rem 0.125rem #efefef;
+}
+
+.footer-content {
+  padding: 1rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: #000000;
+}
+
+.footer-link {
+  text-decoration: none;
+  color: #000000;
+}
+
+.footer-link:hover, .footer-link:focus {
+  color: #ffffff;
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+/*
+ * Breakpoints
+ * https://material.io/guidelines/layout/responsive-ui.html#responsive-ui-breakpoints
+ *
+ * Use a media query when the browser's width becomes xrem (y pixels at
+ * browser's default font size or x times the default font size in the user's
+ * browser).
+ * 480, 600, 840, 960, 1280
+ */
+
+/*
+ * 0 to 479 pixels, breakpoint at 480 pixels = 30rem
+ */
+@media screen and (max-width: 29.9375rem) {
+  .wrapper {
+    max-width: 29.9375rem;
+  }
+	.restaurants-list {
+		flex-direction: column;
+	}
+	.restaurants-filter {
+		height: 4.75rem;
+		flex-direction: column;
+	}
+	.restaurants-filter select {
+		width: 90%; /* fallback if needed */
+		width: calc(100% - 1em);
+	}
+  .restaurant-details {
+    flex-direction: column;
+  }
+  .restaurant-details-card {
+    width: 100%;
+    order: 2;
+  }
+  .restaurant-details-map {
+    width: 100%;
+    height: 30vh;
+    order: 1;
+  }
+  .footer-content {
+    font-size: 0.55rem; /* from 0.75rem */
+    font-weight: 300;
+    letter-spacing: 0.075em; /* from 0.05em */
+  }
+}
+
+/*
+ * 480 to 599 pixels, breakpoint at 600 pixels = 37.5rem
+ */
+@media screen and (min-width: 30rem) and (max-width: 37.4375rem) {
+  .wrapper {
+    max-width: 37.4375rem;
+  }
+	.restaurants-filter select {
+		width: calc(50% - 1em);
+	}
+  .restaurant-card {
+    margin: 1rem;
+  }
+  .restaurant-details {
+    flex-direction: column;
+  }
+  .restaurant-details-card {
+    width: 100%;
+    order: 2;
+  }
+  .restaurant-details-map {
+    width: 100%;
+    height: 35vh;
+    order: 1;
+  }
+  .footer-content {
+    font-size: 0.65rem; /* from 0.75rem */
+    font-weight: 300;
+    letter-spacing: 0.075em; /* from 0.05em */
+  }
+}
+
+/*
+ * 600 to 839 pixels, breakpoint at 840 pixels = 52.5rem
+ */
+@media screen and (min-width: 37.5rem) and (max-width: 52.4375rem) {
+  .wrapper {
+    max-width: 52.4375rem;
+  }
+	.restaurants-filter select {
+		width: calc(45% - 1em);
+	}
+  .restaurant-card {
+    width: 45%; /* 2 cards */
+  }
+  .review-card {
+    width: 45%; /* 2 cards */
+  }
+}
+
+/*
+ * 840 to 959 pixels, breakpoint at 960 pixels = 60rem
+ */
+@media screen and (min-width: 52.5rem) and (max-width: 59.9375rem) {
+  .wrapper {
+    max-width: 59.9375rem;
+  }
+	.restaurants-filter select {
+		width: calc(40% - 1em);
+	}
+  .restaurant-card {
+    width: 45%; /* 2 cards */
+  }
+  .review-card {
+    width: 45%; /* 2 cards */
+  }
+}
+
+/*
+ * 960 to 1279 pixels, breakpoint at 1280 pixels = 80rem
+ */
+@media screen and (min-width: 60rem) and (max-width: 79.9375rem) {
+  .wrapper {
+    max-width: 79.9375rem;
+  }
+	.restaurants-filter select {
+		width: calc(35% - 1em);
+	}
+  .restaurant-card {
+    width: 30%; /* 3 cards */
+  }
+  .review-card {
+    width: 30%; /* 3 cards */
+  }
+}
+
+/*
+ * 1280 pixels / 80rem and beyond
+ */
+@media screen and (min-width: 80rem) {
+	.restaurants-filter select {
+		width: calc(30% - 1em);
+	}
+  .restaurant-card {
+    width: 22.5%; /* 4 cards */
+  }
+  .restaurant-card-table-content {
+    font-size: 0.925rem;
+  }
+  .review-card {
+    width: 30%; /* 3 cards */
+  }
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+.message {
+  box-shadow: 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12), 0 3px 5px -1px rgba(0,0,0,.2);
+  display: none;
+  padding: 15px;
+}
+
+.warn {
+  background: #FF9800;
+}
+
+.error {
+  background: #F44336;
+}
+
+.success {
+  background: #4CAF50;
+}
