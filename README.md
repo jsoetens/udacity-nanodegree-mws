@@ -10,12 +10,12 @@ Thank you Google and Udacity for granting me a full 6-month [Google Developer Na
 * [Offline Web Applications](docs/study-notes/offline-web-applications.md)
 * [Web Tooling and Automation](docs/study-notes/web-tooling-and-automation.md)
 * [Asynchronous JavaScript Requests](docs/study-notes/asynchronous-javascript-requests.md)
+* [Browser Rendering Optimization](docs/study-notes/browser-rendering-optimization.md)
 
 ## Projects
-
 * [Restaurant Reviews App: Stage 1](mws-project-1/README.md)
 * [Restaurant Reviews App: Stage 2](mws-project-2/README.md)
-* Restaurant Reviews App: Stage 3
+* [Restaurant Reviews App: Stage 3](mws-project-3/README.md)
 
 ## Supporting Courses
 ### Part 1 - Building Accessible and Responsive Web Apps
@@ -35,9 +35,10 @@ Thank you Google and Udacity for granting me a full 6-month [Google Developer Na
 
 ## Optional Courses
 * [Version Control with Git](https://www.udacity.com/course/ud123)
-* [GitHub & Collaboration](https://eu.udacity.com/course/github-collaboration--ud456)
+* [GitHub & Collaboration](https://www.udacity.com/course/github-collaboration--ud456)
 * [JavaScript Design Patterns](https://www.udacity.com/course/ud989)
 * [Frontend End Frameworks](https://www.udacity.com/course/ud894)
+* [Website Performance Optimization](https://www.udacity.com/course/website-performance-optimization--ud884)
 
 ### JavaScript fundamentals
 * [Eloquent JavaScript - 3rd edition](http://eloquentjavascript.net/3rd_edition/)
