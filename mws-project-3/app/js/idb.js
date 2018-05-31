@@ -27,11 +27,15 @@ function createIndexedDB() {
             upgradeDb.createObjectStore('restaurants', {keyPath: 'id'});
         }
       case 2:
-        // Creating object store for reviews.
+        // Creating object store for reviews, index for restaurant_id.
         if (!upgradeDb.objectStoreNames.contains('reviews')) {
           console.log('[DEBUG] Creating a new object store for reviews.');
-          const restaurantsOS =
+          const reviewsOS =
             upgradeDb.createObjectStore('reviews', {keyPath: 'id'});
+          // console.log(
+          //   '[DEBUG] Creating a restaurant_id index on object store reviews');
+          // reviewsOS.createIndex(
+          //   'restaurant_id', 'restaurant_id', {unique: false});
         }
     }
   });
@@ -57,10 +61,10 @@ function saveRestaurantsDataLocally(restaurants) {
     // Don't use Promise.all when there's only one restaurant.
     if (restaurants.length > 1) {
       return Promise.all(restaurants.map(restaurant => store.put(restaurant)))
-      .catch(() => {
-        tx.abort();
-        throw Error('[ERROR] Restaurants were not added to the store.');
-      });
+        .catch(() => {
+          tx.abort();
+          throw Error('[ERROR] Restaurants were not added to the store.');
+        });
     } else {
       store.put(restaurants);
     }
@@ -85,5 +89,52 @@ function getLocalRestaurantByIdData(id) {
     const store = tx.objectStore('restaurants');
     // Make sure you're using a number for id.
     return store.get(parseInt(id));
+  });
+}
+
+/**
+ * Write reviews data to object store reviews.
+ * The saveReviewsDataLocally function takes an array of objects and adds
+ * or updates each object to the IndexedDB database. The store.put operations
+ * happen inside a Promise.all. This way if any of the put operations fail,
+ * we can catch the error and abort the transaction. Aborting the transaction
+ * rolls back all the changes that happened in the transaction so that if any
+ * of the events fail to put, none of them will be added to the object store.
+ *
+ * TODO: this function doesn't seem to work when there's only one review...
+ * Error: Uncaught (in promise) DOMException: Failed to execute 'put' on
+ * 'IDBObjectStore': Evaluating the object store's key path did not yield
+ * a value.
+ */
+function saveReviewsDataLocally(reviews) {
+  console.log(reviews);
+  console.log(typeof reviews);
+  if (!('indexedDB' in window)) {return null;}
+  return dbPromise.then(db => {
+    const tx = db.transaction('reviews', 'readwrite');
+    const store = tx.objectStore('reviews');
+    // Don't use Promise.all when there's only one review.
+    if (reviews.length > 1) {
+      return Promise.all(reviews.map(review => store.put(review)))
+        .catch(() => {
+          tx.abort();
+          throw Error('[ERROR] Reviews were not added to the store.');
+        });
+    } else {
+      store.put(reviews);
+    }
+  });
+}
+
+// Get reviews by id data from object store reviews, using the index on
+// restaurant_id
+function getLocalReviewsByIdData(id) {
+  if (!('indexedDB' in window)) {return null;}
+  return dbPromise.then(db => {
+    const tx = db.transaction('reviews', 'readonly');
+    const store = tx.objectStore('reviews');
+    const index = store.index('restaurant_id');
+    // Make sure you're using a number for id.
+    return index.getAll(parseInt(id));
   });
 }

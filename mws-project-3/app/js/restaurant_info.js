@@ -7,6 +7,8 @@
 // Declare global variables.
 let map;
 let restaurant;
+const endpointRestaurants = `http://localhost:1337/restaurants`;
+const endpointReviews = `http://localhost:1337/reviews`;
 
 // Declare the id elements.
 const elementBreadcrumb = document.getElementById('breadcrumb');
@@ -44,9 +46,9 @@ const loadRestaurantNetworkFirst = (id) => {
     saveRestaurantsDataLocally(dataFromNetwork)
     .then(() => {
       DBHelper.setLastUpdated(new Date());
-      // DBHelper.messageDataSaved();
+      DBHelper.messageDataSaved();
     }).catch(err => {
-      // DBHelper.messageSaveError();
+      DBHelper.messageSaveError();
       console.warn(err);
     });
     createGoogleMaps();
@@ -54,13 +56,45 @@ const loadRestaurantNetworkFirst = (id) => {
     console.log('[DEBUG] Network requests have failed, this is expected if offline');
     getLocalRestaurantByIdData(id)
     .then(offlineData => {
-      // DBHelper.messageOffline();
+      DBHelper.messageOffline();
       self.restaurant = offlineData;
       updateRestaurantUI();
       createBreadcrumb();
       createGoogleMaps();
     }).catch(err => {
-      // DBHelper.messageNoData();
+      DBHelper.messageNoData();
+      console.warn(err);
+    });
+  });
+}
+
+/**
+ * Fetch reviews from a restaurant by its ID from network and fallback to
+ * IndexedDB, update UI.
+ * http://localhost:1337/reviews/?restaurant_id=<restaurant_id>
+ */
+const loadReviewsNetworkFirst = (id) => {
+  const endpointReviewsById =
+    `http://localhost:1337/reviews/?restaurant_id=${id}`;
+  DBHelper.getServerData(endpointReviewsById)
+  .then(dataFromNetwork => {
+    updateReviewsUI(dataFromNetwork);
+    saveReviewsDataLocally(dataFromNetwork)
+    .then(() => {
+      DBHelper.setLastUpdated(new Date());
+      DBHelper.messageDataSaved();
+    }).catch(err => {
+      DBHelper.messageSaveError();
+      console.warn(err);
+    });
+  }).catch(err => {
+    console.log('[DEBUG] Network requests have failed, this is expected if offline');
+    getLocalReviewsByIdData(id)
+    .then(offlineData => {
+      DBHelper.messageOffline();
+      updateReviewsUI(offlineData);
+    }).catch(err => {
+      DBHelper.messageNoData();
       console.warn(err);
     });
   });
@@ -112,7 +146,8 @@ const updateRestaurantUI = () => {
   if (restaurant.operating_hours) {
     updateRestaurantHoursUI();
   }
-  updateReviewsUI();
+
+  loadReviewsNetworkFirst(self.restaurant.id);
 }
 
 /**
@@ -140,7 +175,8 @@ const updateRestaurantHoursUI = () => {
 /**
  * Create reviews cards.
  */
-const updateReviewsUI = (reviews = self.restaurant.reviews) => {
+// const updateReviewsUI = (reviews = self.restaurant.reviews) => {
+const updateReviewsUI = (reviews) => {
   const title = document.createElement('h3');
   title.className = 'reviews-title';
   title.innerHTML = 'Reviews';
@@ -175,10 +211,15 @@ const createReviewHTML = (review) => {
   name.className = 'card-title';
   name.innerHTML = review.name;
   divCardPrimary.appendChild(name);
+
   // Review date.
   const date = document.createElement('h3');
   date.className = 'card-subtitle';
-  date.innerHTML = review.date;
+  // The API server returns createdAt, updatedAt in epoch format.
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toDateString
+  // date.innerHTML = review.date;
+  const reviewDate = new Date(review.createdAt);
+  date.innerHTML = reviewDate.toDateString();
   divCardPrimary.appendChild(date);
   li.appendChild(divCardPrimary);
 
