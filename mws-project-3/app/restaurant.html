@@ -84,6 +84,25 @@
     </footer>
   </div>
   <!-- scripts -->
+  <!-- scripts - Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      console.log('[DEBUG] Service worker is supported.')
+      // Use the window load event to keep the page load performant
+      // https://developers.google.com/web/fundamentals/primers/service-workers/registration
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log(`[DEBUG] Service worker registered with scope: ${registration.scope}`);
+          })
+          .catch(error => {
+            console.log(`[DEBUG] Service worker registration failed, error: ${error}`);
+          });
+      });
+    } else {
+      console.log('[DEBUG] Service worker is not supported.')
+    }
+  </script>
   <!-- scripts - App -->
   <!-- <script src="js/dbhelper.js"></script> -->
   <!-- <script src="js/restaurant_info.js"></script> -->
