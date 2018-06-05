@@ -30,6 +30,14 @@ window.initMap = () => {
   // Fetch restaurant by using url parameter on current page.
   const id = getParameterByName('id');
   loadRestaurantNetworkFirst(id);
+  // Test POST review.
+  // let newReview = {
+  //       restaurant_id: 1,
+  //       name: 'John Doe',
+  //       rating: 5,
+  //       comments: 'Best restaurant in town!'
+  // };
+  // createReviewNetworkFirst(newReview);
 }
 
 /**
@@ -98,6 +106,51 @@ const loadReviewsNetworkFirst = (id) => {
       console.warn(err);
     });
   });
+}
+
+/**
+ * Add a review for a restaurant by its ID, save data locally to IndexedDB,
+ * send to API server, update UI.
+ * POST: http://localhost:1337/reviews/
+ * Parameters: "restaurant_id", "name", "rating", "comments"
+ * 
+ * TODO: use FormData.
+ * https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData
+ */
+const createReviewNetworkFirst = (review) => {
+  const endpointPostReview =
+    `http://localhost:1337/reviews/`;
+  const data = {
+    restaurant_id: review.restaurant_id,
+    name: review.name,
+    rating: review.rating,
+    comments: review.comments
+  };
+  console.log(data);
+  // Save the review locally to IndexedDB.
+  saveReviewsDataLocally(data)
+  .then(() => {
+    DBHelper.setLastUpdated(new Date());
+    DBHelper.messageDataSaved();
+  }).catch(err => {
+    DBHelper.messageSaveError();
+    console.warn(err);
+  });
+  // POST the review to the API server.
+  DBHelper.postRequest(endpointPostReview, data)
+  .then(dataFromNetwork => {
+    console.log(dataFromNetwork)
+  }).catch(err => {
+    console.log('[DEBUG] Network requests have failed, this is expected if offline');
+  });
+  // Alternative POST.
+  // const headers = new Headers({'Content-Type': 'application/json'});
+  // const body = JSON.stringify(data);
+  // return fetch(endpointPostReview, {
+  //   method: 'POST',
+  //   headers: headers,
+  //   body: body
+  // });
 }
 
 const createGoogleMaps = () => {

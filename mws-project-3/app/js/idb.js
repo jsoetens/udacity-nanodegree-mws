@@ -29,13 +29,14 @@ function createIndexedDB() {
       case 2:
         // Creating object store for reviews, index for restaurant_id.
         if (!upgradeDb.objectStoreNames.contains('reviews')) {
+          // Using a key generator as users can post reviews.
           console.log('[DEBUG] Creating a new object store for reviews.');
           const reviewsOS =
-            upgradeDb.createObjectStore('reviews', {keyPath: 'id'});
-          // console.log(
-          //   '[DEBUG] Creating a restaurant_id index on object store reviews');
-          // reviewsOS.createIndex(
-          //   'restaurant_id', 'restaurant_id', {unique: false});
+            upgradeDb.createObjectStore('reviews', {keyPath: 'id', autoIncrement: true});
+          console.log(
+            '[DEBUG] Creating a restaurant_id index on object store reviews');
+          reviewsOS.createIndex(
+            'restaurant_id', 'restaurant_id', {unique: false});
         }
     }
   });
@@ -107,8 +108,6 @@ function getLocalRestaurantByIdData(id) {
  * a value.
  */
 function saveReviewsDataLocally(reviews) {
-  console.log(reviews);
-  console.log(typeof reviews);
   if (!('indexedDB' in window)) {return null;}
   return dbPromise.then(db => {
     const tx = db.transaction('reviews', 'readwrite');

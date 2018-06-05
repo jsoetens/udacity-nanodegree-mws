@@ -118,6 +118,14 @@ class DBHelper {
     return response.json();
   }
 
+  /*
+   * readResponseAsText reads the body of the response using the Response.text()
+   * method.
+   */
+  static readResponseAsText(response) {
+    return response.text();
+  }
+
   /**
    * Get the database URL.
    * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get
@@ -140,6 +148,21 @@ class DBHelper {
       // Once the promise resolves, the JSON data is passed to logResult.
       // .then(this.logResult)
       // .catch(this.logError);
+  }
+
+  /**
+   * postRequest
+   */
+  static postRequest(pathToAPI, data) {
+    return fetch(pathToAPI, {
+      method: 'POST',
+      body: data
+    })
+    .then(this.validateResponse)
+    .then(this.readResponseAsText)
+    // Once the promise resolves, the text data is passed to logResult.
+    // .then(this.logResult)
+    // .catch(this.logError);
   }
 
   /**
