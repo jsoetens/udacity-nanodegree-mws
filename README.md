@@ -11,6 +11,7 @@ Thank you Google and Udacity for granting me a full 6-month [Google Developer Na
 * [Web Tooling and Automation](docs/study-notes/web-tooling-and-automation.md)
 * [Asynchronous JavaScript Requests](docs/study-notes/asynchronous-javascript-requests.md)
 * [Browser Rendering Optimization](docs/study-notes/browser-rendering-optimization.md)
+* [Building High Conversion Web Forms](docs/study-notes/building-high-conversion-web-forms.md)
 
 ## Projects
 * [Restaurant Reviews App: Stage 1](mws-project-1/README.md)
@@ -39,6 +40,7 @@ Thank you Google and Udacity for granting me a full 6-month [Google Developer Na
 * [JavaScript Design Patterns](https://www.udacity.com/course/ud989)
 * [Frontend End Frameworks](https://www.udacity.com/course/ud894)
 * [Website Performance Optimization](https://www.udacity.com/course/website-performance-optimization--ud884)
+* [Building High Conversion Web Forms](https://www.udacity.com/course/building-high-conversion-web-forms--ud890)
 
 ### JavaScript fundamentals
 * [Eloquent JavaScript - 3rd edition](http://eloquentjavascript.net/3rd_edition/)
