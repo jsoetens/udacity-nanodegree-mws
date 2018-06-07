@@ -153,6 +153,7 @@ gulp.task('css-copy2build', () =>
  * - js-babel
  * - js-minify-main
  * - js-minify-resto
+ * - js-minify-review
  */
 
 // Copy JavaScript from app to build.
@@ -213,6 +214,17 @@ gulp.task('js-minify-resto', () => {
     .pipe(gulp.dest('build/js'));
 });
 
+gulp.task('js-minify-review', () => {
+  return gulp.src([
+    'app/js/dbhelper.js', 'app/js/review.js'
+    ])
+    .pipe(sourcemaps.init())
+    .pipe(babel())
+    .pipe(concat('review-bundle.min.js'))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('build/js'));
+});
 
 /*
  * Progressive Web Apps
@@ -294,7 +306,7 @@ gulp.task('build-js', cb => {
   runSequence(
     'clean-js',
     'js-minify-idb',
-    ['js-minify-main', 'js-minify-resto'],
+    ['js-minify-main', 'js-minify-resto', 'js-minify-review'],
     'pwa-service-worker',
     cb);
 });
@@ -307,7 +319,7 @@ gulp.task('build', cb => {
     'html-copy2build',
     'css-minify',
     // 'js-babel',
-    ['js-minify-idb', 'js-minify-main', 'js-minify-resto'],
+    ['js-minify-idb', 'js-minify-main', 'js-minify-resto', 'js-minify-review'],
     'pwa-manifest-copy2build', 'pwa-service-worker',
     cb);
 });

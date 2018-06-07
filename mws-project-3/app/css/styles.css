@@ -314,7 +314,8 @@ video {
 }
 
 .restaurant-card-opening-hours {
-  padding: 1rem;
+  /* top | right | bottom | left */
+  padding: 1rem 1rem 0 1rem;
 }
 
 .restaurant-card-table-content {
@@ -374,6 +375,20 @@ video {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   text-transform: uppercase;
+}
+
+
+/* -------------------------------------------------------------------------- */
+
+.review-main {
+  max-width: 50rem;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
 }
 
 

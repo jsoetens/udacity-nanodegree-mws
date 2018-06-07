@@ -17,6 +17,7 @@ const elementRestaurantName = document.getElementById('restaurant-name');
 const elementRestaurantAddress = document.getElementById('restaurant-address');
 const elementRestaurantCuisine = document.getElementById('restaurant-cuisine');
 const elementRestaurantHours = document.getElementById('restaurant-hours');
+const elementReviewLink = document.getElementById('review-link');
 const elementGoogleMap = document.getElementById('map');
 const elementReviewsContainer = document.getElementById('reviews-container');
 const elementReviewsList = document.getElementById('reviews-list');
@@ -30,14 +31,6 @@ window.initMap = () => {
   // Fetch restaurant by using url parameter on current page.
   const id = getParameterByName('id');
   loadRestaurantNetworkFirst(id);
-  // Test POST review.
-  // let newReview = {
-  //       restaurant_id: 1,
-  //       name: 'John Doe',
-  //       rating: 5,
-  //       comments: 'Best restaurant in town!'
-  // };
-  // createReviewNetworkFirst(newReview);
 }
 
 /**
@@ -49,7 +42,7 @@ const loadRestaurantNetworkFirst = (id) => {
   DBHelper.getServerData(endpointRestaurantById)
   .then(dataFromNetwork => {
     self.restaurant = dataFromNetwork;
-    updateRestaurantUI();
+    updateRestaurantUI(id);
     createBreadcrumb();
     saveRestaurantsDataLocally(dataFromNetwork)
     .then(() => {
@@ -66,7 +59,7 @@ const loadRestaurantNetworkFirst = (id) => {
     .then(offlineData => {
       DBHelper.messageOffline();
       self.restaurant = offlineData;
-      updateRestaurantUI();
+      updateRestaurantUI(id);
       createBreadcrumb();
       createGoogleMaps();
     }).catch(err => {
@@ -108,51 +101,6 @@ const loadReviewsNetworkFirst = (id) => {
   });
 }
 
-/**
- * Add a review for a restaurant by its ID, save data locally to IndexedDB,
- * send to API server, update UI.
- * POST: http://localhost:1337/reviews/
- * Parameters: "restaurant_id", "name", "rating", "comments"
- * 
- * TODO: use FormData.
- * https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData
- */
-const createReviewNetworkFirst = (review) => {
-  const endpointPostReview =
-    `http://localhost:1337/reviews/`;
-  const data = {
-    restaurant_id: review.restaurant_id,
-    name: review.name,
-    rating: review.rating,
-    comments: review.comments
-  };
-  console.log(data);
-  // Save the review locally to IndexedDB.
-  saveReviewsDataLocally(data)
-  .then(() => {
-    DBHelper.setLastUpdated(new Date());
-    DBHelper.messageDataSaved();
-  }).catch(err => {
-    DBHelper.messageSaveError();
-    console.warn(err);
-  });
-  // POST the review to the API server.
-  DBHelper.postRequest(endpointPostReview, data)
-  .then(dataFromNetwork => {
-    console.log(dataFromNetwork)
-  }).catch(err => {
-    console.log('[DEBUG] Network requests have failed, this is expected if offline');
-  });
-  // Alternative POST.
-  // const headers = new Headers({'Content-Type': 'application/json'});
-  // const body = JSON.stringify(data);
-  // return fetch(endpointPostReview, {
-  //   method: 'POST',
-  //   headers: headers,
-  //   body: body
-  // });
-}
-
 const createGoogleMaps = () => {
   let loc = {lat: 40.722216, lng: -73.987501};
   // Not using scrollwheel: False anymore, using default gestureHandling: auto
@@ -178,7 +126,7 @@ const createGoogleMaps = () => {
 /**
  * Create restaurant details, update operating hours and the review cards.
  */
-const updateRestaurantUI = () => {
+const updateRestaurantUI = (id) => {
   // There is no insertAfter method. It can be emulated by combining the
   // insertBefore method with nextSibling.
   const picture = createResponsivePicture(self.restaurant);
@@ -199,6 +147,9 @@ const updateRestaurantUI = () => {
   if (restaurant.operating_hours) {
     updateRestaurantHoursUI();
   }
+
+  // Add the restaurant id as url parameter.
+  elementReviewLink.setAttribute('href', `review.html?id=${id}`);
 
   loadReviewsNetworkFirst(self.restaurant.id);
 }
