@@ -4,7 +4,9 @@
   "description": "Mobile Web Specialist Nanodegree - Project 2",
   "main": "js/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --progress",
+    "webpack": "webpack"
   },
   "keywords": [
     "Udacity",
@@ -23,9 +25,13 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.7.0",
     "browserify": "^16.2.2",
+    "css-loader": "^0.28.11",
     "del": "^3.0.0",
+    "extract-loader": "^2.0.1",
+    "file-loader": "^1.1.11",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.1",
     "gulp-clean-css": "^3.9.4",
@@ -36,7 +42,17 @@
     "gulp-webp": "^3.0.0",
     "imagemin": "^5.3.1",
     "imagemin-webp": "^4.1.0",
+    "node-sass": "^4.9.0",
+    "postcss-loader": "^2.1.5",
     "run-sequence": "^2.2.1",
+    "sass-loader": "^7.0.2",
+    "webpack": "^3.12.0",
+    "webpack-dev-server": "^2.11.2",
     "workbox-build": "^3.2.0"
+  },
+  "dependencies": {
+    "@material/button": "^0.36.0",
+    "@material/select": "^0.36.0",
+    "@material/textfield": "^0.36.0"
   }
 }

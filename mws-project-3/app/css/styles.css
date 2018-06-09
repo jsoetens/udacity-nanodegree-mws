@@ -391,6 +391,26 @@ video {
   flex-direction: column;
 }
 
+.restaurant-id-input,
+.name-input,
+.restaurant-rating-select,
+.comments-input {
+  display: block;
+  width: 300px;
+  margin: 20px auto;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 300px;
+  margin: auto;
+}
+
+.button-container button {
+  margin: 3px;
+}
+
 
 /* -------------------------------------------------------------------------- */
 

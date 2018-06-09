@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Review Restaurant</title>
   <!-- https://developers.google.com/web/tools/lighthouse/audits/description -->
   <!-- https://support.google.com/webmasters/answer/35624#1 -->
   <meta name="Description" content="The best restaurant reviews of your area!">
@@ -17,13 +19,15 @@
   <!-- TODO: replace favicon - temporary using Material Design -->
   <link rel="shortcut icon" href="https://material.io/favicon.ico">
   <!-- CSS -->
-  <!-- Normalize.css corrects bugs and common browser inconsistencies. -->
-  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
   <!-- TODO: install Material Components for the web via npm and consume its ES2015 modules and Sass directly. -->
-  <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+  <!-- <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"> -->
+  <!-- Normalize.css corrects bugs and common browser inconsistencies. -->
+  <!-- <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" /> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/6.0.0/normalize.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
-  <title>Review Restaurant</title>
+  <link rel="stylesheet" href="css/mdc-bundle.css">
 </head>
 <body>
   <div class="wrapper">
@@ -54,52 +58,55 @@
       <p id="no-data" class="message error">You're offline and local data is unavailable.</p>
       <p id="data-saved" class="message success">Server data was saved for offline mode.</p>
       <p id="save-error" class="message error">Server data couldn't be saved offline.</p>
+
       <!-- review-form -->
       <!-- * Parameters: "restaurant_id", "name", "rating", "comments" -->
-      <form id="review-form" class="review-form" method="post" action=".">
-        
-        <div>
-          <!-- ID will be prepopulated by JavaScript-->
-          <label for="inputRestaurantId">Restaurant ID</label>
+      <form id="review-form" class="review-form" action="index.html">
+
+        <div class="mdc-text-field mdc-text-field--box restaurant-id-input">
+          <!-- ID will be pre-filled by JavaScript-->
           <!-- iOS requires using pattern="\d*" to show the numeric keyboard. -->
-          <input id="inputRestaurantId" type="number" pattern="\d*"
-            placeholder="1" required>
+          <input id="restaurant-id-input" class="mdc-text-field__input" name="restaurant-id" type="number" pattern="\d*" required>
+          <label id="restaurant-id-label" for="restaurant-id-input" class="mdc-floating-label">Restaurant ID</label>
+          <div class="mdc-line-ripple"></div>
         </div>
 
-        <div>
-          <label for="inputName">Name</label>
-          <!-- Mobile browsers ignore the autofocus attribute, to prevent the keyboard from randomly appearing. -->
-          <!-- The autofocus attribute will steal keyboard focus and potentially prevents the backspace character from being used for navigation. -->
-          <input id="inputName" type="text" name="name"
-            placeholder="Full name" required autocomplete="name" required>
-        </div>
-
-        <div>
-          <label for="inputRestaurantRating">Star Rating (1 to 5):</label>
-            <!-- iOS requires using pattern="\d*" to show the numeric keyboard. -->
-            <input id="inputRestaurantRating" type="number" min="1" max="5" step="1" pattern="\d*" list="ratingScore" required>
-            <!-- The datalist values are provided as suggestions, and users are not restricted to the suggestions provided. -->
-            <datalist id="ratingScore">
-              <option value="1">
-              <option value="2">
-              <option value="3">
-              <option value="4">
-              <option value="5">
-            </datalist>
-          </input>
-        </div>
-          
-        <div>
-          <label for="inputComments">Comments</label>
-          <input id="inputComments" type="text" placeholder="Awesome!" required>
+        <div class="mdc-text-field mdc-text-field--box name-input">
+          <input id="name-input" class="mdc-text-field__input" name="name" type="text" required>
+          <label for="name-input" class="mdc-floating-label">Name</label>
+          <div class="mdc-line-ripple"></div>
         </div>
         
-        <div>
-          <button type="submit" class="">Save</button>
+        <div class="mdc-select restaurant-rating-select">
+          <select id="restaurant-rating-select" class="mdc-select__native-control">
+            <option value="" disabled="" selected=""></option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+          <label class="mdc-floating-label">Rating</label>
+          <div class="mdc-line-ripple"></div>
+        </div>
+
+        <div class="mdc-text-field mdc-text-field--box comments-input">
+          <input id="comments-input" class="mdc-text-field__input" name="comments" type="text" required>
+          <label for="comments-input" class="mdc-floating-label">Comments</label>
+          <div class="mdc-line-ripple"></div>
+        </div>
+        
+        <div class="button-container">
+          <button type="button" class="mdc-button cancel">
+            Cancel
+          </button>
+          <button class="mdc-button mdc-button--raised next">
+            Next
+          </button>
         </div>
 
       </form>
-      
+
     </main>
     <!-- footer -->
     <footer id="footer" class="footer">
@@ -131,7 +138,8 @@
   <!-- <script src="js/review.js"></script> -->
   <script src="js/idb-bundle.min.js"></script>
   <script src="js/review-bundle.min.js"></script>
+  <script src="js/mdc-bundle.js"></script>
   <!-- TODO: install Material Components for the web via npm and consume its ES2015 modules and Sass directly. -->
-  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+  <!-- <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script> -->
 </body>
 </html>

@@ -4,24 +4,12 @@ let restaurant;
 // Declare the id elements.
 const elementBreadcrumb = document.getElementById('breadcrumb');
 const elementReviewForm = document.getElementById('review-form');
-const elementInputRestaurantId = document.getElementById('inputRestaurantId');
-const elementInputName = document.getElementById('inputName');
-const elementInputRestaurantRating = 
-  document.getElementById('inputRestaurantRating');
-const elementInputComments = document.getElementById('inputComments');
-
-// POST the review.
-elementReviewForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  // https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects
-  let reviewFormData = new FormData();
-  reviewFormData.append('restaurant_id', elementInputRestaurantId.value);
-  reviewFormData.append('name', elementInputName.value);
-  reviewFormData.append('rating', elementInputRestaurantRating.value);
-  reviewFormData.append('comments', elementInputComments.value);
-  createReviewNetworkFirst(reviewFormData);
-  // alert('Success!');
-});
+const elementRestaurantIdInput = document.getElementById('restaurant-id-input');
+const elementRestaurantIdLabel = document.getElementById('restaurant-id-label');
+const elementNameInput = document.getElementById('name-input');
+const elementRestaurantRatingSelect = 
+  document.getElementById('restaurant-rating-select');
+const elementCommentsInput = document.getElementById('comments-input');
 
 /**
  * Start the following when the initial HTML document has been
@@ -33,13 +21,28 @@ elementReviewForm.addEventListener('submit', (evt) => {
 document.addEventListener('DOMContentLoaded', (event) => {
   // Get restaurant id by using url parameter on current page.
   const id = getParameterByName('id');
-  // Prepopulate restaurant ID in the form.
-  // elementInputRestaurantId.setAttribute('placeholder', id);
-  elementInputRestaurantId.setAttribute('value', id);
+  // Pre-fill restaurant ID in the form.
+  // Render mdc-text-field with the mdc-text-field--upgraded modifier class.
+  // This will ensure that the label moves out of the way of the text field’s
+  // value and prevents a Flash Of Un-styled Content (FOUC).
+  elementRestaurantIdInput.setAttribute('value', id);
+  elementRestaurantIdInput.classList.add('mdc-text-field--upgraded');
+  elementRestaurantIdLabel.classList.add('mdc-floating-label--float-above');
   // Get restaurant details to create the breadcrumb.
   getRestaurantInfoNetworkFirst(id);
 });
 
+// POST the review.
+elementReviewForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  // https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects
+  let reviewFormData = new FormData();
+  reviewFormData.append('restaurant_id', elementRestaurantIdInput.value);
+  reviewFormData.append('name', elementNameInput.value);
+  reviewFormData.append('rating', elementRestaurantRatingSelect.value);
+  reviewFormData.append('comments', elementCommentsInput.value);
+  createReviewNetworkFirst(reviewFormData);
+});
 
 /**
  * Fetch some restaurant info by its ID from network and fallback to IndexedDB,
@@ -89,8 +92,16 @@ const createReviewNetworkFirst = (review) => {
   DBHelper.postRequest(endpointPostReview, review)
   .then(dataFromNetwork => {
     // console.log(dataFromNetwork)
+    // TODO: replace alert with Push Notifications.
+    alert('Your review has been submitted successfully!');
+    // alert('Your review has been submitted.');
+    // Redirect back to restaurant info page.
+    window.location = `restaurant.html?id=${elementRestaurantIdInput.value}`;
   }).catch(err => {
     console.log('[DEBUG] Network requests have failed, this is expected if offline');
+    // Background sync should show a notification.
+    // Redirect back to restaurant info page.
+    window.location = `restaurant.html?id=${elementRestaurantIdInput.value}`;
   });
   // Alternative POST.
   // const headers = new Headers({'Content-Type': 'application/json'});
