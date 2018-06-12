@@ -8,6 +8,7 @@ const webp = require('gulp-webp');
 const responsive = require('gulp-responsive');
 const $ = require('gulp-load-plugins')();
 const cleanCSS = require('gulp-clean-css');
+const rename = require('gulp-rename');
 const sourcemaps = require('gulp-sourcemaps');
 const babel = require('gulp-babel');
 const concat = require('gulp-concat');
@@ -132,17 +133,30 @@ gulp.task('html-copy2build', () =>
 
 // Minify CSS using clean-css.
 gulp.task('css-minify', () => {
-  return gulp.src('app/css/**/*.css')
+  // return gulp.src('app/css/**/*.css')
+  return gulp.src('app/css/styles.css')
     .pipe(cleanCSS({debug: true}, (details) => {
       console.log(`${details.name}: ${details.stats.originalSize}`);
       console.log(`${details.name}: ${details.stats.minifiedSize}`);
     }))
+    .pipe(rename({suffix: '.min'}))
   .pipe(gulp.dest('build/css'));
+});
+
+gulp.task('minify-css', function() {
+  return gulp.src('css/index.css')
+    .pipe(cleanCSS())
+    .pipe(size({title: 'styles'}))
+    .pipe(rename({
+      suffix: '.min'
+    }))
+    .pipe(gulp.dest('_includes/css/'));
 });
 
 // Copy CSS from app to build.
 gulp.task('css-copy2build', () =>
-  gulp.src('app/css/**/*.css')
+  // gulp.src('app/css/**/*.css')
+  gulp.src('app/css/mdc-bundle.min.css')
   .pipe(gulp.dest('build/css'))
 );
 
@@ -216,7 +230,7 @@ gulp.task('js-minify-resto', () => {
 
 gulp.task('js-minify-review', () => {
   return gulp.src([
-    'app/js/dbhelper.js', 'app/js/review.js'
+    'app/js/dbhelper.js', 'app/js/review.js', 'app/js/mdc-bundle.js'
     ])
     .pipe(sourcemaps.init())
     .pipe(babel())
@@ -317,6 +331,7 @@ gulp.task('build', cb => {
     'clean-build',
     'build-images',
     'html-copy2build',
+    'css-copy2build',
     'css-minify',
     // 'js-babel',
     ['js-minify-idb', 'js-minify-main', 'js-minify-resto', 'js-minify-review'],

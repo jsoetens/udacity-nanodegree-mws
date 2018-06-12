@@ -37,6 +37,7 @@
     "gulp-clean-css": "^3.9.4",
     "gulp-concat": "^2.6.1",
     "gulp-load-plugins": "^1.5.0",
+    "gulp-rename": "^1.3.0",
     "gulp-responsive": "^2.10.0",
     "gulp-uglify": "^3.0.0",
     "gulp-webp": "^3.0.0",

@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Restaurant Info</title>
   <!-- https://developers.google.com/web/tools/lighthouse/audits/description -->
   <!-- https://support.google.com/webmasters/answer/35624#1 -->
   <meta name="Description" content="The best restaurant reviews of your area!">
@@ -16,10 +18,9 @@
   <link rel="manifest" href="/manifest.json">
   <!-- CSS -->
   <!-- Normalize.css corrects bugs and common browser inconsistencies. -->
-  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
-  <link rel="stylesheet" href="css/styles.css">
-  <title>Restaurant Info</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/6.0.0/normalize.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+  <link rel="stylesheet" href="css/styles.min.css">
 </head>
 <body>
   <div class="wrapper">
@@ -107,8 +108,6 @@
     }
   </script>
   <!-- scripts - App -->
-  <!-- <script src="js/dbhelper.js"></script> -->
-  <!-- <script src="js/restaurant_info.js"></script> -->
   <script src="js/idb-bundle.min.js"></script>
   <script src="js/resto-bundle.min.js"></script>
   <!-- scripts - Google Maps -->

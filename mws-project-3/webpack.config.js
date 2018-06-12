@@ -2,11 +2,11 @@ const autoprefixer = require('autoprefixer');
 
 module.exports = [
   {
-    entry: './src/css/mdc.scss',
+    entry: './app/sass/mdc.scss',
     output: {
       // This is necessary for webpack to compile
       // But we never use style-bundle.js
-      filename: 'style-bundle.js',
+      filename: './tmp/style-bundle.js',
     },
     module: {
       rules: [{
@@ -15,11 +15,15 @@ module.exports = [
           {
             loader: 'file-loader',
             options: {
-              name: './build/css/mdc-bundle.css',
+              name: './app/css/mdc-bundle.min.css',
             },
           },
           { loader: 'extract-loader' },
-          { loader: 'css-loader' },
+          { loader: 'css-loader',
+            options: {
+              minimize: true || {/* CSSNano Options */}
+            } 
+          },
           {
             loader: 'postcss-loader',
             options: {
@@ -37,9 +41,9 @@ module.exports = [
     },
   },
   {
-    entry: "./src/js/mdc.js",
+    entry: "./app/js/mdc.js",
     output: {
-      filename: "./build/js/mdc-bundle.js"
+      filename: "./app/js/mdc-bundle.js"
     },
     module: {
       loaders: [{
