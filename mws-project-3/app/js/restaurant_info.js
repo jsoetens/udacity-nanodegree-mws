@@ -18,10 +18,87 @@ const elementRestaurantAddress = document.getElementById('restaurant-address');
 const elementRestaurantCuisine = document.getElementById('restaurant-cuisine');
 const elementRestaurantHours = document.getElementById('restaurant-hours');
 const elementReviewLink = document.getElementById('review-link');
-const elementGoogleMap = document.getElementById('map');
+const elementMapsContainer = document.getElementById('maps-container');
+const elementGoogleMaps = document.getElementById('google-maps');
+const elementGoogleStaticMaps = document.getElementById('google-static-maps');
 const elementReviewsContainer = document.getElementById('reviews-container');
 const elementReviewsList = document.getElementById('reviews-list');
 
+/**
+ * Start the following when the initial HTML document has been
+ * completely loaded and parsed, without waiting for stylesheets, images,
+ * and subframes to finish loading.
+ * Fetch neighborhoods and cuisines.
+ * https://developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded
+ */
+document.addEventListener('DOMContentLoaded', (event) => {
+  createMapsStatic();
+});
+
+/**
+ * Embed a Google Maps image on your web page using the Maps Static API.
+ * https://developers.google.com/maps/documentation/maps-static/intro
+ */
+const createMapsStatic = () => {
+  // Create the Maps Static API Url
+  // https://developers.google.com/maps/documentation/maps-static/dev-guide
+  let mapsStaticUrl 
+    = `https://maps.googleapis.com/maps/api/staticmap?parameters`;
+  const mapsCenter = `40.722216,-73.987501`;
+  const mapsZoom = 12;
+  // const mapsImageSizes = '640x640';
+  let mapsImageWidth = 640;
+  let mapsImageHeight = 640;
+  let mapsScale = 1;
+  const mapsImageFormat = 'jpg';
+  // TODO: move the API Key to either environmental variables or config.js
+  const mapsApiKey = `AIzaSyDm9CBeGB2XpSOVQXsuyo-kJtdHSNGiF4k`;
+  // const imageMapsStatic = document.createElement('img');
+  const imageMapsStatic = new Image();
+  imageMapsStatic.id = 'static-map';
+  imageMapsStatic.className = 'google-maps-static-img';
+  // Adding an event needs to be a function.
+  imageMapsStatic.setAttribute('onclick', 'showGoogleMaps()');
+  imageMapsStatic.alt 
+    = 'Static map showing high level view of New York, Manhattan and Brooklyn';
+  // Determine image sizes, free plan allows max 640x640 on scale 1 and
+  // 640x640 on scale 2 returns 1280x1280 pixels.
+  // https://developer.mozilla.org/en-US/docs/Web/API/Element/clientWidth
+  // https://developer.mozilla.org/en-US/docs/Web/API/Element/clientHeight
+  const intElemClientWidth = elementMapsContainer.clientWidth;
+  if (intElemClientWidth <= 640) {
+    mapsImageWidth = intElemClientWidth;
+  } else {
+    mapsScale = 2;
+    mapsImageWidth = 640
+  }
+  const intElementClientHeight = elementMapsContainer.clientHeight;
+  if (intElementClientHeight <= 640) {
+    mapsImageHeight = intElementClientHeight;
+  } else {
+    mapsScale = 2;
+    mapsImageHeight = 640
+  }
+  let mapsImageSizes = `${mapsImageWidth}x${mapsImageHeight}`;
+  mapsStaticUrl = 
+    `${mapsStaticUrl}&center=${mapsCenter}&zoom=${mapsZoom}&size=${mapsImageSizes}&scale=${mapsScale}&format=${mapsImageFormat}&key=${mapsApiKey}`;
+  imageMapsStatic.src = mapsStaticUrl;
+  imageMapsStatic.width = mapsImageWidth;
+  imageMapsStatic.height = mapsImageHeight;
+  elementGoogleStaticMaps.appendChild(imageMapsStatic);
+}
+
+const showGoogleMaps = () => {
+  if (elementGoogleMaps.style.display === 'none') {
+    elementGoogleMaps.style.display = 'block';
+    elementGoogleStaticMaps.style.display = 'none';
+  }
+}
+
+// Ask permission for Push Notifications.
+Notification.requestPermission((status) => {
+  console.log('[DEBUG] Notification permission status:', status);
+});
 
 /**
  * Initialize Google map, called from HTML.
@@ -53,6 +130,7 @@ const loadRestaurantNetworkFirst = (id) => {
       console.warn(err);
     });
     createGoogleMaps();
+
   }).catch(err => {
     console.log('[DEBUG] Network requests have failed, this is expected if offline');
     getLocalRestaurantByIdData(id)
@@ -105,8 +183,7 @@ const createGoogleMaps = () => {
   let loc = {lat: 40.722216, lng: -73.987501};
   // Not using scrollwheel: False anymore, using default gestureHandling: auto
   // https://developers.google.com/maps/documentation/javascript/interaction
-  // self.map = new google.maps.Map(elementGoogleMap, {
-  map = new google.maps.Map(elementGoogleMap, {
+  map = new google.maps.Map(elementGoogleMaps, {
     // center: restaurant.latlng,
     center: loc,
     zoom: 12
@@ -116,12 +193,12 @@ const createGoogleMaps = () => {
   // https://dequeuniversity.com/rules/axe/2.2/frame-title
   // https://developers.google.com/maps/documentation/javascript/events
   let setTitle = () => {
-    const iFrameGoogleMaps = document.querySelector('#map iframe');
+    const iFrameGoogleMaps = document.querySelector('#google-maps iframe');
     iFrameGoogleMaps.setAttribute('title', 'Google Maps overview of restaurants');
   }
-  // self.map.addListener('tilesloaded', setTitle);
   map.addListener('tilesloaded', setTitle);
 };
+
 
 /**
  * Create restaurant details, update operating hours and the review cards.

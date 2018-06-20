@@ -103,9 +103,43 @@ video {
 
 /* -------------------------------------------------------------------------- */
 
-.google-maps {
+.maps-container-home {
   width: 100%;
-	height: 40vh;
+  height: 33vh;
+}
+
+.maps-container-resto {
+  background-color: pink;
+  width: 100%;
+  min-height: 25vh;
+}
+
+.google-maps-home {
+  width: 100%;
+  height: 33vh;
+  /* Don't show the map at first. */
+  display: none;
+}
+
+.google-maps-resto {
+  width: 100%;
+  height: 100%;
+  min-height: 25vh;
+  /* Don't show the map at first. */
+  display: none;
+}
+
+.google-static-maps {
+  width: 100%;
+  height: 100%;
+}
+
+.google-maps-static-img {
+  width: 100%;
+  height: 100%;
+  /* https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit */
+  object-fit: cover;
+  overflow: hidden;
 }
 
 
@@ -164,6 +198,7 @@ video {
 
 .card-primary {
   padding: 1rem;
+  justify-content: space-between;
 }
 
 .card-title {
@@ -269,17 +304,6 @@ video {
   border-bottom: 1px solid #e0e0e0;
 }
 
-.restaurant-details-map {
-  width: 50%;
-  min-height: 25vh;
-  flex: 1;
-}
-
-.google-maps-stretch {
-  width: 100%;
-	height: 100%;
-}
-
 .restaurant-details-title {
   width: 100%;
   margin: 0.75rem;
@@ -290,7 +314,7 @@ video {
 }
 
 .restaurant-details-card {
-  width: 50%;
+  width: 100%;
   min-width: 15rem; /* 240px */
   display: flex;
   flex-direction: column;
@@ -477,14 +501,8 @@ video {
   .restaurant-details {
     flex-direction: column;
   }
-  .restaurant-details-card {
-    width: 100%;
-    order: 2;
-  }
-  .restaurant-details-map {
-    width: 100%;
-    height: 30vh;
-    order: 1;
+  .maps-container-resto {
+    height: 25vh;
   }
   .footer-content {
     font-size: 0.55rem; /* from 0.75rem */
@@ -509,14 +527,8 @@ video {
   .restaurant-details {
     flex-direction: column;
   }
-  .restaurant-details-card {
-    width: 100%;
-    order: 2;
-  }
-  .restaurant-details-map {
-    width: 100%;
-    height: 35vh;
-    order: 1;
+  .maps-container-resto {
+    height: 25vh;
   }
   .footer-content {
     font-size: 0.65rem; /* from 0.75rem */
@@ -538,6 +550,15 @@ video {
   .restaurant-card {
     width: 45%; /* 2 cards */
   }
+  .restaurant-details-card {
+    width: 50%;
+    min-width: 15rem; /* 240px */
+  }
+  .maps-container-resto {
+    width: 50%;
+    min-height: 25vh;
+    order: 1;
+  }
   .review-card {
     width: 45%; /* 2 cards */
   }
@@ -555,6 +576,15 @@ video {
 	}
   .restaurant-card {
     width: 45%; /* 2 cards */
+  }
+  .restaurant-details-card {
+    width: 50%;
+    min-width: 15rem; /* 240px */
+  }
+  .maps-container-resto {
+    width: 50%;
+    min-height: 25vh;
+    order: 1;
   }
   .review-card {
     width: 45%; /* 2 cards */
@@ -574,6 +604,15 @@ video {
   .restaurant-card {
     width: 30%; /* 3 cards */
   }
+  .restaurant-details-card {
+    width: 50%;
+    min-width: 15rem; /* 240px */
+  }
+  .maps-container-resto {
+    width: 50%;
+    min-height: 25vh;
+    order: 1;
+  }
   .review-card {
     width: 30%; /* 3 cards */
   }
@@ -588,6 +627,15 @@ video {
 	}
   .restaurant-card {
     width: 22.5%; /* 4 cards */
+  }
+  .restaurant-details-card {
+    width: 50%;
+    min-width: 15rem; /* 240px */
+  }
+  .maps-container-resto {
+    width: 50%;
+    min-height: 25vh;
+    order: 1;
   }
   .restaurant-card-table-content {
     font-size: 0.925rem;

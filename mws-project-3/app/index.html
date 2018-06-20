@@ -43,10 +43,11 @@
       <p id="data-saved" class="message success">Server data was saved for offline mode.</p>
       <p id="save-error" class="message error">Server data couldn't be saved offline.</p>
       <!-- map -->
-      <section id="map-container">
+      <section id="maps-container" class="maps-container-home">
         <!-- The application role will tell assistive technology to disable -->
         <!-- its shortcuts and pass through all key presses to the page. -->
-        <div id="map" class="google-maps" role="application" aria-label="Google Maps overview of restaurants" aria-hidden="true"></div>
+        <div id="google-maps" class="google-maps-home" role="application" aria-label="Google Maps overview of restaurants" aria-hidden="true" style="display: none;"></div>
+        <div id="google-static-maps" class="google-static-maps"></div>
       </section>
       <!-- restaurants -->
       <section>

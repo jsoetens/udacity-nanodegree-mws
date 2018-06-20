@@ -143,16 +143,6 @@ gulp.task('css-minify', () => {
   .pipe(gulp.dest('build/css'));
 });
 
-gulp.task('minify-css', function() {
-  return gulp.src('css/index.css')
-    .pipe(cleanCSS())
-    .pipe(size({title: 'styles'}))
-    .pipe(rename({
-      suffix: '.min'
-    }))
-    .pipe(gulp.dest('_includes/css/'));
-});
-
 // Copy CSS from app to build.
 gulp.task('css-copy2build', () =>
   // gulp.src('app/css/**/*.css')
@@ -219,6 +209,7 @@ gulp.task('js-minify-main', () => {
 gulp.task('js-minify-resto', () => {
   return gulp.src([
     'app/js/dbhelper.js', 'app/js/restaurant_info.js'
+    // 'app/js/dbhelper.js', 'app/js/resto-bundle.js'
     ])
     .pipe(sourcemaps.init())
     .pipe(babel())
@@ -290,7 +281,7 @@ gulp.task('default', ['build']);
 gulp.task('watch', () => {
   gulp.watch('app/img/**', ['images-copy2build']);
   gulp.watch('app/*.html', ['html-copy2build']);
-  gulp.watch('app/css/**/*.css', ['css-copy2build']);
+  gulp.watch('app/css/**/*.css', ['css-minify']);
   // gulp.watch('app/js/**/*.js', ['js-copy2build']);
   // gulp.watch('app/js/**/*.js', ['js-minify-idb']);
   gulp.watch('app/js/**/*.js', ['build-js']);

@@ -53,6 +53,13 @@
       <p id="save-error" class="message error">Server data couldn't be saved offline.</p>
       <!-- restaurant-details -->
       <div class="restaurant-details">
+        <!-- map -->
+        <section id="maps-container" class="maps-container-resto">
+          <!-- The application role will tell assistive technology to disable -->
+          <!-- its shortcuts and pass through all key presses to the page. -->
+          <div id="google-maps" class="google-maps-resto" role="application" aria-label="Google Maps overview of restaurants" aria-hidden="true" style="display: none;"></div>
+          <div id="google-static-maps" class="google-static-maps"></div>
+        </section>
         <!-- restaurants -->
         <section id="restaurant-container" class="restaurant-details-card">
           <!-- <img id="restaurant-img"> -->
@@ -69,12 +76,6 @@
           <div class="card-actions">
             <a id="review-link" class="card-actions-link" href="review.html">Add Review</a>
           </div>
-        </section>
-        <!-- map -->
-        <section id="map-container" class="restaurant-details-map">
-          <!-- The application role will tell assistive technology to disable -->
-          <!-- its shortcuts and pass through all key presses to the page. -->
-          <div id="map" class="google-maps-stretch" role="application" aria-label="Google Maps overview of restaurants" aria-hidden="true"></div>
         </section>
       </div>
       <!-- reviews -->
