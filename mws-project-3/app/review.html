@@ -22,8 +22,9 @@
   <!-- Normalize.css corrects bugs and common browser inconsistencies. -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/6.0.0/normalize.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-  <link rel="stylesheet" href="css/styles.min.css">
-  <link rel="stylesheet" href="css/mdc-bundle.min.css">
+  <!-- Material Icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="css/styles-bundle.min.css">
 </head>
 <body>
   <div class="wrapper">
@@ -54,27 +55,23 @@
       <p id="no-data" class="message error">You're offline and local data is unavailable.</p>
       <p id="data-saved" class="message success">Server data was saved for offline mode.</p>
       <p id="save-error" class="message error">Server data couldn't be saved offline.</p>
-
       <!-- review-form -->
       <!-- * Parameters: "restaurant_id", "name", "rating", "comments" -->
       <form id="review-form" class="review-form" action="index.html">
-
         <div class="mdc-text-field mdc-text-field--box restaurant-id-input">
           <!-- ID will be pre-filled by JavaScript-->
           <!-- iOS requires using pattern="\d*" to show the numeric keyboard. -->
-          <input id="restaurant-id-input" class="mdc-text-field__input" name="restaurant-id" type="number" pattern="\d*" required>
+          <input id="restaurant-id-input" class="mdc-text-field__input" name="restaurant_id" type="number" pattern="\d*" required>
           <label id="restaurant-id-label" for="restaurant-id-input" class="mdc-floating-label">Restaurant ID</label>
           <div class="mdc-line-ripple"></div>
         </div>
-
         <div class="mdc-text-field mdc-text-field--box name-input">
           <input id="name-input" class="mdc-text-field__input" name="name" type="text" required>
           <label for="name-input" class="mdc-floating-label">Name</label>
           <div class="mdc-line-ripple"></div>
         </div>
-        
         <div class="mdc-select restaurant-rating-select">
-          <select id="restaurant-rating-select" class="mdc-select__native-control">
+          <select id="restaurant-rating-select" class="mdc-select__native-control" name="rating">
             <option value="" disabled="" selected=""></option>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -85,29 +82,22 @@
           <label class="mdc-floating-label">Rating</label>
           <div class="mdc-line-ripple"></div>
         </div>
-
         <div class="mdc-text-field mdc-text-field--box comments-input">
           <input id="comments-input" class="mdc-text-field__input" name="comments" type="text" required>
           <label for="comments-input" class="mdc-floating-label">Comments</label>
           <div class="mdc-line-ripple"></div>
         </div>
-        
         <div class="button-container">
-          <button type="button" class="mdc-button cancel">
+          <button type="button" class="mdc-button cancel" onclick="cancelReview()">
             Cancel
           </button>
           <button class="mdc-button mdc-button--raised next">
             Next
           </button>
         </div>
-
       </form>
-
     </main>
-    <!-- footer -->
-    <footer id="footer" class="footer">
-      <p class="footer-content">Copyright © 2018 <a class="footer-link" href="/">Restaurant Reviews</a> All Rights Reserved.</p>
-    </footer>
+    <!-- no footer -->
   </div>
   <!-- scripts -->
   <!-- scripts - Service Worker -->

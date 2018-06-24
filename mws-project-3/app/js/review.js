@@ -1,3 +1,10 @@
+/**
+ * Material Design
+ */
+import {MDCRipple} from '@material/ripple';
+import {MDCTextField} from '@material/textfield';
+import {MDCSelect} from '@material/select';
+
 // Declare global variables.
 let restaurant;
 
@@ -6,10 +13,25 @@ const elementBreadcrumb = document.getElementById('breadcrumb');
 const elementReviewForm = document.getElementById('review-form');
 const elementRestaurantIdInput = document.getElementById('restaurant-id-input');
 const elementRestaurantIdLabel = document.getElementById('restaurant-id-label');
-const elementNameInput = document.getElementById('name-input');
-const elementRestaurantRatingSelect = 
-  document.getElementById('restaurant-rating-select');
-const elementCommentsInput = document.getElementById('comments-input');
+// const elementNameInput = document.getElementById('name-input');
+// const elementRestaurantRatingSelect = 
+//   document.getElementById('restaurant-rating-select');
+// const elementCommentsInput = document.getElementById('comments-input');
+
+/**
+ * Material Design
+ */
+const classRestaurantIdInput = 
+  new MDCTextField(document.querySelector('.restaurant-id-input'));
+const classNameInput = 
+  new MDCTextField(document.querySelector('.name-input'));
+const classRestaurantRatingSelect = 
+  new MDCSelect(document.querySelector('.restaurant-rating-select'));
+const classCommentsInput = 
+  new MDCTextField(document.querySelector('.comments-input'));
+
+new MDCRipple(document.querySelector('.cancel'));
+new MDCRipple(document.querySelector('.next'));
 
 /**
  * Start the following when the initial HTML document has been
@@ -22,25 +44,28 @@ document.addEventListener('DOMContentLoaded', (event) => {
   // Get restaurant id by using url parameter on current page.
   const id = getParameterByName('id');
   // Pre-fill restaurant ID in the form.
-  // Render mdc-text-field with the mdc-text-field--upgraded modifier class.
-  // This will ensure that the label moves out of the way of the text field’s
-  // value and prevents a Flash Of Un-styled Content (FOUC).
+  // Render mdc-text-field with the mdc-floating-label--float-above modifier
+  // class. This will ensure that the label moves out of the way of the text
+  // field’s value and prevents a Flash Of Un-styled Content (FOUC).
   elementRestaurantIdInput.setAttribute('value', id);
-  elementRestaurantIdInput.classList.add('mdc-text-field--upgraded');
   elementRestaurantIdLabel.classList.add('mdc-floating-label--float-above');
   // Get restaurant details to create the breadcrumb.
   getRestaurantInfoNetworkFirst(id);
 });
 
+// Cancel the form and go back to restaurant info page.
+const cancelReview = () => {
+  // Redirect back to restaurant info page.
+  window.location = `index.html`;
+}
+// webpack: make sure some variables, functions are exposed to global scope.
+window.cancelReview = cancelReview;
+
 // POST the review.
 elementReviewForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   // https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects
-  let reviewFormData = new FormData();
-  reviewFormData.append('restaurant_id', elementRestaurantIdInput.value);
-  reviewFormData.append('name', elementNameInput.value);
-  reviewFormData.append('rating', elementRestaurantRatingSelect.value);
-  reviewFormData.append('comments', elementCommentsInput.value);
+  let reviewFormData = new FormData(elementReviewForm);
   createReviewNetworkFirst(reviewFormData);
 });
 
@@ -73,25 +98,21 @@ const getRestaurantInfoNetworkFirst = (id) => {
  * send to API server, update UI.
  * POST: http://localhost:1337/reviews/
  * Parameters: "restaurant_id", "name", "rating", "comments"
- * 
- * TODO: all logic needs to be reviewed when we implement Background Sync.
- * When we now go offline / online again, data will be duplicated in IDB.
  */
-const createReviewNetworkFirst = (review) => {
+const createReviewNetworkFirst = (reviewFormData) => {
   const endpointPostReview =
     `http://localhost:1337/reviews/`;
-  // FormData cannot be cloned so we create our object for IndexedDB.
   const data = {
-    // review is a FormData object.
-    restaurant_id: parseInt(review.get('restaurant_id')),
-    name: review.get('name'),
-    rating: review.get('rating'),
-    comments: review.get('comments')
+    restaurant_id: parseInt(reviewFormData.get('restaurant_id')),
+    name: reviewFormData.get('name'),
+    // Rating is a select element which returns text and we prefer a number.
+    rating: parseInt(reviewFormData.get('rating')),
+    comments: reviewFormData.get('comments')
   };
+  console.log(data);
   // POST the review to the API server.
-  DBHelper.postRequest(endpointPostReview, review)
+  DBHelper.postRequest(endpointPostReview, data)
   .then(dataFromNetwork => {
-    // console.log(dataFromNetwork)
     // TODO: replace alert with Push Notifications.
     alert('Your review has been submitted successfully!');
     // alert('Your review has been submitted.');
@@ -103,15 +124,7 @@ const createReviewNetworkFirst = (review) => {
     // Redirect back to restaurant info page.
     window.location = `restaurant.html?id=${elementRestaurantIdInput.value}`;
   });
-  // Alternative POST.
-  // const headers = new Headers({'Content-Type': 'application/json'});
-  // const body = JSON.stringify(data);
-  // return fetch(endpointPostReview, {
-  //   method: 'POST',
-  //   headers: headers,
-  //   body: body
-  // });
-}
+}  
 
 /**
  * Add restaurant name to the breadcrumb navigation menu.
@@ -141,4 +154,3 @@ const getParameterByName = (name, url) => {
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
-
