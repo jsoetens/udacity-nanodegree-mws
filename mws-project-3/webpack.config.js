@@ -2,7 +2,7 @@ const autoprefixer = require('autoprefixer');
 
 module.exports = [
   {
-    entry: './app/sass/mdc.scss',
+    entry: './app/sass/styles.scss',
     output: {
       // This is necessary for webpack to compile
       // But we never use style-bundle.js
@@ -15,7 +15,7 @@ module.exports = [
           {
             loader: 'file-loader',
             options: {
-              name: './app/css/mdc-bundle.min.css',
+              name: './app/css/styles-bundle.min.css',
             },
           },
           { loader: 'extract-loader' },
@@ -41,9 +41,16 @@ module.exports = [
     },
   },
   {
-    entry: "./app/js/mdc.js",
+    entry: "./app/js/resto-info.js",
     output: {
-      filename: "./app/js/mdc-bundle.js"
+      filename: "./app/js/resto-bundle.js"
+    }
+  },
+  {
+    entry: "./app/js/review.js",
+    output: {
+      // filename: "./app/js/review-bundle.min.js"
+      filename: "./app/js/review-bundle.js"
     },
     module: {
       loaders: [{
@@ -53,6 +60,6 @@ module.exports = [
           presets: ['env']
         }
       }]
-    },
+    }
   }
 ];

@@ -1,5 +1,23 @@
 @charset "utf-8";
 
+/* -------------------------------------------------------------------------- */
+
+/* Material Design */
+
+@import "@material/textfield/mdc-text-field";
+@import "@material/select/mdc-select";
+@import "@material/button/mdc-button";
+@import "@material/icon-button/mdc-icon-button";
+
+// #add-to-favorites .mdc-icon-button {
+.favorite-button {
+  @include mdc-icon-button-ink-color(#ff4081);
+  @include mdc-states-base-color(#ff4081);
+  @include mdc-states-hover-opacity(.09);
+  @include mdc-states-focus-opacity(.26);
+  @include mdc-states-press-opacity(.35);
+}
+
 
 /* -------------------------------------------------------------------------- */
 
@@ -62,6 +80,16 @@ body {
   flex: 1 100%;
 }
 
+.flex-container-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-container-col {
+  display: flex;
+  flex-direction: column;
+}
+
 /* Prevent accidentally overflowing the viewport */
 img,
 embed,
@@ -109,7 +137,6 @@ video {
 }
 
 .maps-container-resto {
-  background-color: pink;
   width: 100%;
   min-height: 25vh;
 }

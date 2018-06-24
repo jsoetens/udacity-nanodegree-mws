@@ -1,20 +1,21 @@
 /**
- * TODO: Add to Home Screen (aka Web App Install Banners)
- * trigger the Add to Home Screen prompt by using the beforeinstallprompt event.
- * https://developers.google.com/web/fundamentals/app-install-banners/
+ * Material Design
  */
+import {MDCRipple} from '@material/ripple';
+import {MDCIconButtonToggle} from '@material/icon-button';
 
 // Declare global variables.
 let map;
 let restaurant;
-const endpointRestaurants = `http://localhost:1337/restaurants`;
-const endpointReviews = `http://localhost:1337/reviews`;
+let restaurant_id;
+let is_favorite = false;
 
 // Declare the id elements.
 const elementBreadcrumb = document.getElementById('breadcrumb');
 const elementCardPrimary = document.getElementById('card-primary');
 const elementRestaurantName = document.getElementById('restaurant-name');
 const elementRestaurantAddress = document.getElementById('restaurant-address');
+const elementAddToFavorites = document.getElementById('add-to-favorites');
 const elementRestaurantCuisine = document.getElementById('restaurant-cuisine');
 const elementRestaurantHours = document.getElementById('restaurant-hours');
 const elementReviewLink = document.getElementById('review-link');
@@ -23,6 +24,51 @@ const elementGoogleMaps = document.getElementById('google-maps');
 const elementGoogleStaticMaps = document.getElementById('google-static-maps');
 const elementReviewsContainer = document.getElementById('reviews-container');
 const elementReviewsList = document.getElementById('reviews-list');
+
+/**
+ * Material Design
+ */
+// Enhance icon button to have a ripple effect by instantiating MDCRipple 
+// on the root element.
+const iconButtonRipple = 
+  new MDCRipple(document.querySelector('.mdc-icon-button'));
+iconButtonRipple.unbounded = true;
+
+const toggleFavoriteButton = 
+  new MDCIconButtonToggle(elementAddToFavorites);
+
+elementAddToFavorites.addEventListener('MDCIconButtonToggle:change', function(evt) {
+  // let newStatus = evt.detail.isOn ? 'yes' : 'no';
+  if (evt.detail.isOn) {
+    is_favorite = true;
+    postIsFavoriteNetworkFirst(self.restaurant_id, is_favorite)
+  } else {
+    is_favorite = false;
+    postIsFavoriteNetworkFirst(self.restaurant_id, is_favorite);
+  }
+});
+
+/**
+ * Post the is_favorite status by restaurant_id, save data locally to IndexedDB,
+ * send to API server, update UI.
+ * POST: http://localhost:1337/restaurants/<restaurant_id>/?is_favorite=true
+ * POST: http://localhost:1337/restaurants/<restaurant_id>/?is_favorite=false
+ * Parameters: "restaurant_id", "is_favorite"
+ */
+const postIsFavoriteNetworkFirst = (restaurant_id, is_favorite) => {
+  let endpointPostIsFavorite = 
+    `http://localhost:1337/restaurants/${restaurant_id}/?is_favorite=${is_favorite}`;
+  // POST the is_favorite status to the API server.
+  DBHelper.postRequest(endpointPostIsFavorite)
+  .then(dataFromNetwork => {
+    // TODO: replace alert with Push Notifications.
+    // alert('Your is_favorite has been submitted successfully!');
+    console.log(`[DEBUG] POST is_favorite=${is_favorite}`);
+  }).catch(err => {
+    console.log('[DEBUG] Network requests have failed, this is expected if offline');
+    // Background sync should show a notification.
+  });
+}  
 
 /**
  * Start the following when the initial HTML document has been
@@ -88,12 +134,15 @@ const createMapsStatic = () => {
   elementGoogleStaticMaps.appendChild(imageMapsStatic);
 }
 
+// Show the Google Maps when the static image is clicked.
 const showGoogleMaps = () => {
   if (elementGoogleMaps.style.display === 'none') {
     elementGoogleMaps.style.display = 'block';
     elementGoogleStaticMaps.style.display = 'none';
   }
 }
+// webpack: make sure some variables, functions are exposed to global scope.
+window.showGoogleMaps = showGoogleMaps;
 
 // Ask permission for Push Notifications.
 Notification.requestPermission((status) => {
@@ -106,8 +155,8 @@ Notification.requestPermission((status) => {
  */
 window.initMap = () => {
   // Fetch restaurant by using url parameter on current page.
-  const id = getParameterByName('id');
-  loadRestaurantNetworkFirst(id);
+  self.restaurant_id = getParameterByName('id');
+  loadRestaurantNetworkFirst(self.restaurant_id);
 }
 
 /**
@@ -119,6 +168,10 @@ const loadRestaurantNetworkFirst = (id) => {
   DBHelper.getServerData(endpointRestaurantById)
   .then(dataFromNetwork => {
     self.restaurant = dataFromNetwork;
+    if (self.restaurant.is_favorite === 'true') {
+      is_favorite = true;
+      toggleFavoriteButton.on = true;
+    }
     updateRestaurantUI(id);
     createBreadcrumb();
     saveRestaurantsDataLocally(dataFromNetwork)
@@ -137,6 +190,10 @@ const loadRestaurantNetworkFirst = (id) => {
     .then(offlineData => {
       DBHelper.messageOffline();
       self.restaurant = offlineData;
+      if (self.restaurant.is_favorite === 'true') {
+        is_favorite = true;
+        toggleFavoriteButton.on = true;
+      }
       updateRestaurantUI(id);
       createBreadcrumb();
       createGoogleMaps();
@@ -188,7 +245,8 @@ const createGoogleMaps = () => {
     center: loc,
     zoom: 12
   });
-  DBHelper.addMarkerForRestaurant(self.restaurant, self.map);
+  // DBHelper.addMarkerForRestaurant(self.restaurant, self.map);
+  DBHelper.addMarkerForRestaurant(self.restaurant, map);
   // a11y - Frames must have non-empty title attribute
   // https://dequeuniversity.com/rules/axe/2.2/frame-title
   // https://developers.google.com/maps/documentation/javascript/events
@@ -221,7 +279,7 @@ const updateRestaurantUI = (id) => {
 
   elementRestaurantCuisine.innerHTML = self.restaurant.cuisine_type;
 
-  if (restaurant.operating_hours) {
+  if (self.restaurant.operating_hours) {
     updateRestaurantHoursUI();
   }
 

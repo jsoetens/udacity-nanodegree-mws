@@ -145,26 +145,18 @@ gulp.task('css-minify', () => {
 
 // Copy CSS from app to build.
 gulp.task('css-copy2build', () =>
-  // gulp.src('app/css/**/*.css')
-  gulp.src('app/css/mdc-bundle.min.css')
+  gulp.src('app/css/**/*.css')
   .pipe(gulp.dest('build/css'))
 );
 
 
 /**
  * JavaScript
- * - js-copy2build
  * - js-babel
  * - js-minify-main
  * - js-minify-resto
  * - js-minify-review
  */
-
-// Copy JavaScript from app to build.
-gulp.task('js-copy2build', () =>
-  gulp.src('app/js/**/*.js')
-  .pipe(gulp.dest('build/js'))
-);
 
 // http://babeljs.io/docs/setup/#installation
 // https://babeljs.io/docs/usage/babelrc/
@@ -208,8 +200,7 @@ gulp.task('js-minify-main', () => {
 
 gulp.task('js-minify-resto', () => {
   return gulp.src([
-    'app/js/dbhelper.js', 'app/js/restaurant_info.js'
-    // 'app/js/dbhelper.js', 'app/js/resto-bundle.js'
+    'app/js/dbhelper.js', 'app/js/resto-bundle.js'
     ])
     .pipe(sourcemaps.init())
     .pipe(babel())
@@ -221,7 +212,7 @@ gulp.task('js-minify-resto', () => {
 
 gulp.task('js-minify-review', () => {
   return gulp.src([
-    'app/js/dbhelper.js', 'app/js/review.js', 'app/js/mdc-bundle.js'
+    'app/js/dbhelper.js', 'app/js/review-bundle.js'
     ])
     .pipe(sourcemaps.init())
     .pipe(babel())
@@ -272,6 +263,7 @@ gulp.task('pwa-manifest-copy2build', () =>
 
 /**
  * Default / Watch
+ * - CSS / Sass is handled by webpack
  */
 
 // Default Gulp task.
@@ -281,11 +273,8 @@ gulp.task('default', ['build']);
 gulp.task('watch', () => {
   gulp.watch('app/img/**', ['images-copy2build']);
   gulp.watch('app/*.html', ['html-copy2build']);
-  gulp.watch('app/css/**/*.css', ['css-minify']);
-  // gulp.watch('app/js/**/*.js', ['js-copy2build']);
-  // gulp.watch('app/js/**/*.js', ['js-minify-idb']);
+  gulp.watch('app/css/**/*.css', ['css-copy2build']);
   gulp.watch('app/js/**/*.js', ['build-js']);
-  // gulp.watch('app/js/**/*.js', ['babel']);
   gulp.watch('app/manifest.json', ['pwa-manifest-copy2build']);
   gulp.watch('src/js/sw.js', ['pwa-service-worker']);
 });
@@ -323,8 +312,6 @@ gulp.task('build', cb => {
     'build-images',
     'html-copy2build',
     'css-copy2build',
-    'css-minify',
-    // 'js-babel',
     ['js-minify-idb', 'js-minify-main', 'js-minify-resto', 'js-minify-review'],
     'pwa-manifest-copy2build', 'pwa-service-worker',
     cb);
