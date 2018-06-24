@@ -79,6 +79,9 @@ const postIsFavoriteNetworkFirst = (restaurant_id, is_favorite) => {
  */
 document.addEventListener('DOMContentLoaded', (event) => {
   createMapsStatic();
+  // Fetch restaurant by using url parameter on current page.
+  self.restaurant_id = getParameterByName('id');
+  loadRestaurantNetworkFirst(self.restaurant_id);
 });
 
 /**
@@ -153,11 +156,11 @@ Notification.requestPermission((status) => {
  * Initialize Google map, called from HTML.
  * https://developers.google.com/maps/documentation/javascript/tutorial
  */
-window.initMap = () => {
+// window.initMap = () => {
   // Fetch restaurant by using url parameter on current page.
-  self.restaurant_id = getParameterByName('id');
-  loadRestaurantNetworkFirst(self.restaurant_id);
-}
+  // self.restaurant_id = getParameterByName('id');
+  // loadRestaurantNetworkFirst(self.restaurant_id);
+// }
 
 /**
  * Fetch a restaurant by its ID from network and fallback to IndexedDB,
@@ -177,18 +180,17 @@ const loadRestaurantNetworkFirst = (id) => {
     saveRestaurantsDataLocally(dataFromNetwork)
     .then(() => {
       DBHelper.setLastUpdated(new Date());
-      DBHelper.messageDataSaved();
+      // DBHelper.messageDataSaved();
     }).catch(err => {
-      DBHelper.messageSaveError();
+      // DBHelper.messageSaveError();
       console.warn(err);
     });
     createGoogleMaps();
-
   }).catch(err => {
     console.log('[DEBUG] Network requests have failed, this is expected if offline');
     getLocalRestaurantByIdData(id)
     .then(offlineData => {
-      DBHelper.messageOffline();
+      // DBHelper.messageOffline();
       self.restaurant = offlineData;
       if (self.restaurant.is_favorite === 'true') {
         is_favorite = true;
@@ -196,9 +198,9 @@ const loadRestaurantNetworkFirst = (id) => {
       }
       updateRestaurantUI(id);
       createBreadcrumb();
-      createGoogleMaps();
+      // createGoogleMaps();
     }).catch(err => {
-      DBHelper.messageNoData();
+      // DBHelper.messageNoData();
       console.warn(err);
     });
   });
@@ -218,19 +220,19 @@ const loadReviewsNetworkFirst = (id) => {
     saveReviewsDataLocally(dataFromNetwork)
     .then(() => {
       DBHelper.setLastUpdated(new Date());
-      DBHelper.messageDataSaved();
+      // DBHelper.messageDataSaved();
     }).catch(err => {
-      DBHelper.messageSaveError();
+      // DBHelper.messageSaveError();
       console.warn(err);
     });
   }).catch(err => {
     console.log('[DEBUG] Network requests have failed, this is expected if offline');
     getLocalReviewsByIdData(id)
     .then(offlineData => {
-      DBHelper.messageOffline();
+      // DBHelper.messageOffline();
       updateReviewsUI(offlineData);
     }).catch(err => {
-      DBHelper.messageNoData();
+      // DBHelper.messageNoData();
       console.warn(err);
     });
   });

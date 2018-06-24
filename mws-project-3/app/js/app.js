@@ -128,6 +128,7 @@ const loadMainNetworkFirst = () => {
         // DBHelper.messageOffline();
         updateNeighborhoodsUI(offlineData);
         updateCuisinesUI(offlineData);
+        refreshRestaurantsNetworkFirst();
       }
     });
   });

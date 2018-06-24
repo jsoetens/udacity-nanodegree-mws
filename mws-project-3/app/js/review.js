@@ -83,11 +83,11 @@ const getRestaurantInfoNetworkFirst = (id) => {
     console.log('[DEBUG] Network requests have failed, this is expected if offline');
     getLocalRestaurantByIdData(id)
     .then(offlineData => {
-      DBHelper.messageOffline();
+      // DBHelper.messageOffline();
       self.restaurant = offlineData;
       createBreadcrumb();
     }).catch(err => {
-      DBHelper.messageNoData();
+      // DBHelper.messageNoData();
       console.warn(err);
     });
   });
