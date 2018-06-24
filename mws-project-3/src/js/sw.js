@@ -1,7 +1,7 @@
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.2.0/workbox-sw.js');
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.3.0/workbox-sw.js');
 
 /**
- * Workbox 3.2.0
+ * Workbox 3.3.0
  * Workbox - https://developers.google.com/web/tools/workbox/
  * Codelab - https://codelabs.developers.google.com/codelabs/workbox-lab/
  *
@@ -21,6 +21,8 @@ if (workbox) {
   // Debugging Workbox
   // Force development builds
   // workbox.setConfig({ debug: true });
+  // The most verbose - displays all logs.
+  // workbox.core.setLogLevel(workbox.core.LOG_LEVELS.debug);
   // Force production builds
   workbox.setConfig({ debug: false });
 
@@ -48,33 +50,17 @@ if (workbox) {
       plugins: [
         new workbox.expiration.Plugin({
           maxEntries: 30,
+          maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
         }),
       ],
     }),
   );
 
-  // Google Maps APIs
-  // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#stale-while-revalidate
-  // Use cache but update in the background ASAP.
-  // workbox.routing.registerRoute(
-  //   new RegExp('https://maps.(?:googleapis|gstatic).com/(.*)'),
-  //   workbox.strategies.staleWhileRevalidate({
-  //     cacheName: 'pwa-maps-cache',
-  //     cacheExpiration: {
-  //       maxEntries: 20
-  //     },
-  //     // Status 0 is the response you would get if you request a cross-origin
-  //     // resource and the server that you're requesting it from is not
-  //     // configured to serve cross-origin resources.
-  //     cacheableResponse: {statuses: [0, 200]}
-  //   })
-  // );
-
   // Images
   // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
   // https://developers.google.com/web/tools/workbox/modules/workbox-cache-expiration
   workbox.routing.registerRoute(
-    /\.(?:jpeg|webp|png|gif|jpg|svg)$/,
+    /\.(?:png|gif|jpg|jpeg|svg|webp)$/,
     // Whenever the app requests images, the service worker checks the
     // cache first for the resource before going to the network.
     workbox.strategies.cacheFirst({
@@ -84,10 +70,10 @@ if (workbox) {
       plugins: [
         new workbox.expiration.Plugin({
           maxEntries: 60,
-          maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
-        })
-      ]
-    })
+          maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+        }),
+      ],
+    }),
   );
 
   // Restaurants
@@ -102,6 +88,68 @@ if (workbox) {
       // configured to serve cross-origin resources.
       cacheableResponse: {statuses: [0, 200]}
     })
+  );
+
+  // Reviews
+  // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#stale-while-revalidate
+  // Use cache but update in the background ASAP.
+  // http://localhost:8887/review.html?id=1
+  workbox.routing.registerRoute(
+    new RegExp('review.html(.*)'),
+    workbox.strategies.cacheFirst({
+      cacheName: 'pwa-restaurants-cache',
+      // Status 0 is the response you would get if you request a cross-origin
+      // resource and the server that you're requesting it from is not
+      // configured to serve cross-origin resources.
+      cacheableResponse: {statuses: [0, 200]}
+    })
+  );
+
+  // Notifications
+  const showNotification = () => {
+    self.registration.showNotification('Background Sync', {
+      body: 'Success!'
+    });
+  };
+
+  // Background Sync using workbox-background-sync
+  // https://developers.google.com/web/updates/2015/12/background-sync
+  // https://developers.google.com/web/tools/workbox/modules/workbox-background-sync
+  // https://codelabs.developers.google.com/codelabs/workbox-indexeddb/
+
+  // If a user tries to add an event while offline, the failed endpoint request
+  // will be saved in the background sync queue. When the user returns online,
+  // the queued requests are re-sent even if the app is closed!
+
+  // Create a Workbox Background Sync Queue, initialize backgroundSync plugin.
+  // Background sync needs to create a Queue, represented by an IndexedDB
+  // database, that is used to store failed HTTP requests.
+
+  const bgSyncPlugin = new workbox.backgroundSync.Plugin(
+    'pwa-reviews-queue',
+    {
+      maxRetentionTime: 24 * 60, // Retry for max of 24 Hours
+    },
+    {
+      callbacks: {
+        queueDidReplay: showNotification
+        // other types of callbacks could go here
+      }
+    }
+  );
+
+  // The plugin is added to the configuration of a handler,
+  // networkWithBackgroundSync.
+  const networkWithBackgroundSync = new workbox.strategies.NetworkOnly({
+    plugins: [bgSyncPlugin],
+  });
+  
+  // POST review
+  // http://localhost:1337/reviews/
+  workbox.routing.registerRoute(
+    new RegExp('http://localhost:1337/reviews/'),
+    networkWithBackgroundSync,
+    'POST'
   );
 
 } else {

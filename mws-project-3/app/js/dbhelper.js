@@ -154,9 +154,12 @@ class DBHelper {
    * postRequest
    */
   static postRequest(pathToAPI, data) {
+    const headers = new Headers({'Content-Type': 'application/json'});
+    const body = JSON.stringify(data);
     return fetch(pathToAPI, {
       method: 'POST',
-      body: data
+      headers: headers,
+      body: body
     })
     .then(this.validateResponse)
     .then(this.readResponseAsText)

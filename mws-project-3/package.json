@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "@material/button": "^0.36.0",
+    "@material/icon-button": "^0.36.0",
     "@material/select": "^0.36.0",
     "@material/textfield": "^0.36.0"
   }
