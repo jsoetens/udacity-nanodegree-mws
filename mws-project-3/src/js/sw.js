@@ -46,11 +46,14 @@ if (workbox) {
   workbox.routing.registerRoute(
     new RegExp('https://fonts.(?:googleapis|gstatic).com/(.*)'),
     workbox.strategies.cacheFirst({
-      cacheName: 'pwa-cache-google-fonts',
+      cacheName: 'pwa-cache-googleapis',
       plugins: [
         new workbox.expiration.Plugin({
           maxEntries: 30,
           maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+        }),
+        new workbox.cacheableResponse.Plugin({
+          statuses: [0, 200]
         }),
       ],
     }),
@@ -59,14 +62,14 @@ if (workbox) {
   // Images
   // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
   // https://developers.google.com/web/tools/workbox/modules/workbox-cache-expiration
+  // Whenever the app requests images, the service worker checks the
+  // cache first for the resource before going to the network.
+  // A maximum of 60 entries will be kept (automatically removing older
+  // images) and these files will expire in 30 days.
   workbox.routing.registerRoute(
     /\.(?:png|gif|jpg|jpeg|svg|webp)$/,
-    // Whenever the app requests images, the service worker checks the
-    // cache first for the resource before going to the network.
     workbox.strategies.cacheFirst({
-      cacheName: 'pwa-images-cache',
-      // A maximum of 60 entries will be kept (automatically removing older
-      // images) and these files will expire in 30 days.
+      cacheName: 'pwa-cache-images',
       plugins: [
         new workbox.expiration.Plugin({
           maxEntries: 60,
@@ -76,13 +79,23 @@ if (workbox) {
     }),
   );
 
+  // Cache CSS and JavaScript files that aren't precached.
+  // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#stale-while-revalidate
+  workbox.routing.registerRoute(
+    /\.(?:js|css)$/,
+    workbox.strategies.staleWhileRevalidate({
+      cacheName: 'pwa-cache-static-resources',
+    }),
+  );
+
+
   // Restaurants
   // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#network_first_network_falling_back_to_cache
   // http://localhost:8887/restaurant.html?id=1
   workbox.routing.registerRoute(
     new RegExp('restaurant.html(.*)'),
     workbox.strategies.networkFirst({
-      cacheName: 'pwa-restaurants-cache',
+      cacheName: 'pwa-cache-restaurants',
       // Status 0 is the response you would get if you request a cross-origin
       // resource and the server that you're requesting it from is not
       // configured to serve cross-origin resources.
@@ -97,7 +110,7 @@ if (workbox) {
   workbox.routing.registerRoute(
     new RegExp('review.html(.*)'),
     workbox.strategies.cacheFirst({
-      cacheName: 'pwa-restaurants-cache',
+      cacheName: 'pwa-cache-restaurants',
       // Status 0 is the response you would get if you request a cross-origin
       // resource and the server that you're requesting it from is not
       // configured to serve cross-origin resources.
