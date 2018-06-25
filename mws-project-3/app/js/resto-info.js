@@ -101,7 +101,7 @@ const createMapsStatic = () => {
   let mapsScale = 1;
   const mapsImageFormat = 'jpg';
   // TODO: move the API Key to either environmental variables or config.js
-  const mapsApiKey = `AIzaSyDm9CBeGB2XpSOVQXsuyo-kJtdHSNGiF4k`;
+  const mapsApiKey = `AIzaSyCfMw2lNBHbO5Y3WV374h0gT-cHgzlP2s8`;
   // const imageMapsStatic = document.createElement('img');
   const imageMapsStatic = new Image();
   imageMapsStatic.id = 'static-map';
@@ -151,16 +151,6 @@ window.showGoogleMaps = showGoogleMaps;
 Notification.requestPermission((status) => {
   console.log('[DEBUG] Notification permission status:', status);
 });
-
-/**
- * Initialize Google map, called from HTML.
- * https://developers.google.com/maps/documentation/javascript/tutorial
- */
-// window.initMap = () => {
-  // Fetch restaurant by using url parameter on current page.
-  // self.restaurant_id = getParameterByName('id');
-  // loadRestaurantNetworkFirst(self.restaurant_id);
-// }
 
 /**
  * Fetch a restaurant by its ID from network and fallback to IndexedDB,

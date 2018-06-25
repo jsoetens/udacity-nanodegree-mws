@@ -174,7 +174,7 @@ const updateCuisinesUI = (result) => {
 const refreshRestaurantsNetworkFirst = () => {
   DBHelper.getServerData(endpointRestaurants)
   .then(dataFromNetwork => {
-    refreshRestaurantsUI(dataFromNetwork);
+    refreshRestaurantsUI(false, dataFromNetwork);
     saveRestaurantsDataLocally(dataFromNetwork)
     .then(() => {
       DBHelper.setLastUpdated(new Date());
@@ -191,7 +191,7 @@ const refreshRestaurantsNetworkFirst = () => {
         // DBHelper.messageNoData();
       } else {
         // DBHelper.messageOffline();
-        refreshRestaurantsUI(offlineData);
+        refreshRestaurantsUI(true, offlineData);
       }
     });
   });
@@ -200,7 +200,7 @@ const refreshRestaurantsNetworkFirst = () => {
 /**
  * Update ul restaurants-list and markers on map for current restaurants.
  */
-const refreshRestaurantsUI = (result) => {
+const refreshRestaurantsUI = (offline, result) => {
   // Retrieve the selected neighborhood and cuisine.
   const neighborhoodIndex = elementNeighborhoodsSelect.selectedIndex;
   const cuisineIndex = elementCuisinesSelect.selectedIndex;
@@ -226,7 +226,9 @@ const refreshRestaurantsUI = (result) => {
   self.restaurants.forEach(restaurant => {
     elementRestaurantsList.appendChild(addRestaurantCardUI(restaurant));
   });
-  addMarkersToMapUI();
+  if (!offline) {
+    addMarkersToMapUI();
+  }
 }
 
 /**
