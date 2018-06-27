@@ -3,7 +3,10 @@
 My project work for the [Mobile Web Specialist Nanodegree ](https://sites.google.com/knowlabs.com/gdnd2017/home) by Udacity.  
 Thank you Google and Udacity for granting me a full 6-month [Google Developer Nanodegree Scholarship](https://sites.google.com/knowlabs.com/gdnd2017/home).
 
+![Certificate Mobile Web Specialist Nanodegree](/mws-nanodegree-certificate.png)
+
 ## Study Notes
+
 * [Responsive Web Design Fundamentals](docs/study-notes/responsive-web-design-fundamentals.md)
 * [Responsive Images](docs/study-notes/responsive-images.md)
 * [Web Accessibility](docs/study-notes/web-accessibility.md)
@@ -14,27 +17,33 @@ Thank you Google and Udacity for granting me a full 6-month [Google Developer Na
 * [Building High Conversion Web Forms](docs/study-notes/building-high-conversion-web-forms.md)
 
 ## Projects
+
 * [Restaurant Reviews App: Stage 1](mws-project-1/README.md)
 * [Restaurant Reviews App: Stage 2](mws-project-2/README.md)
 * [Restaurant Reviews App: Stage 3](mws-project-3/README.md)
 
 ## Supporting Courses
+
 ### Part 1 - Building Accessible and Responsive Web Apps
+
 * [Responsive Web Design Fundamentals](https://www.udacity.com/course/responsive-web-design-fundamentals--ud893)
 * [Responsive Images](https://www.udacity.com/course/responsive-images--ud882)
 * [Web Accessibility](https://www.udacity.com/course/web-accessibility--ud891)
 
 ### Part 2 - Building Offline Capable Web Apps
+
 * [Asynchronous JavaScript Requests](https://www.udacity.com/course/asynchronous-javascript-requests--ud109)
 * [ES6 JavaScript Improved](https://www.udacity.com/course/es6-javascript-improved--ud356)
 * [Offline Web Applications](https://www.udacity.com/course/offline-web-applications--ud899)
 * [Web Tooling and Automation](https://www.udacity.com/course/web-tooling-automation--ud892)
 
 ### Part 3 - Building Performant Web Apps
+
 * [Client Server Communication](https://www.udacity.com/course/client-server-communication--ud897)
 * [Browser Rendering Optimization](https://www.udacity.com/course/browser-rendering-optimization--ud860)
 
 ## Optional Courses
+
 * [Version Control with Git](https://www.udacity.com/course/ud123)
 * [GitHub & Collaboration](https://www.udacity.com/course/github-collaboration--ud456)
 * [JavaScript Design Patterns](https://www.udacity.com/course/ud989)
@@ -43,6 +52,7 @@ Thank you Google and Udacity for granting me a full 6-month [Google Developer Na
 * [Building High Conversion Web Forms](https://www.udacity.com/course/building-high-conversion-web-forms--ud890)
 
 ### JavaScript fundamentals
+
 * [Eloquent JavaScript - 3rd edition](http://eloquentjavascript.net/3rd_edition/)
 * [Hack Reactor Prep](https://www.hackreactor.com/prep-programs)
 * [HackerRank - 10 Days of JavaScript](https://www.hackerrank.com/domains/tutorials/10-days-of-javascript)
